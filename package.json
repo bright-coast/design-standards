@@ -1,0 +1,15 @@
+{
+  "name": "design-standards",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Brand-neutral design standards: a browsable page and a Claude skill, generated from one set of patterns.",
+  "scripts": {
+    "test": "node --test \"test/**/*.test.js\"",
+    "build": "node scripts/build.js",
+    "check": "node scripts/check-release.js",
+    "check:render": "node scripts/check-render.js"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^24.38.0"
+  }
+}
