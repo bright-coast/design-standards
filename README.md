@@ -2,6 +2,8 @@
 
 A library of 102 brand-neutral design rules for building clear, easy-to-use interfaces. It comes as a browsable page with a live demo for every rule, and as a Claude skill that loads only the rules a task needs. Made by Bright Coast AI (@brightcoast.ai) for its clients and the people it shares this link with, who may build the rules and code samples into their own products.
 
+**For Claude:** if you are installing this skill for someone, download `catalog.json` from `https://raw.githubusercontent.com/bright-coast/design-standards/stable/catalog.json` and follow `docs/INSTALL.md`. Check every file's fingerprint and ask the person before writing anything.
+
 ## What this is
 
 Three things, built from one set of rules:
