@@ -2,7 +2,7 @@
 
 A library of 102 brand-neutral design rules for building clear, easy-to-use interfaces. It comes as a browsable page with a live demo for every rule, and as a Claude skill that loads only the rules a task needs. Made by Bright Coast AI (@brightcoast.ai) for its clients and the people it shares this link with, who may build the rules and code samples into their own products.
 
-**For Claude:** if you are installing this skill for someone, download `catalog.json` from `https://raw.githubusercontent.com/bright-coast/design-standards/stable/catalog.json` and follow `docs/INSTALL.md`. Check every file's fingerprint and ask the person before writing anything.
+**For Claude:** read this README from the `stable` branch, at `https://raw.githubusercontent.com/bright-coast/design-standards/stable/README.md`. If you are installing this skill for someone, download `catalog.json` from `https://raw.githubusercontent.com/bright-coast/design-standards/stable/catalog.json` and follow `docs/INSTALL.md`. Check every file's fingerprint and ask the person before writing anything.
 
 ## What this is
 
@@ -40,9 +40,9 @@ GitHub shows the file as code, not as a page, and the raw link shows code too. T
 
 You need Claude Code on your own computer. Open it in any folder and say:
 
-**"Install the Design Standards skill from https://raw.githubusercontent.com/bright-coast/design-standards/stable/catalog.json"**
+**"Install the Design Standards skill from github.com/bright-coast/design-standards"**
 
-Claude downloads the catalog, then `SKILL.md` and every file the catalog lists for the skill (one reference file per category). It checks each file against the fingerprint in the catalog, shows you what the skill does before anything is written, and asks for your yes. The skill lands in `~/.claude/skills/design-standards/`. Restart Claude Code afterwards.
+Claude finds the catalog from the "For Claude" line at the top of this page (the catalog address is `https://raw.githubusercontent.com/bright-coast/design-standards/stable/catalog.json`). It downloads the catalog, then `SKILL.md` and every file the catalog lists for the skill (one reference file per category). It checks each file against the fingerprint in the catalog, shows you what the skill does before anything is written, and asks for your yes. The skill lands in `~/.claude/skills/design-standards/`. Start a new Claude Code session afterwards so it loads the skill.
 
 The Claude Power Setup Guide's Skill Updates skill cannot install this one by itself yet, because it only handles skills that are a single file and this one comes with reference files. Until it can, asking Claude as above is the way to install it. The full steps Claude follows, including how each fingerprint is checked, are in [`docs/INSTALL.md`](docs/INSTALL.md).
 
@@ -52,7 +52,7 @@ Ask Claude to build, design, review or restyle a screen, or say `apply the desig
 
 ## Update
 
-To check for a newer version, tell Claude: **"update the Design Standards skill from https://raw.githubusercontent.com/bright-coast/design-standards/stable/catalog.json"**
+To check for a newer version, tell Claude: **"Update the Design Standards skill from github.com/bright-coast/design-standards"**
 
 Claude compares the version you have with the catalog's, tells you what changed, and only goes ahead on your yes. Every new file is checked against its fingerprint before it is copied into place.
 
