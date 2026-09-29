@@ -3,8 +3,11 @@
 const fs = require('fs');
 const path = require('path');
 const { lfSha256Buffer } = require('./lib/lf');
+const { buildCatalog } = require('./lib/catalog');
 const { buildPage } = require('./build-page');
 const { buildSkill } = require('./build-skill');
+
+const buildSkillOnly = (files) => Object.fromEntries(Object.entries(files).filter(([k]) => k.startsWith('skills/design-standards/')));
 
 function buildAll(root) {
   const files = { 'dist/design-standards.html': buildPage(root), ...buildSkill(root) };
@@ -14,6 +17,12 @@ function buildAll(root) {
     files: skillFiles.map((f) => ({ path: f, sha256: lfSha256Buffer(Buffer.from(files[f], 'utf8')) })),
   };
   files['release.json'] = JSON.stringify(release, null, 2) + '\n';
+  const cl = path.join(root, 'CHANGELOG.md');
+  files['catalog.json'] = buildCatalog({
+    version: release.version,
+    files: buildSkillOnly(files),
+    changelog: fs.existsSync(cl) ? fs.readFileSync(cl, 'utf8') : '',
+  });
   return files;
 }
 
@@ -31,6 +40,6 @@ if (require.main === module) {
   const files = buildAll(root);
   writeAll(root, files);
   const skill = Object.keys(files).filter((f) => f.startsWith('skills/')).length;
-  console.log(`built dist/design-standards.html, ${skill} skill files and release.json`);
+  console.log(`built dist/design-standards.html, ${skill} skill files, release.json and catalog.json`);
 }
 module.exports = { buildAll, writeAll };
