@@ -24,7 +24,7 @@ function renderCategories(root, patterns) {
   }).join('\n\n');
 }
 
-// The category blocks only. The private Bright Coast build uses this with its own intro and theme.
+// The category blocks only, for callers that supply their own intro and theme.
 const renderLibrary = (root) => renderCategories(root, loadPatterns(root));
 
 function buildPage(root) {

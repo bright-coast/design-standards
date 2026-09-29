@@ -285,3 +285,12 @@ test('patterns, dist and skills may carry arrows and check marks, but not U+FFFD
   fs.appendFileSync(path.join(ok, DEMO), `\n<i class="chev">&#x25BE;</i> <i class="chev">${String.fromCharCode(0x25be)}</i>\n`);
   assert.deepStrictEqual(failuresOf(ok)['Source ASCII'], []);
 });
+test('a bare "Bright Coast" or "BrightCoast" is caught, "Bright Coast AI" is not', () => {
+  const root = makeFullFixture();
+  fs.mkdirSync(path.join(root, 'docs'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'docs/a.md'), 'Bright Coast AI is fine.\n');
+  assert.deepStrictEqual(failuresOf(root)['Text rules'], []);
+  fs.writeFileSync(path.join(root, 'docs/a.md'), 'The Bright Coast build.\nThe BrightCoast build.\n');
+  const t = failuresOf(root)['Text rules'];
+  assert.ok(t.some((m) => m.startsWith('docs/a.md:1')) && t.some((m) => m.startsWith('docs/a.md:2')));
+});
