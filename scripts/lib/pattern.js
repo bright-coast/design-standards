@@ -1,6 +1,7 @@
 'use strict';
 const { escapeHtml } = require('./html');
 const SECTION_RE = /^## (Rule|Do|Avoid|Extra: [a-z-]+|Code: .+)$/;
+const CHEV = String.fromCharCode(0x25BE);
 
 function parsePattern(text, where) {
   const t = text.replace(/\r\n/g, '\n');
@@ -51,7 +52,7 @@ function formatPattern(p) {
 function renderPattern(p, demoHtml, num) {
   const li = (avoid, mk, t) => `<li${avoid ? ' class="avoid"' : ''}><span class="mk">${mk}</span>${t}</li>`;
   const items = [...p.dos.map((d) => li(false, '&check;', d)), ...p.avoids.map((a) => li(true, '&times;', a))];
-  const codes = p.codes.map((c) => `<div class="code-panel"><div class="code-panel-bar"><span class="code-panel-lang">${escapeHtml(c.label)}</span><button class="code-toggle" type="button"><span class="txt">Show code</span><span class="chev">25BE</span></button></div>${c.html}</div>`).join('\n');
+  const codes = p.codes.map((c) => `<div class="code-panel"><div class="code-panel-bar"><span class="code-panel-lang">${escapeHtml(c.label)}</span><button class="code-toggle" type="button"><span class="txt">Show code</span><span class="chev">${CHEV}</span></button></div>${c.html}</div>`).join('\n');
   const extras = p.extras.map((e) => e.html).join('\n');
   return `<div class="lib-pattern" id="lp-${p.id}">\n${demoHtml}\n<div>\n<div class="lib-pattern-head"><span class="lib-pattern-num">${String(num).padStart(2, '0')}</span><h4>${escapeHtml(p.title)}</h4></div>\n<div class="lib-pattern-body">\n${p.rule}\n</div>\n${items.length ? `<ul class="lib-dodont">${items.join('')}</ul>\n` : ''}${extras ? extras + '\n' : ''}</div>\n${codes}\n</div>`;
 }

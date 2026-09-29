@@ -38,3 +38,9 @@ test('a pattern with only avoid items renders no do items', () => {
   assert.ok(!html.includes('&check;'));
   assert.ok(html.includes('&times;'));
 });
+test('the code-toggle renders the chevron character correctly', () => {
+  const html = renderPattern(SAMPLE, '<div class="demo">D</div>', 1);
+  const chevron = String.fromCharCode(0x25BE);
+  const chevronSpan = `<span class="chev">${chevron}</span>`;
+  assert.ok(html.includes(chevronSpan), `Expected chevron span to contain: ${JSON.stringify(chevronSpan)}`);
+});
