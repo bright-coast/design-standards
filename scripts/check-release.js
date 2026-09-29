@@ -2,12 +2,12 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { execSync, execFileSync } = require('child_process');
 const { lfSha256, walk } = require('./lib/lf');
 const { HEADER, CREDIT_LINE, LICENCE_LINE, LOCAL_MD_SENTENCE } = require('./lib/headers');
 const CATEGORIES = require('./lib/categories');
 const { loadPatterns } = require('./lib/repo');
-const { isTealFamily } = require('./lib/color');
+const { isTealFamily, findColors } = require('./lib/color');
 const { SKILL_PATH } = require('./lib/catalog');
 const { buildAll } = require('./build');
 const { MAX_REFERENCE_BYTES } = require('./build-skill');
@@ -19,7 +19,6 @@ const EXEMPT = new Set(['LICENSE', 'scripts/lib/headers.js', 'scripts/check-rele
 // The only files that may carry the @brightcoast.ai handle (the generated page is built from shell.html).
 const HANDLE_FILES = new Set(['README.md', 'page/shell.html', 'dist/design-standards.html']);
 const HANDLE_OK = 'brightcoast.ai';
-const SOURCE_DIRS = ['scripts', 'test', 'page', 'themes', 'skill-src'];
 const AT_RULES = new Set(['media', 'keyframes', 'font-face', 'container', 'supports', 'layer', 'property', 'import', 'charset', 'page', 'namespace', 'starting-style', 'scope', 'view-transition', 'counter-style', 'position-try', 'tailwind', 'apply', 'theme', 'utility', 'variant']);
 // Built from char codes so this file stays ASCII.
 const DASH_RE = new RegExp('[' + String.fromCharCode(0x2013) + String.fromCharCode(0x2014) + ']');
@@ -122,7 +121,7 @@ function checkScrub(root, namesFile) {
         }
       }
       if (/--bc-/.test(line)) fails.push(`${r}:${n} uses a --bc- token`);
-      for (const m of line.matchAll(/#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b/g)) if (isTealFamily(m[0])) fails.push(`${r}:${n} has a teal-family colour ${m[0]}`);
+      for (const c of findColors(line)) if (isTealFamily(c.hex)) fails.push(`${r}:${n} has a teal-family colour ${c.text}`);
       if (/C:\\Users\\|\/Users\/[a-z]|\/home\/[a-z]/i.test(line)) fails.push(`${r}:${n} has a personal path`);
     });
   }
@@ -186,7 +185,7 @@ function checkVersion(root) {
   if (!new RegExp(`^## ${version.replace(/\./g, '\\.')} \\(`, 'm').test(readLf(path.join(root, 'CHANGELOG.md')))) fails.push(`CHANGELOG.md has no entry headed "## ${version} ("`);
   try {
     const tag = execSync('git describe --tags --abbrev=0', { cwd: root, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
-    const changed = execSync(`git diff --name-only ${tag} -- patterns`, { cwd: root }).toString().trim() + execSync('git ls-files --others --exclude-standard patterns', { cwd: root }).toString().trim();
+    const changed = execFileSync('git', ['diff', '--name-only', tag, '--', 'patterns'], { cwd: root }).toString().trim() + execSync('git ls-files --others --exclude-standard patterns', { cwd: root }).toString().trim();
     if (changed && tag.replace(/^v/, '') === version) fails.push(`patterns changed since ${tag} but VERSION is still ${version}: bump VERSION, package.json and CHANGELOG.md`);
   } catch (e) { /* no tag yet, or not a git repo */ }
   return fails;
@@ -277,19 +276,28 @@ function checkSkillShape(root) {
   return fails;
 }
 
-// 11. Source ASCII: no non-ASCII characters and no replacement characters in scripts, tests, page, themes or skill source.
+// 11. Source ASCII: every text file in the repo (walk() skips .git, node_modules and .superpowers).
+// Tooling and doc files must be pure ASCII. patterns/, dist/ and skills/ may carry the non-ASCII characters
+// demos legitimately use (arrows, check marks), so there only these fail: U+FFFD, a bare hex run where a
+// chevron entity was meant, and em or en dashes.
+const LOOSE_DIRS = ['patterns/', 'dist/', 'skills/'];
+const BARE_CHEV = /class="chev">[0-9A-Fa-f]{4}(?![0-9A-Za-z])/;
 function checkSourceAscii(root) {
   const fails = [];
-  for (const d of SOURCE_DIRS) {
-    const dir = path.join(root, d);
-    if (!fs.existsSync(dir)) continue;
-    for (const p of walk(dir)) {
-      readLf(p).split('\n').forEach((line, i) => {
-        const where = `${relTo(root, p)}:${i + 1}`;
-        if (line.includes(REPLACEMENT_CHAR)) fails.push(`${where} has a replacement character (U+FFFD): the file was corrupted`);
-        else for (const ch of line) if (ch.charCodeAt(0) > 127) { fails.push(`${where} has a non-ASCII character (U+${ch.codePointAt(0).toString(16).toUpperCase().padStart(4, '0')}); use an escape or entity`); break; }
-      });
-    }
+  for (const r of textFiles(root)) {
+    const loose = LOOSE_DIRS.some((d) => r.startsWith(d));
+    readLf(path.join(root, r)).split('\n').forEach((line, i) => {
+      const where = `${r}:${i + 1}`;
+      if (line.includes(REPLACEMENT_CHAR)) { fails.push(`${where} has a replacement character (U+FFFD): the file was corrupted`); return; }
+      if (loose) {
+        if (BARE_CHEV.test(line)) fails.push(`${where} has a bare hex run after class="chev">: the entity lost its &#x prefix`);
+        if (DASH_RE.test(line)) fails.push(`${where} has an em or en dash`);
+        return;
+      }
+      for (const ch of line) {
+        if (ch.charCodeAt(0) > 127) { fails.push(`${where} has a non-ASCII character (U+${ch.codePointAt(0).toString(16).toUpperCase().padStart(4, '0')}); use an escape or entity`); break; }
+      }
+    });
   }
   return fails;
 }

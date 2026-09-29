@@ -32,4 +32,39 @@ function isTealFamily(hex) {
   const [h, s] = hsl;
   return h >= 160 && h <= 185 && s >= 0.25;
 }
-module.exports = { hexToHsl, hslToHex, isTealFamily };
+
+// CSS named colours in or near the teal family, as hex. Only names that can fall in the rule are listed.
+const NAMED = { teal: '#008080', turquoise: '#40E0D0', aqua: '#00FFFF', cyan: '#00FFFF', mediumaquamarine: '#66CDAA', lightseagreen: '#20B2AA', darkcyan: '#008B8B' };
+const toHex2 = (v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0');
+const num = (s, pctScale) => (s.endsWith('%') ? (parseFloat(s) / 100) * pctScale : parseFloat(s));
+// Every colour literal on a line, as [{text, hex}] with hex normalised to 6 digits (alpha dropped).
+// Covers 3, 4, 6 and 8 digit hex, rgb()/rgba(), hsl()/hsla() and the named colours above.
+function findColors(line) {
+  const out = [];
+  for (const m of line.matchAll(/#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})(?![0-9a-zA-Z])/g)) {
+    const h = m[0].slice(1);
+    const six = h.length <= 4 ? [...h.slice(0, 3)].map((c) => c + c).join('') : h.slice(0, 6);
+    out.push({ text: m[0], hex: ('#' + six).toUpperCase() });
+  }
+  for (const m of line.matchAll(/\brgba?\(([^)]*)\)/gi)) {
+    const p = m[1].split(/[\s,/]+/).filter(Boolean);
+    if (p.length < 3) continue;
+    const [r, g, b] = p.slice(0, 3).map((s) => num(s, 255));
+    if ([r, g, b].some(Number.isNaN)) continue;
+    out.push({ text: m[0], hex: ('#' + toHex2(r) + toHex2(g) + toHex2(b)).toUpperCase() });
+  }
+  for (const m of line.matchAll(/\bhsla?\(([^)]*)\)/gi)) {
+    const p = m[1].split(/[\s,/]+/).filter(Boolean);
+    if (p.length < 3) continue;
+    const h = parseFloat(p[0]);
+    const s = num(p[1], 1) / (p[1].endsWith('%') ? 1 : 100);
+    const l = num(p[2], 1) / (p[2].endsWith('%') ? 1 : 100);
+    if ([h, s, l].some(Number.isNaN)) continue;
+    out.push({ text: m[0], hex: hslToHex(((h % 360) + 360) % 360, s, l) });
+  }
+  for (const m of line.matchAll(/(?<![\w-])(teal|turquoise|aqua|cyan|mediumaquamarine|lightseagreen|darkcyan)(?![\w-])/gi)) {
+    out.push({ text: m[0], hex: NAMED[m[0].toLowerCase()] });
+  }
+  return out;
+}
+module.exports = { hexToHsl, hslToHex, isTealFamily, findColors, NAMED };

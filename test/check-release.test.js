@@ -6,7 +6,6 @@ const path = require('path');
 const { makeFullFixture, writeNames } = require('./helpers');
 const { runChecks } = require('../scripts/check-release');
 const { buildAll, writeAll } = require('../scripts/build');
-const { isTealFamily } = require('../scripts/lib/color');
 
 const EM = String.fromCharCode(0x2014);
 const E_ACUTE = String.fromCharCode(0xe9);
@@ -73,11 +72,41 @@ test('brand colours are caught even inside a style attribute (Review Focus 3)', 
   assert.ok(s.some((m) => /teal-family colour #008080/.test(m)), 'teal family');
   assert.ok(s.some((m) => /listed name: #004D40/.test(m)), 'listed exact colour, any case');
 });
-test('a light teal sample is judged by the teal-family rule', () => {
+test('a light teal sample is flagged', () => {
   const root = makeFullFixture();
   mutate(root, DEMO, (t) => t.replace('demo</div>', '<span style="background:#E0F2F1">x</span></div>'));
-  const flagged = failuresOf(root).Scrub.some((m) => /teal-family colour #E0F2F1/.test(m));
-  assert.strictEqual(flagged, isTealFamily('#E0F2F1'));
+  assert.ok(failuresOf(root).Scrub.some((m) => /teal-family colour #E0F2F1/.test(m)));
+});
+test('a non-teal colour is not flagged', () => {
+  const root = makeFullFixture();
+  mutate(root, DEMO, (t) => t.replace('demo</div>', '<span style="color:#123456;background:rgb(200,30,30);border-color:hsl(10,80%,40%)">x</span></div>'));
+  assert.deepStrictEqual(failuresOf(root).Scrub, []);
+});
+// Each way a teal-family colour can be written, wherever it sits in a demo.
+const COLOUR_FORMS = [
+  ['a 6 digit hex in style', '<span style="color:#008080">x</span>', '#008080'],
+  ['an 8 digit hex in a JS string', '<script>el.style.color = "#008080FF";</script>', '#008080FF'],
+  ['a 4 digit hex', '<span style="color:#0888">x</span>', '#0888'],
+  ['a 3 digit hex', '<span style="color:#088">x</span>', '#088'],
+  ['rgb()', '<span style="color:rgb(0,128,128)">x</span>', 'rgb(0,128,128)'],
+  ['rgba() with spaces', '<span style="color:rgba(0 128 128 / 50%)">x</span>', 'rgba(0 128 128 / 50%)'],
+  ['hsl()', '<span style="color:hsl(180,100%,25%)">x</span>', 'hsl(180,100%,25%)'],
+  ['hsla()', '<span style="color:hsla(180, 100%, 25%, 0.5)">x</span>', 'hsla(180, 100%, 25%, 0.5)'],
+  ['the word teal', '<span style="color: teal">x</span>', 'teal'],
+  ['the word turquoise', '<span style="color:turquoise">x</span>', 'turquoise'],
+  ['the word darkcyan', '<span style="color:DarkCyan">x</span>', 'DarkCyan'],
+];
+for (const [label, snippet, shown] of COLOUR_FORMS) {
+  test(`scrub catches ${label}`, () => {
+    const root = makeFullFixture();
+    mutate(root, DEMO, (t) => t.replace('demo</div>', snippet + '</div>'));
+    assert.ok(failuresOf(root).Scrub.some((m) => m.endsWith(`has a teal-family colour ${shown}`)), failuresOf(root).Scrub.join('|'));
+  });
+}
+test('a class name that merely contains a colour word is not flagged', () => {
+  const root = makeFullFixture();
+  mutate(root, DEMO, (t) => t.replace('demo</div>', '<span class="teal-card aqua_x">x</span></div>'));
+  assert.deepStrictEqual(failuresOf(root).Scrub, []);
 });
 test('a --bc- token and a listed name are caught', () => {
   const root = makeFullFixture();
@@ -207,11 +236,52 @@ test('a non-ASCII character or a replacement character in a source file is caugh
   assert.ok(a.some((m) => /scripts\/bad\.js:1 .*non-ASCII/.test(m)));
   assert.ok(a.some((m) => /themes\/bad\.css:1 .*replacement character/.test(m)));
 });
-test('the source scan ignores .superpowers, node_modules and unrelated folders', () => {
+// The same forbidden tokens, planted where every scan must ignore them and where every scan must flag them.
+const PLANT = (root, rel) => {
+  const p = path.join(root, rel);
+  fs.mkdirSync(path.dirname(p), { recursive: true });
+  fs.writeFileSync(p, `Acme #008080 by @somecreator Source: a reel ${EM} caf${E_ACUTE} bad${REPLACEMENT}\n`);
+};
+test('.superpowers and node_modules are ignored by every scan, the same tokens in a normal file are flagged', () => {
   const root = makeFullFixture();
-  for (const d of ['.superpowers', 'node_modules', 'patterns']) {
-    fs.mkdirSync(path.join(root, d, 'scripts'), { recursive: true });
-    fs.writeFileSync(path.join(root, d, 'scripts/x.js'), '// ' + E_ACUTE + '\n');
+  PLANT(root, '.superpowers/x.md');
+  PLANT(root, 'node_modules/x/y.md');
+  PLANT(root, 'docs/x.md');
+  const f = failuresOf(root);
+  for (const name of ['Credits', 'Scrub', 'Text rules', 'Source ASCII']) {
+    assert.ok(!f[name].some((m) => /\.superpowers|node_modules/.test(m)), `${name} scanned an ignored folder`);
+    assert.ok(f[name].some((m) => m.startsWith('docs/x.md')), `${name} did not flag docs/x.md`);
   }
+  assert.ok(f.Scrub.some((m) => /docs\/x\.md:1 contains a listed name: Acme/.test(m)));
+  assert.ok(f.Scrub.some((m) => /docs\/x\.md:1 has a teal-family colour #008080/.test(m)));
+  assert.ok(f.Credits.some((m) => /docs\/x\.md:1 has a handle: @somecreator/.test(m)));
+  assert.ok(f['Text rules'].some((m) => /docs\/x\.md:1 has an em or en dash/.test(m)));
+  assert.ok(f['Source ASCII'].some((m) => /docs\/x\.md:1 has a replacement character/.test(m)));
+});
+test('the source scan covers the README, CHANGELOG, docs and the generated json, strictly', () => {
+  for (const rel of ['README.md', 'CHANGELOG.md', 'docs/a.md', 'catalog.json', 'release.json', 'scripts/a.js', 'page/a.html', 'themes/a.css', 'skill-src/a.tpl.md', 'test/a.test.js']) {
+    const root = makeFullFixture();
+    const p = path.join(root, rel);
+    fs.mkdirSync(path.dirname(p), { recursive: true });
+    fs.appendFileSync(p, `\ncaf${E_ACUTE}\n`);
+    assert.ok(failuresOf(root)['Source ASCII'].some((m) => m.startsWith(rel + ':') && /non-ASCII/.test(m)), rel);
+  }
+});
+test('patterns, dist and skills may carry arrows and check marks, but not U+FFFD, a bare chevron hex or dashes', () => {
+  const ARROW = String.fromCharCode(0x2192);
+  const CHECK = String.fromCharCode(0x2713);
+  const root = makeFullFixture();
+  for (const rel of [DEMO, 'dist/design-standards.html', 'skills/design-standards/references/forms.md']) fs.appendFileSync(path.join(root, rel), `\n${ARROW} ${CHECK}\n`);
   assert.deepStrictEqual(failuresOf(root)['Source ASCII'], []);
+  const bad = makeFullFixture();
+  fs.appendFileSync(path.join(bad, DEMO), `\n<i class="chev">25BE</i>\n`);
+  fs.appendFileSync(path.join(bad, 'dist/design-standards.html'), `\nx${REPLACEMENT}\n`);
+  fs.appendFileSync(path.join(bad, 'skills/design-standards/references/forms.md'), `\na ${EM} b\n`);
+  const a = failuresOf(bad)['Source ASCII'];
+  assert.ok(a.some((m) => /demo\.html.*bare hex run/.test(m)));
+  assert.ok(a.some((m) => /dist\/design-standards\.html.*replacement character/.test(m)));
+  assert.ok(a.some((m) => /forms\.md.*em or en dash/.test(m)));
+  const ok = makeFullFixture();
+  fs.appendFileSync(path.join(ok, DEMO), `\n<i class="chev">&#x25BE;</i> <i class="chev">${String.fromCharCode(0x25be)}</i>\n`);
+  assert.deepStrictEqual(failuresOf(ok)['Source ASCII'], []);
 });
