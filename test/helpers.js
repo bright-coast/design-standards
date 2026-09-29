@@ -25,4 +25,22 @@ function makeFixture(extraStyles = 'body { color: var(--ds-ink); }', script = 'c
   put('patterns/interaction/_category.html', 'How people click and drag.\n');
   return root;
 }
-module.exports = { makeFixture, PATTERNS };
+// A complete, valid repo: fixture plus README, CHANGELOG, package.json, and the generated files.
+function makeFullFixture() {
+  const { buildAll, writeAll } = require('../scripts/build');
+  const root = makeFixture();
+  const put = (rel, text) => fs.writeFileSync(path.join(root, rel), text);
+  put('README.md', '# Design Standards\n\nMade by Bright Coast AI (@brightcoast.ai).\n\n## Licence\n\nThe Bright Coast AI Client Skills Licence.\n');
+  const version = fs.readFileSync(path.join(root, 'VERSION'), 'utf8').trim();
+  put('CHANGELOG.md', `# Changelog\n\n## ${version} (25 Sep 2026)\n\nFirst release.\n`);
+  put('package.json', JSON.stringify({ name: 'design-standards', version }));
+  writeAll(root, buildAll(root));
+  return root;
+}
+// Writes a private names file outside the repo and returns its path.
+function writeNames(terms) {
+  const f = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'ds-names-')), 'names.txt');
+  fs.writeFileSync(f, terms.join('\n') + '\n');
+  return f;
+}
+module.exports = { makeFixture, makeFullFixture, writeNames, PATTERNS };
