@@ -1,5 +1,5 @@
 'use strict';
-const NAMED = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', rsquo: '’', lsquo: '‘', rdquo: '”', ldquo: '“', middot: '·', check: '✓', times: '×', hellip: '…', larr: '←', rarr: '→', ndash: '–', mdash: '—' };
+const NAMED = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', rsquo: '\u2019', lsquo: '\u2018', rdquo: '\u201D', ldquo: '\u201C', middot: '�', check: '\u2713', times: '�', hellip: '\u2026', larr: '\u2190', rarr: '\u2192', ndash: '\u2013', mdash: '\u2014' };
 
 function decodeEntities(s) {
   return s.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (m, e) => {
