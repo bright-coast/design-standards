@@ -1,0 +1,12 @@
+<div class="demo"><div class="demo-toolbar"><span class="demo-label">Same grid, same long command: default against min-width: 0</span></div><div class="demo-stage" data-demo-theme="light"><div class="a-frame">
+  <div class="mw-pair">
+    <div class="mw-case"><div class="mw-page"><div class="mw-grid">
+      <div class="mw-cell"><span class="mw-lab">macOS</span><pre class="mw-cmd">curl -fsSL https://example.com/install.sh | bash -s -- --channel stable --prefix "$HOME/.local" --with-shell-completions --no-telemetry --yes</pre></div>
+      <div class="mw-cell"><span class="mw-lab">Windows</span><pre class="mw-cmd">winget install Example.Tool</pre></div>
+    </div></div><span class="vd-caption">Default: the long command widens the left column and pushes the Windows column out of the page</span></div>
+    <div class="mw-case mw-fixed"><div class="mw-page"><div class="mw-grid">
+      <div class="mw-cell"><span class="mw-lab">macOS</span><pre class="mw-cmd">curl -fsSL https://example.com/install.sh | bash -s -- --channel stable --prefix "$HOME/.local" --with-shell-completions --no-telemetry --yes</pre></div>
+      <div class="mw-cell"><span class="mw-lab">Windows</span><pre class="mw-cmd">winget install Example.Tool</pre></div>
+    </div></div><span class="vd-caption">min-width: 0 on each cell: the command scrolls inside its own box and the two columns fit</span></div>
+  </div>
+</div></div></div>

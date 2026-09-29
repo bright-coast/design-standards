@@ -1,0 +1,14 @@
+<div class="demo"><div class="demo-toolbar"><span class="demo-label">Replay: origin at the trigger, then width against scaleX</span></div><div class="demo-stage" data-demo-theme="light"><div class="a-frame">
+  <button class="replay-btn" data-replay="#mo-wrap">&#8635; Replay</button>
+  <div id="mo-wrap">
+    <div class="mo-pair">
+      <div class="mo-col"><div class="mo-stage"><button class="mo-trigger" type="button" tabindex="-1">Menu &#9662;</button><div class="mo-menu mo-origin-center"><span>Rename</span><span>Duplicate</span><span>Delete</span></div></div><span class="vd-caption">origin: center, so it appears from nowhere</span></div>
+      <div class="mo-col"><div class="mo-stage"><button class="mo-trigger" type="button" tabindex="-1">Menu &#9662;</button><div class="mo-menu mo-origin-trigger"><span>Rename</span><span>Duplicate</span><span>Delete</span></div></div><span class="vd-caption">origin: top left, so it grows from the trigger</span></div>
+    </div>
+    <div class="mo-bars">
+      <div><span class="vd-caption" style="display:block;text-align:left;">width: 12% to 100% (relayout every frame)</span><div class="mo-track"><div class="mo-bar mo-bar-width"></div></div></div>
+      <div><span class="vd-caption" style="display:block;text-align:left;">transform: scaleX(0.12 to 1) (compositor only, looks identical)</span><div class="mo-track"><div class="mo-bar mo-bar-scale"></div></div></div>
+    </div>
+  </div>
+  <div class="vd-caption" style="text-align:left;margin-top:12px;">Scale is exaggerated so the origin is visible. With the OS reduced-motion setting on, this page skips the replay animations.</div>
+</div></div></div>

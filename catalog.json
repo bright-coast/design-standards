@@ -1,0 +1,60 @@
+{
+  "catalog_version": 1,
+  "repo": "bright-coast/design-standards",
+  "ref": "stable",
+  "raw_base": "https://raw.githubusercontent.com/bright-coast/design-standards/stable/",
+  "license": "Bright Coast AI Client Skills Licence 1.0",
+  "skills": [
+    {
+      "id": "design-standards",
+      "name": "Design Standards",
+      "status": "ready",
+      "version": "1.0.0",
+      "sha256": "bddf4758fda2562f9c3649fee7c8be7e94b2fd42edc611021ca78bce92740ef4",
+      "category": "Building",
+      "summary": "Gives Claude a library of design rules for building clear, easy-to-use interfaces, loaded one category at a time, plus a checklist of the tells that make a screen look machine-made. It applies whenever you ask Claude to build, design, review or restyle a page, form, table or dashboard.",
+      "needs": [],
+      "offer_if": "builds or designs web pages, apps or dashboards",
+      "path": "skills/design-standards/SKILL.md",
+      "changes": "First release.",
+      "files": [
+        {
+          "path": "skills/design-standards/references/ai-slop.md",
+          "sha256": "3e9bc06f6753c40d78d09151e460415badcac75d891fd29cd00f2a277a26bb25"
+        },
+        {
+          "path": "skills/design-standards/references/content.md",
+          "sha256": "886c2c69dda975e59b42a79688bd9d64ca59e718b6e24608cadb11b2dda505bf"
+        },
+        {
+          "path": "skills/design-standards/references/feedback.md",
+          "sha256": "dacbbe98e51c008049d6838f9f71441e98ddabb51a3e56c41b069aadac80df55"
+        },
+        {
+          "path": "skills/design-standards/references/forms.md",
+          "sha256": "71f2c720e6f89ed5e96151090eb9e50160080aae3e0174c561fce799d0e14f36"
+        },
+        {
+          "path": "skills/design-standards/references/interaction.md",
+          "sha256": "31feac6f642a50b9853cef476b9c437ca3273987048617690ef7d63aa92609fb"
+        },
+        {
+          "path": "skills/design-standards/references/motion.md",
+          "sha256": "9eb005dee47f18721adbb3a53987c6383e853add7d9db03786d5a9dfb8e4be5e"
+        },
+        {
+          "path": "skills/design-standards/references/navigation.md",
+          "sha256": "a9e5e5b0cdcef48c606aca2f45d09ba2623561fa2a7215ce00a54578d281bab7"
+        },
+        {
+          "path": "skills/design-standards/references/psychology.md",
+          "sha256": "54bc48111213be12841543eea75950e07ef13bcd3aa18568720dc97faf256587"
+        },
+        {
+          "path": "skills/design-standards/references/visual.md",
+          "sha256": "2371d903503071dd4374a848b9e414590a3bdb5061f92e407cc310ef5abd6930"
+        }
+      ]
+    }
+  ]
+}
