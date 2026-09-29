@@ -4,7 +4,7 @@ const assert = require('node:assert');
 const { decodeEntities, htmlToMd, codeToText, fence, fenceLang, textOf } = require('../scripts/lib/html');
 
 test('decodes named, decimal and hex entities and leaves unknown ones alone', () => {
-  assert.strictEqual(decodeEntities('&lt;b&gt; &amp; &rsquo; &#65; &#x42; &zzz;'), '<b> & ’ A B &zzz;');
+  assert.strictEqual(decodeEntities('&lt;b&gt; &amp; &rsquo; &#65; &#x42; &zzz;'), '<b> & \u2019 A B &zzz;');
 });
 test('inline code keeps literal angle brackets (Review Focus 1)', () => {
   const md = htmlToMd('<p>Use <code class="tok">&lt;button&gt;</code> with <strong>aria-expanded</strong>.</p>');
@@ -32,4 +32,7 @@ test('fenceLang maps panel labels', () => {
 });
 test('textOf collapses tags and whitespace', () => {
   assert.strictEqual(textOf('<p>a  <b>b</b></p>\n<p>c</p>'), 'a b c');
+});
+test('decodeEntities converts entities including middot and times', () => {
+  assert.strictEqual(decodeEntities('&middot; &times; &check; &hellip; &rsquo;'), '\u00B7 \u00D7 \u2713 \u2026 \u2019');
 });
