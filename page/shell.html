@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Standards</title>
+<style>
+{{STYLES}}
+</style>
+</head>
+<body>
+<!-- Copyright 2026 Bright Coast AI. For Bright Coast AI clients and people Bright Coast AI has given the guide to, not for copying or redistribution: see LICENSE at github.com/bright-coast/claude-power-setup-guide. -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-brand">
+      <div class="topbar-mark">DS</div>
+      <div class="topbar-name">Design Standards</div>
+    </div>
+    <nav class="topbar-nav">
+{{NAV}}
+    </nav>
+    <button class="theme-btn" id="pageThemeBtn" aria-pressed="false">&#9680; Theme: System</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <section class="hero">
+    <div class="eyebrow">Reference &middot; v{{VERSION}}</div>
+    <h1>Design Standards</h1>
+    <p class="hero-sub">A working library of {{TOTAL}} design rules for building clear, easy-to-use interfaces. Every rule has a live demo, a short explanation, what to do and what to avoid, and a code sketch. Neutral by design: the rules never choose your colours, fonts or brand.</p>
+    <div class="hero-invoke">
+      <span class="invoke-pill">&quot;apply the design standards to &lt;screen&gt;&quot;</span>
+    </div>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><span class="num">{{TOTAL}}</span><span class="lbl">Patterns, each with a live demo</span></div>
+      <div class="hero-meta-item"><span class="num">{{CATS}}</span><span class="lbl">Categories</span></div>
+    </div>
+  </section>
+
+  <section class="part" id="full-library">
+{{LIBRARY}}
+  </section>
+
+  <footer class="doc-footer">
+    <p>Design Standards v{{VERSION}} &middot; @brightcoast.ai</p>
+    <p>Copyright 2026 Bright Coast AI. For Bright Coast AI clients and people Bright Coast AI has given the guide to, not for copying or redistribution: see LICENSE at github.com/bright-coast/claude-power-setup-guide.</p>
+  </footer>
+
+</div>
+
+<script>
+{{SCRIPT}}
+</script>
+</body>
+</html>
