@@ -7,7 +7,7 @@
     },
     {
       "path": "skills/design-standards/references/ai-slop.md",
-      "sha256": "3e9bc06f6753c40d78d09151e460415badcac75d891fd29cd00f2a277a26bb25"
+      "sha256": "20206efbbbb7efcc0a5619fcd92f7f85ad651d9ce0b92bd5c5baba6fa58334cf"
     },
     {
       "path": "skills/design-standards/references/content.md",
@@ -19,11 +19,11 @@
     },
     {
       "path": "skills/design-standards/references/forms.md",
-      "sha256": "71f2c720e6f89ed5e96151090eb9e50160080aae3e0174c561fce799d0e14f36"
+      "sha256": "0783aa116eb5fea78f6cc78f439c1bb00291b9bf5a68e35379ed48a2725ee93a"
     },
     {
       "path": "skills/design-standards/references/interaction.md",
-      "sha256": "31feac6f642a50b9853cef476b9c437ca3273987048617690ef7d63aa92609fb"
+      "sha256": "44f3d00aec1d56ae7f29a5ae77780625ff5758224329e0add6dc2b1b6dcf6b1f"
     },
     {
       "path": "skills/design-standards/references/motion.md",
@@ -39,7 +39,7 @@
     },
     {
       "path": "skills/design-standards/references/visual.md",
-      "sha256": "2371d903503071dd4374a848b9e414590a3bdb5061f92e407cc310ef5abd6930"
+      "sha256": "fade3aa488043fb47761fa7a53012e6e561016cd2131316c8d847de185cb992d"
     }
   ]
 }

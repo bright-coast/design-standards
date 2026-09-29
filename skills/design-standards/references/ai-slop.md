@@ -120,7 +120,7 @@ review pass, chat UI (details and CSS: Interaction, entry 23)
 
 **Don’t.** Add choreography that plays after the job is already done and makes the person wait for it. In one popular OTP demo, four digit boxes swing onto a ring, spin a turn and a quarter and settle into one green tile after the code has been typed, about a second of delay. The same family is decoration that carries no information, such as a glowing network-graph animation that looks impressive and says nothing.
 
-**Why it reads as machine-made.** This is an audience reaction, not a rule. Audiences call the OTP flourish too much and machine-made, and ask of the network graph whether it means anything or just looks cool.
+**Why it reads as machine-made.** This is a judgement about reception, not a rule. The OTP flourish is widely received as too much and machine-made, and a glowing network graph invites the question of whether it means anything at all.
 
 **Fix.** Motion has to carry information and never delay the task. Keep the interface neutral until a verdict, show colour only when the code is right or wrong, and keep interface motion in the 150 to 250ms band with the bounce saved for a celebration. The motion rules that hold this line are in Animation Timing (Motion, entry 01), Easing Curves (Motion, entry 03) and Motion That Stays Cheap (Motion, entry 05).
 
