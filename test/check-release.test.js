@@ -294,3 +294,13 @@ test('a bare "Bright Coast" or "BrightCoast" is caught, "Bright Coast AI" is not
   const t = failuresOf(root)['Text rules'];
   assert.ok(t.some((m) => m.startsWith('docs/a.md:1')) && t.some((m) => m.startsWith('docs/a.md:2')));
 });
+test('personal paths fail, but capitalised key names and URL paths do not', () => {
+  const root = makeFullFixture();
+  mutate(root, PAT, (t) => t.replace(RULE, '<p>Use arrows/Home/End and GET /api/users/me.</p>'));
+  assert.deepStrictEqual(failuresOf(root).Scrub, []);
+  for (const p of ['C:' + String.fromCharCode(92) + 'Users' + String.fromCharCode(92) + 'someone', '/Users/someone/x', '/home/someone/x']) {
+    const r = makeFullFixture();
+    mutate(r, PAT, (t) => t.replace(RULE, `<p>See ${p}.</p>`));
+    assert.ok(failuresOf(r).Scrub.some((m) => m.includes('personal path')), `${p} was not flagged`);
+  }
+});

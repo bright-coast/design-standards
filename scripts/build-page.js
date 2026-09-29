@@ -10,15 +10,26 @@ const read = (root, rel) => fs.readFileSync(path.join(root, rel), 'utf8').replac
 // One pass, so text that was inserted is never scanned for placeholders again, and "$&" style text is safe.
 const fill = (template, values) => template.replace(/\{\{([A-Z_]+)\}\}/g, (m, k) => (Object.prototype.hasOwnProperty.call(values, k) ? values[k] : m));
 
+// patterns/<cat>/_category.html: plain text is the dek on its own; HTML is rendered verbatim after the
+// category head. A line holding the marker splits it: what follows goes after the last pattern.
+const CATEGORY_MARKER = '<!-- patterns -->';
+function splitCategoryHtml(raw) {
+  const i = raw.indexOf(CATEGORY_MARKER);
+  const pre = (i < 0 ? raw : raw.slice(0, i)).trim();
+  const post = i < 0 ? '' : raw.slice(i + CATEGORY_MARKER.length).trim();
+  return { pre: pre && !pre.startsWith('<') ? `      <p class="lib-cat-dek">${pre}</p>` : pre, post };
+}
+
 function renderCategories(root, patterns) {
   return CATEGORIES.filter((c) => patterns.some((p) => p.category === c.id)).map((c) => {
     const items = patterns.filter((p) => p.category === c.id);
-    const dek = loadDek(root, c.id);
+    const { pre, post } = splitCategoryHtml(loadDek(root, c.id));
     return [
       `    <div class="lib-cat" id="lib-${c.id}">`,
       `      <div class="lib-cat-head"><h3>${escapeHtml(c.title)}</h3><span class="lib-cat-count">${items.length} patterns</span></div>`,
-      dek ? `      <p class="lib-cat-dek">${dek}</p>` : null,
+      pre || null,
       items.map((p) => renderPattern(p, p.demo, p.order)).join('\n\n'),
+      post || null,
       '    </div>',
     ].filter((x) => x !== null).join('\n');
   }).join('\n\n');
@@ -42,4 +53,4 @@ function buildPage(root) {
   });
   return html + '\n';
 }
-module.exports = { buildPage, renderLibrary, fill };
+module.exports = { buildPage, renderLibrary, fill, splitCategoryHtml, CATEGORY_MARKER };

@@ -18,3 +18,8 @@ test('teal family is detected, other colours are not', () => {
   assert.ok(!isTealFamily('#808080'));
   assert.ok(!isTealFamily('#fff'));
 });
+test('numeric character references are not read as colours', () => {
+  const { findColors } = require('../scripts/lib/color');
+  assert.deepStrictEqual(findColors('<span>&#128465;</span> &#9662;'), []);
+  assert.strictEqual(findColors('color:#008080; x &#128465;').length, 1);
+});

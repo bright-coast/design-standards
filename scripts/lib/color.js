@@ -41,7 +41,8 @@ const num = (s, pctScale) => (s.endsWith('%') ? (parseFloat(s) / 100) * pctScale
 // Covers 3, 4, 6 and 8 digit hex, rgb()/rgba(), hsl()/hsla() and the named colours above.
 function findColors(line) {
   const out = [];
-  for (const m of line.matchAll(/#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})(?![0-9a-zA-Z])/g)) {
+  // (?<!&) skips numeric character references such as &#128465; (an emoji, not a colour).
+  for (const m of line.matchAll(/(?<!&)#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})(?![0-9a-zA-Z])/g)) {
     const h = m[0].slice(1);
     const six = h.length <= 4 ? [...h.slice(0, 3)].map((c) => c + c).join('') : h.slice(0, 6);
     out.push({ text: m[0], hex: ('#' + six).toUpperCase() });

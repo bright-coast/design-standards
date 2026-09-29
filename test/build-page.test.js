@@ -44,3 +44,20 @@ test('the theme block and styles are in the page head', () => {
   const html = buildPage(makeFixture());
   assert.ok(html.indexOf('--ds-accent') < html.indexOf('body { color'));
 });
+test('plain-text category text is wrapped as the dek paragraph', () => {
+  assert.ok(buildPage(makeFixture()).includes('<p class="lib-cat-dek">How people click and drag.</p>'));
+});
+test('category HTML is rendered verbatim, with the part after the marker placed after the last pattern (ruling P2)', () => {
+  const root = makeFixture();
+  const pre = '<p class="lib-cat-dek">Dek.</p>\n<div class="caveat-box"><b>Six states.</b> Text.</div>';
+  const post = '<div class="psych-index" id="psych-index"><h4>Index</h4></div>';
+  fs.writeFileSync(path.join(root, 'patterns/interaction/_category.html'), `${pre}\n<!-- patterns -->\n${post}\n`);
+  const html = buildPage(root);
+  const cat = html.slice(html.indexOf('id="lib-interaction"'), html.indexOf('id="lib-forms"'));
+  assert.ok(cat.includes(pre), 'the part before the marker is not verbatim');
+  assert.ok(cat.includes(post), 'the part after the marker is missing');
+  assert.ok(!cat.includes('<!-- patterns -->'), 'the marker leaked into the page');
+  assert.ok(cat.indexOf(pre) < cat.indexOf('id="lp-accordion"'), 'pre must come before the first pattern');
+  assert.ok(cat.indexOf(post) > cat.indexOf('id="lp-accordion"'), 'post must come after the last pattern');
+  assert.ok(!cat.includes('<p class="lib-cat-dek"><p'), 'HTML must not be wrapped in a second dek paragraph');
+});

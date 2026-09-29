@@ -122,7 +122,8 @@ function checkScrub(root, namesFile) {
       }
       if (/--bc-/.test(line)) fails.push(`${r}:${n} uses a --bc- token`);
       for (const c of findColors(line)) if (isTealFamily(c.hex)) fails.push(`${r}:${n} has a teal-family colour ${c.text}`);
-      if (/C:\\Users\\|\/Users\/[a-z]|\/home\/[a-z]/i.test(line)) fails.push(`${r}:${n} has a personal path`);
+      // Case-sensitive on purpose: "arrows/Home/End" and "/api/users/me" are not paths on a machine.
+      if (/[A-Za-z]:\\Users\\|\/Users\/[a-z]|\/home\/[a-z]/.test(line)) fails.push(`${r}:${n} has a personal path`);
     });
   }
   return fails;
