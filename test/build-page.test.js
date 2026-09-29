@@ -19,7 +19,7 @@ test('page has every pattern, the category counts and the footer', () => {
   assert.ok(html.includes('v' + version), 'fixture VERSION not in page');
   assert.ok(!/\{\{[A-Z_]+\}\}/.test(html), 'unfilled placeholder left in the page');
   assert.ok(!html.includes('\r'), 'CR found');
-  assert.ok(!html.includes('�'), 'replacement character found');
+  assert.ok(!html.includes(String.fromCharCode(0xFFFD)), 'replacement character found');
 });
 test('dollar signs in inserted CSS and JS are not treated as replacement patterns (Review Focus 2)', () => {
   const css = "a::after { content: '$&'; } b { content: '$1'; }";
