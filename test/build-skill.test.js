@@ -7,7 +7,7 @@ const { makeFixture } = require('./helpers');
 const { buildSkill, MAX_REFERENCE_BYTES } = require('../scripts/build-skill');
 const H = require('../scripts/lib/headers');
 
-test('SKILL.md follows the guide format', () => {
+test('SKILL.md follows the shared skill format', () => {
   const root = makeFixture();
   const version = fs.readFileSync(path.join(root, 'VERSION'), 'utf8').trim();
   const t = buildSkill(root)['skills/design-standards/SKILL.md'];

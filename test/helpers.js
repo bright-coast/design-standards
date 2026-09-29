@@ -30,7 +30,7 @@ function makeFullFixture() {
   const { buildAll, writeAll } = require('../scripts/build');
   const root = makeFixture();
   const put = (rel, text) => fs.writeFileSync(path.join(root, rel), text);
-  put('README.md', '# Design Standards\n\nMade by Bright Coast AI (@brightcoast.ai).\n\n## Licence\n\nThe Bright Coast AI Client Skills Licence.\n');
+  put('README.md', '# Design Standards\n\nMade by Bright Coast AI (@brightcoast.ai).\n\n## Licence\n\nThe Bright Coast AI Design Standards Licence 1.0.\n');
   const version = fs.readFileSync(path.join(root, 'VERSION'), 'utf8').trim();
   put('CHANGELOG.md', `# Changelog\n\n## ${version} (25 Sep 2026)\n\nFirst release.\n`);
   put('package.json', JSON.stringify({ name: 'design-standards', version }));

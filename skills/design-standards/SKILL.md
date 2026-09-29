@@ -4,8 +4,8 @@ description: Use when someone asks you to build, design, review or restyle any u
 version: 1.0.0
 ---
 
-> A Bright Coast AI skill, made by Rob Lee. Part of the Claude Power Setup Guide: github.com/bright-coast/claude-power-setup-guide
-> Copyright 2026 Bright Coast AI. For Bright Coast AI clients and people Bright Coast AI has given the guide to, not for copying or redistribution: see LICENSE at github.com/bright-coast/claude-power-setup-guide.
+> A Bright Coast AI skill, made by Rob Lee. github.com/bright-coast/design-standards
+> Copyright 2026 Bright Coast AI. For Bright Coast AI clients and people Bright Coast AI has given this link to. You may build what you find here into your own work; you may not republish or resell the material itself. See LICENSE at github.com/bright-coast/design-standards.
 
 ## Before you do anything
 

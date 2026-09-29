@@ -3,43 +3,43 @@
   "files": [
     {
       "path": "skills/design-standards/SKILL.md",
-      "sha256": "352e91a018c79056c07b4d95f7f0f23eee609c273a272cff45687a60dcb7b14b"
+      "sha256": "d37ecbe2b2600e35047022dba09b23ee1a7b9bfd752625c960e5df9e2ff2d280"
     },
     {
       "path": "skills/design-standards/references/ai-slop.md",
-      "sha256": "20206efbbbb7efcc0a5619fcd92f7f85ad651d9ce0b92bd5c5baba6fa58334cf"
+      "sha256": "ca3641d16940f74fe06bcf26b81a35ec2ec56f332b1b796a26c0d8d312bf9eeb"
     },
     {
       "path": "skills/design-standards/references/content.md",
-      "sha256": "886c2c69dda975e59b42a79688bd9d64ca59e718b6e24608cadb11b2dda505bf"
+      "sha256": "0cef795c358ef89612f8dd69a9b5d24ce188fcbb18b0320b3bf6fcee7e218739"
     },
     {
       "path": "skills/design-standards/references/feedback.md",
-      "sha256": "dacbbe98e51c008049d6838f9f71441e98ddabb51a3e56c41b069aadac80df55"
+      "sha256": "e7a582504cfbe361312dac13a73a7fd966d661131780fe6fa3a1230500fd9456"
     },
     {
       "path": "skills/design-standards/references/forms.md",
-      "sha256": "0783aa116eb5fea78f6cc78f439c1bb00291b9bf5a68e35379ed48a2725ee93a"
+      "sha256": "df34c8cdae985494faf40e819dc5fdea6b5c3511429cce054853951f4434b321"
     },
     {
       "path": "skills/design-standards/references/interaction.md",
-      "sha256": "9aa9e38eebd3be8b6b6cd67e50f4859fe4bb2587f2c396bd13e001df7fd08e66"
+      "sha256": "0f5bcd06656d9ff94b742e246b44cccd44daa0a2a57ed172f02a56863ce3fa3e"
     },
     {
       "path": "skills/design-standards/references/motion.md",
-      "sha256": "9eb005dee47f18721adbb3a53987c6383e853add7d9db03786d5a9dfb8e4be5e"
+      "sha256": "6aed80a602859cbb0f24682e4e024413fe63b212bc8fcd4ead7917e89be20b78"
     },
     {
       "path": "skills/design-standards/references/navigation.md",
-      "sha256": "a9e5e5b0cdcef48c606aca2f45d09ba2623561fa2a7215ce00a54578d281bab7"
+      "sha256": "921e72e15f482b7ddf655630d81f8ab4d79b9ae40cc6504ac07abee441173e2f"
     },
     {
       "path": "skills/design-standards/references/psychology.md",
-      "sha256": "54bc48111213be12841543eea75950e07ef13bcd3aa18568720dc97faf256587"
+      "sha256": "893abec0a58e133a4bd61b83ac53089a2ee27e7e9be7d6eb20dda3f7413adc27"
     },
     {
       "path": "skills/design-standards/references/visual.md",
-      "sha256": "fade3aa488043fb47761fa7a53012e6e561016cd2131316c8d847de185cb992d"
+      "sha256": "5e57163fb00b1ea33f127b9414d51a850c82239d3bfdd5c5001073b43b0ee2ef"
     }
   ]
 }

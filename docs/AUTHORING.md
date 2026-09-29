@@ -49,4 +49,4 @@ A new category: add it to `scripts/lib/categories.js`, create the folder and its
 5. Commit, then tag `v<version>`.
 6. Move the `stable` branch forward to the release with a normal push, never a force-push. Moving `stable` is the moment people can install or update to the new version.
 
-The Claude Power Setup Guide can also pick up the new skill files from `release.json` when its owner syncs a release.
+`release.json` lists every released skill file with its fingerprint, so another catalog can pick up a release later.

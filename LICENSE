@@ -1,4 +1,4 @@
-Bright Coast AI Client Skills Licence, version 1.0 (25 September 2026)
+Bright Coast AI Design Standards Licence, version 1.0 (29 September 2026)
 
 Copyright (c) 2026 Bright Coast AI. All rights reserved.
 
@@ -6,13 +6,13 @@ This is a source-available licence, not an open source licence. The Materials ar
 
 1. What this covers
 
-"Materials" means everything in this repository: the guide, the skills, the catalog, the scripts, the documents and the example page, and every copy of them. It does not include the things you make using them (see section 7).
+"Materials" means everything in this repository: the rules, the example page, the skill, the catalog, the scripts and the documents, and every copy of them. It does not include the things you make using them (sections 3(e) and 7).
 
 2. Who may use the Materials
 
 You are an "Authorised User" if any one of these is true:
 (a) you, or the organisation you work for, are a client of Bright Coast AI (a current engagement, subscription or written agreement, including access to the Bright Coast AI client portal); or
-(b) Bright Coast AI gave you the guide, or a link to it, directly. For example: Rob Lee sent it to you, you received it in an email or message from Bright Coast AI, it was shared in a meeting, or you got it through the Bright Coast AI client portal; or
+(b) Bright Coast AI gave you the Materials, or a link to them, directly. For example: Rob Lee sent them to you, you received them in an email or message from Bright Coast AI, they were shared in a meeting, or you got them through the Bright Coast AI client portal; or
 (c) Bright Coast AI has given you written permission. An email is enough.
 
 If you only found the repository yourself, for example by searching the internet, you are not an Authorised User until one of the above is true. You may read the Materials, but you may not install, run, copy or use them. To ask for permission, write to support@brightcoast.ai.
@@ -23,13 +23,14 @@ If you only found the repository yourself, for example by searching the internet
 (b) Install and run them on computers you own or control, for your own use or for the internal use of your own organisation.
 (c) Let people in your own organisation use them the same way.
 (d) Keep your own private edits and your own settings files for that use.
+(e) Build what you find in the Materials into your own work. You may copy, adapt and combine any code sample, design rule, pattern, checklist or wording from the Materials into software, websites, apps, documents and other things you make, for your own use, for your organisation or for your customers, whether or not you sell them, as long as what you make is not itself the Materials, a copy of them, or a substitute for them.
 
 4. What nobody may do without written permission from Bright Coast AI, Authorised Users included
 
-(a) Copy, republish, mirror, host or redistribute the Materials, or any part of them, in any form. That includes putting them in a public or shared repository, a template, a course, a marketplace, a plugin or a package.
-(b) Sell, rent, license or offer the Materials, or anything copied or closely derived from them, as a product or a service, or hand them to someone else as part of paid work.
-(c) Remove or change the copyright, credit or licence notices, or present the Materials as your own work.
-(d) Use the Materials, or anything you make with them, to train, fine-tune or evaluate a machine learning model, or to build a competing product.
+(a) Republish or redistribute the Materials as such: the rules, the skill, the catalog, the example page, or a substantial part of them, on their own or as a collection, in a public or shared repository, template, course, marketplace, plugin, package or design-system product. Using pieces of them inside something you make under section 3(e) is not redistribution.
+(b) Sell, rent, license or offer the Materials themselves, or a version of them with your changes, as a product or a service, or hand them to someone else as the thing they paid for. The test is whether the buyer is paying for the Materials or for what you built using them.
+(c) Remove or change the copyright, credit or licence notices in the Materials themselves, or present the Materials as your own work. You do not need to add any credit to what you build under section 3(e).
+(d) Use the Materials themselves to train, fine-tune or evaluate a machine learning model, or to build a product whose purpose is to be a competing library or set of design rules. What you build under section 3(e) is not covered by this.
 (e) Change how the update mechanism works in order to distribute modified versions.
 
 5. Your agreement with Bright Coast AI
@@ -42,7 +43,7 @@ This licence covers the text and code of the Materials. It does not stop you fro
 
 7. What you make is yours
 
-Notes, briefings, pages and other things you make using the Materials belong to you. The credit line that a skill puts on a page it makes stays on that page.
+Anything you make using the Materials belongs to you, including code and text you copied or adapted from them under section 3(e). Ending this licence does not take back anything you already built into your work.
 
 8. Other people's tools
 

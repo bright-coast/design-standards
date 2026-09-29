@@ -1,6 +1,6 @@
 # Design Standards
 
-A library of 102 brand-neutral design rules for building clear, easy-to-use interfaces. It comes as a browsable page with a live demo for every rule, and as a Claude skill that loads only the rules a task needs. Made by Bright Coast AI (@brightcoast.ai).
+A library of 102 brand-neutral design rules for building clear, easy-to-use interfaces. It comes as a browsable page with a live demo for every rule, and as a Claude skill that loads only the rules a task needs. Made by Bright Coast AI (@brightcoast.ai) for its clients and the people it shares this link with, who may build the rules and code samples into their own products.
 
 ## What this is
 
@@ -62,7 +62,7 @@ The skill has two parts. `SKILL.md` and the files in `references/` come from thi
 
 ## Who this is for
 
-This repository is public so Bright Coast AI clients can download it in one click, but being able to see it does not give you the right to use it. It is source-available under the same Bright Coast AI Client Skills Licence 1.0 as the Claude Power Setup Guide. Read the Licence section below.
+This is for Bright Coast AI clients, and for anyone Bright Coast AI has given this link to. You may use the rules, code samples and patterns in anything you build, including products you sell. The repository is public so you can download it in one click, but being able to see it does not by itself give you the right to use it. It is source-available under the Bright Coast AI Design Standards Licence 1.0. Read the Licence section below.
 
 ## What is here
 
@@ -81,4 +81,10 @@ Read [`docs/AUTHORING.md`](docs/AUTHORING.md). In short: add or change one folde
 
 ## Licence
 
-The Bright Coast AI Client Skills Licence. The guide and skills are for Bright Coast AI clients and for anyone Bright Coast AI has given the guide, or a link to it, directly (for example Rob, an email, a meeting or the client portal). This repo is public so you can download it in one click, but being able to see it does not give you the right to use, copy or share it. Please do not copy, republish or resell it. To ask for permission, write to support@brightcoast.ai. The full terms are in [LICENSE](LICENSE).
+The Bright Coast AI Design Standards Licence 1.0. In plain words:
+
+- **Who may use it.** Bright Coast AI clients, and anyone Bright Coast AI has given this repo, or a link to it, directly (for example Rob, an email, a meeting or the client portal). If you found it on your own, you may read it, but please ask before using it.
+- **What you may do.** Install and use the page and the skill. Copy, adapt and combine the rules, code samples, patterns and checklists into your own software, websites, apps and documents, for yourself, your organisation or your customers, whether or not you sell what you make. What you make is yours, and you do not need to credit anyone in it.
+- **What you may not do.** Republish or share the material itself (the rules, the skill, the catalog or the page, or a large part of them) as a collection, template, course, package or design-system product, or sell it, even with your changes. The test is whether someone is paying for this material or for what you built with it.
+
+To ask for permission, or to ask anything about it, write to support@brightcoast.ai. The full terms are in [LICENSE](LICENSE).

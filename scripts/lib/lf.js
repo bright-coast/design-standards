@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-// sha256 of text as the repo stores it (LF endings). Same method as the Power Setup Guide's build-catalog.js.
+// sha256 of text as the repo stores it (LF endings), the method the skill catalog uses.
 // The latin1 round trip is lossless for every byte, so only CRLF pairs change.
 function lfSha256Buffer(buf) {
   const lf = Buffer.from(buf.toString('latin1').replace(/\r\n/g, '\n'), 'latin1');

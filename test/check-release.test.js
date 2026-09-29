@@ -146,6 +146,19 @@ test('a changed LICENSE is caught', () => {
   mutate(root, 'LICENSE', (t) => t + 'extra line\n', false);
   assert.ok(failuresOf(root, { licenceFile: canonical }).Licence.some((m) => /differs from the canonical/.test(m)));
 });
+test('a LICENSE that is not the Design Standards Licence 1.0 is caught, even when it matches the given copy', () => {
+  const root = makeFullFixture();
+  mutate(root, 'LICENSE', (t) => t.replace(/^[^\n]*/, 'Some Other Licence, version 1.0'), false);
+  assert.ok(failuresOf(root).Licence.some((m) => m.includes('does not start with "Bright Coast AI Design Standards Licence, version 1.0 (29 September 2026)"')));
+});
+test('an out-of-date credit or copyright line is caught; the current ones pass', () => {
+  const root = makeFullFixture();
+  assert.deepStrictEqual(failuresOf(root).Credits, []);
+  mutate(root, 'README.md', (t) => t.replace('# Design Standards', '# Design Standards\n\n> A Bright Coast AI skill, made by Rob Lee. Part of something else\n\nCopyright 2026 Bright Coast AI. Not for copying.'), false);
+  const c = failuresOf(root).Credits;
+  assert.ok(c.some((m) => /README\.md:3 has an out-of-date credit line/.test(m)), c.join('|'));
+  assert.ok(c.some((m) => /README\.md:5 has an out-of-date copyright line/.test(m)), c.join('|'));
+});
 test('a missing changelog entry is caught', () => {
   const root = makeFullFixture();
   const v = version(root);

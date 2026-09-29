@@ -10,7 +10,7 @@ Open Claude Code and say:
 
 Claude follows the steps below. Nothing is written without your yes.
 
-The Claude Power Setup Guide's Skill Updates skill cannot install this skill by itself yet: it only handles skills that are a single `SKILL.md`, and this one also has reference files. Until it can, asking Claude as above is the working way to install and update it. The steps are the same download and fingerprint checks the guide uses.
+The Claude Power Setup Guide's Skill Updates skill cannot install this skill by itself yet: it only handles skills that are a single `SKILL.md`, and this one also has reference files. Until it can, asking Claude as above is the working way to install and update it.
 
 ## Where the truth lives
 
@@ -93,4 +93,4 @@ Every download is compared with a fingerprint in the catalog. That confirms the 
 
 ## Licence
 
-The skill and this repo are source-available under the Bright Coast AI Client Skills Licence 1.0, the same licence as the Claude Power Setup Guide, for Bright Coast AI clients. Being able to see the repo does not give you the right to use, copy or share it. The full terms are in `LICENSE` at the root of this repo.
+The skill and this repo are source-available under the Bright Coast AI Design Standards Licence 1.0, for Bright Coast AI clients and anyone Bright Coast AI has given the link to. You may build the rules, code samples and patterns into your own work, including products you sell. You may not republish or resell the skill, the page or the rules themselves. Being able to see the repo does not by itself give you the right to use it. The full terms are in `LICENSE` at the root of this repo.

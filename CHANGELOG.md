@@ -9,3 +9,4 @@ First release.
 - A Claude skill that loads the rules a task needs, one category at a time, and starts every new screen with a checklist of the tells that make an interface look machine-made.
 - To install it, ask Claude to install the Design Standards skill from the catalog. Every file is checked against a fingerprint in the catalog before it is put in place, and your own preferences live in a separate `local.md` that updates never touch.
 - The rules are neutral by design: they never choose your colours, fonts or brand.
+- Released under the Bright Coast AI Design Standards Licence 1.0, which lets you build the rules, code samples and patterns into your own work, including products you sell.

@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { execSync, execFileSync } = require('child_process');
 const { lfSha256, walk } = require('./lib/lf');
-const { HEADER, CREDIT_LINE, LICENCE_LINE, LOCAL_MD_SENTENCE } = require('./lib/headers');
+const { HEADER, CREDIT_LINE, LICENCE_LINE, LOCAL_MD_SENTENCE, LICENCE_NAME, LICENCE_TITLE } = require('./lib/headers');
 const CATEGORIES = require('./lib/categories');
 const { loadPatterns } = require('./lib/repo');
 const { isTealFamily, findColors } = require('./lib/color');
@@ -32,7 +32,7 @@ const scannable = (root) => textFiles(root).filter((r) => !EXEMPT.has(r) && !r.s
 function eachLine(root, files, fn) {
   for (const r of files) readLf(path.join(root, r)).split('\n').forEach((line, i) => fn(r, i + 1, line));
 }
-// Zero-based line indexes of the README "## Licence" section (the guide's wording, copied verbatim).
+// Zero-based line indexes of the README "## Licence" section (plain-words licence summary with the contact address).
 function licenceBlock(lines) {
   const out = new Set();
   let inside = false;
@@ -74,7 +74,10 @@ function checkFresh(root) {
   return fails;
 }
 
-// 2. Credits: no creator handles, no "Source:" lines, no post provenance wording.
+// 2. Credits: no creator handles, no "Source:" lines, no post provenance wording,
+// and any credit or copyright line is exactly this repo's current one (no out-of-date header text).
+const CREDIT_START = CREDIT_LINE.slice(0, CREDIT_LINE.indexOf(', made by'));
+const COPYRIGHT_START = LICENCE_BODY.slice(0, LICENCE_BODY.indexOf('. '));
 const HANDLE = /(?<![A-Za-z0-9._@/-])@([A-Za-z0-9_][A-Za-z0-9_.-]*)/g;
 function checkCredits(root) {
   const fails = [];
@@ -92,6 +95,8 @@ function checkCredits(root) {
       if (/\bSource( \(|:)/.test(line)) fails.push(`${r}:${i + 1} has a "Source:" credit line`);
       if (/\b\d{1,2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* (batch|save)\b/.test(line)) fails.push(`${r}:${i + 1} has save or batch provenance wording`);
       if (/\bsecond reel\b/i.test(line)) fails.push(`${r}:${i + 1} names a reel`);
+      if (line.startsWith(CREDIT_START) && line !== CREDIT_LINE) fails.push(`${r}:${i + 1} has an out-of-date credit line: expected ${CREDIT_LINE}`);
+      if (line.includes(COPYRIGHT_START) && !line.includes(LICENCE_BODY)) fails.push(`${r}:${i + 1} has an out-of-date copyright line: expected ${LICENCE_BODY}`);
     });
   }
   return fails;
@@ -198,7 +203,7 @@ const CATALOG_FIXED = {
   repo: 'bright-coast/design-standards',
   ref: 'stable',
   raw_base: 'https://raw.githubusercontent.com/bright-coast/design-standards/stable/',
-  license: 'Bright Coast AI Client Skills Licence 1.0',
+  license: LICENCE_NAME,
 };
 function checkCatalog(root) {
   const fails = [];
@@ -245,7 +250,8 @@ function checkCatalog(root) {
 function checkLicence(root, licenceFile) {
   const fails = [];
   if (!licenceFile) fails.push('no --licence-file given: the canonical licence copy is required for a release');
-  else if (lfSha256(path.join(root, 'LICENSE')) !== lfSha256(licenceFile)) fails.push('LICENSE differs from the canonical Client Skills Licence copy');
+  else if (lfSha256(path.join(root, 'LICENSE')) !== lfSha256(licenceFile)) fails.push('LICENSE differs from the canonical Design Standards Licence copy');
+  if (readLf(path.join(root, 'LICENSE')).split('\n')[0] !== LICENCE_TITLE) fails.push(`LICENSE does not start with "${LICENCE_TITLE}"`);
   if (!/^## Licence$/m.test(readLf(path.join(root, 'README.md')))) fails.push('README.md has no "## Licence" section');
   if (!readLf(path.join(root, 'skills/design-standards/SKILL.md')).includes(HEADER)) fails.push('SKILL.md does not carry the two standard header lines together');
   const refDir = path.join(root, 'skills/design-standards/references');
@@ -254,7 +260,7 @@ function checkLicence(root, licenceFile) {
   return fails;
 }
 
-// 10. Skill shape (the guide's format, so it can be vendored unchanged).
+// 10. Skill shape (the shared Bright Coast AI skill format).
 function checkSkillShape(root) {
   const fails = [];
   const f = 'skills/design-standards/SKILL.md';

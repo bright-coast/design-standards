@@ -32,7 +32,7 @@ test('two builds are byte-identical', () => {
   assert.deepStrictEqual(buildAll(root), buildAll(root));
 });
 
-test('catalog.json parses, in the guide schema, and matches VERSION', () => {
+test('catalog.json parses, in the skill catalog schema, and matches VERSION', () => {
   const root = makeFixture();
   const files = buildAll(root);
   const cat = JSON.parse(files['catalog.json']);
@@ -40,7 +40,7 @@ test('catalog.json parses, in the guide schema, and matches VERSION', () => {
   assert.strictEqual(cat.catalog_version, 1);
   assert.strictEqual(cat.repo, 'bright-coast/design-standards');
   assert.strictEqual(cat.ref, 'stable');
-  assert.strictEqual(cat.license, 'Bright Coast AI Client Skills Licence 1.0');
+  assert.strictEqual(cat.license, 'Bright Coast AI Design Standards Licence 1.0');
   assert.ok(cat.raw_base.endsWith('/'));
   assert.strictEqual(cat.raw_base, 'https://raw.githubusercontent.com/bright-coast/design-standards/stable/');
   assert.strictEqual(cat.skills.length, 1);
@@ -72,7 +72,7 @@ test('catalog fingerprints match the built files and equal release.json', () => 
   }
   assert.strictEqual(s.sha256, rel.files.find((r) => r.path === s.path).sha256);
 });
-test('catalog.json uses the guide formatter (2-space indent, plain lists inline, LF)', () => {
+test('catalog.json uses the catalog formatter (2-space indent, plain lists inline, LF)', () => {
   const t = buildAll(makeFixture())['catalog.json'];
   assert.ok(t.startsWith('{\n  "catalog_version": 1,\n'));
   assert.ok(t.includes('      "needs": [],\n'));

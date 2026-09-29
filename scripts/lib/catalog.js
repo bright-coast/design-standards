@@ -1,8 +1,9 @@
 'use strict';
-// Builds catalog.json in the same schema as the Claude Power Setup Guide's catalog.json.
-// The formatter matches the guide's build-catalog.js: one key per line, 2-space indent,
-// lists of plain values on one line. The guide and overview keys are omitted (no guide document here).
+// Builds catalog.json in the Bright Coast AI skill catalog schema.
+// The formatter writes one key per line, 2-space indent, and lists of plain values on one line.
+// The schema's `guide` and `overview` keys are omitted (there is no such document here).
 const { lfSha256Buffer } = require('./lf');
+const { LICENCE_NAME } = require('./headers');
 
 const SKILL_PATH = 'skills/design-standards/SKILL.md';
 const REF_PREFIX = 'skills/design-standards/references/';
@@ -47,7 +48,7 @@ function buildCatalog({ version, files, changelog }) {
     repo: 'bright-coast/design-standards',
     ref: 'stable',
     raw_base: 'https://raw.githubusercontent.com/bright-coast/design-standards/stable/',
-    license: 'Bright Coast AI Client Skills Licence 1.0',
+    license: LICENCE_NAME,
     skills: [{
       id: 'design-standards',
       name: 'Design Standards',
