@@ -15,13 +15,13 @@ order: 4
 <pre><code><span class="kw">let</span> selected = <span class="kw">new</span> Set(); <span class="cm">// row ids, not DOM refs, survives paging</span>
 
 <span class="kw">function</span> <span class="fn">syncHeaderCheckbox</span>(totalMatching) {
-  headerCheckbox.indeterminate = selected.size > <span class="num">0</span> && selected.size < totalMatching;
+  headerCheckbox.indeterminate = selected.size > <span class="num">0</span> && selected.size &lt; totalMatching;
   headerCheckbox.checked = selected.size === totalMatching && totalMatching > <span class="num">0</span>;
 }
 
 headerCheckbox.addEventListener(<span class="str">'click'</span>, (e) => {
   e.preventDefault(); <span class="cm">// we drive checked state manually</span>
-  <span class="kw">if</span> (selected.size < allMatchingIds.length) {
+  <span class="kw">if</span> (selected.size &lt; allMatchingIds.length) {
     selected = <span class="kw">new</span> Set(allMatchingIds); <span class="cm">// ALL matching, not just this page</span>
   } <span class="kw">else</span> {
     selected.clear();

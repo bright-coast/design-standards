@@ -17,6 +17,18 @@ test('code strips highlight spans and decodes entities', () => {
   const html = '<pre><code><span class="kw">const</span> a = <span class="str">\'&lt;div&gt;\'</span>;</code></pre>';
   assert.strictEqual(codeToText(html), "const a = '<div>';");
 });
+test('code keeps a raw comparison: only highlight span tags are stripped (F1)', () => {
+  const html = '<pre><code><span class="kw">if</span> (a < b && c > d) x = <span class="num">1</span>;</code></pre>';
+  assert.strictEqual(codeToText(html), 'if (a < b && c > d) x = 1;');
+  assert.strictEqual(codeToText('<pre><code>selected.size < totalMatching;</code></pre>'), 'selected.size < totalMatching;');
+});
+test('code keeps an escaped tag and a raw less-than on one line (F1)', () => {
+  const html = '<pre><code>el.innerHTML = <span class="str">\'&lt;b&gt;\'</span>; <span>if</span> (i <= n) go();</code></pre>';
+  assert.strictEqual(codeToText(html), "el.innerHTML = '<b>'; if (i <= n) go();");
+});
+test('inline code also keeps a raw less-than (F1)', () => {
+  assert.strictEqual(htmlToMd('<p>Check <code>a < b</code> first.</p>'), 'Check `a < b` first.');
+});
 test('two pre blocks in one panel are all kept', () => {
   assert.strictEqual(codeToText('<pre><code>one</code></pre>\n<pre><code>two</code></pre>'), 'one\n\ntwo');
 });

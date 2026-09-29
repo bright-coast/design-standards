@@ -35,7 +35,7 @@ test('a good repo passes every check', () => {
 });
 test('the summary numbers every check and leaves 6 to the render check', () => {
   const names = runChecks(makeFullFixture(), { namesFile: writeNames(['Acme']), licenceFile: null }).map((r) => r.name);
-  assert.deepStrictEqual(names.map((n) => n.replace(/ .*/, '')), ['1.', '2.', '3.', '4.', '5.', '7.', '8.', '9.', '10.', '11.']);
+  assert.deepStrictEqual(names.map((n) => n.replace(/ .*/, '')), ['1.', '2.', '3.', '4.', '5.', '7.', '8.', '9.', '10.', '11.', '12.']);
   assert.ok(/^8\. Catalog/.test(names[6]) && /^7\. Versioning/.test(names[5]));
 });
 test('a stale build is caught', () => {
@@ -151,6 +151,26 @@ test('a missing changelog entry is caught', () => {
   const v = version(root);
   mutate(root, 'CHANGELOG.md', (t) => t.replace(`## ${v} (`, '## 0.0.1 ('), false);
   assert.ok(failuresOf(root).Versioning.some((m) => m.includes(`no entry headed "## ${v} ("`)));
+});
+test('a skill-updates step in "Before you do anything" is caught (F2)', () => {
+  const root = makeFullFixture();
+  mutate(root, 'skills/design-standards/SKILL.md', (t) => t.replace('\n\n## What this does', '\n2. Run the `skill-updates` check quietly.\n\n## What this does'), false);
+  const s = failuresOf(root)['Skill shape'];
+  assert.ok(s.some((m) => /only step 1/.test(m)) && s.some((m) => /skill-updates step/.test(m)));
+});
+test('a raw "<" inside pattern code is caught with its line; &lt; and highlight spans pass (F1)', () => {
+  const root = makeFullFixture();
+  assert.deepStrictEqual(failuresOf(root)['Code escaping'], []);
+  mutate(root, PAT, (t) => t.replace('<pre><code>a { b: c; }</code></pre>', '<pre><code><span class="kw">if</span> (a &lt; b) x();\nif (n < max) y();\n<span>ok</span></code></pre>'), false);
+  const c = failuresOf(root)['Code escaping'];
+  assert.strictEqual(c.length, 1);
+  const line = fs.readFileSync(path.join(root, PAT), 'utf8').split('\n').findIndex((l) => l.includes('n < max')) + 1;
+  assert.ok(c[0].startsWith(`${PAT}:${line} has a raw "<" inside code`), c[0]);
+});
+test('a raw tag other than a highlight span inside pattern code is caught (F1)', () => {
+  const root = makeFullFixture();
+  mutate(root, PAT, (t) => t.replace('<pre><code>a { b: c; }</code></pre>', '<pre><code>el.innerHTML = "<b>x</b>";</code></pre>'), false);
+  assert.strictEqual(failuresOf(root)['Code escaping'].length, 2);
 });
 test('a skill missing the local.md sentence is caught', () => {
   const root = makeFullFixture();

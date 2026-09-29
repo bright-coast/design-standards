@@ -1126,13 +1126,13 @@ handle.addEventListener(<span class="str">'pointerup'</span>, () => {
 <div class="code-panel"><div class="code-panel-bar"><span class="code-panel-lang">JS</span><button class="code-toggle" type="button"><span class="txt">Show code</span><span class="chev">▾</span></button></div><pre><code><span class="kw">let</span> selected = <span class="kw">new</span> Set(); <span class="cm">// row ids, not DOM refs, survives paging</span>
 
 <span class="kw">function</span> <span class="fn">syncHeaderCheckbox</span>(totalMatching) {
-  headerCheckbox.indeterminate = selected.size > <span class="num">0</span> && selected.size < totalMatching;
+  headerCheckbox.indeterminate = selected.size > <span class="num">0</span> && selected.size &lt; totalMatching;
   headerCheckbox.checked = selected.size === totalMatching && totalMatching > <span class="num">0</span>;
 }
 
 headerCheckbox.addEventListener(<span class="str">'click'</span>, (e) => {
   e.preventDefault(); <span class="cm">// we drive checked state manually</span>
-  <span class="kw">if</span> (selected.size < allMatchingIds.length) {
+  <span class="kw">if</span> (selected.size &lt; allMatchingIds.length) {
     selected = <span class="kw">new</span> Set(allMatchingIds); <span class="cm">// ALL matching, not just this page</span>
   } <span class="kw">else</span> {
     selected.clear();
@@ -1157,7 +1157,7 @@ headerCheckbox.addEventListener(<span class="str">'click'</span>, (e) => {
 <div class="code-panel"><div class="code-panel-bar"><span class="code-panel-lang">JS</span><button class="code-toggle" type="button"><span class="txt">Show code</span><span class="chev">▾</span></button></div><pre><code><span class="kw">function</span> <span class="fn">relativeLuminance</span>(hex) {
   <span class="kw">const</span> [r, g, b] = hexToRgb(hex).map(c => {
     c /= <span class="num">255</span>;
-    <span class="kw">return</span> c <= <span class="num">0.03928</span> ? c / <span class="num">12.92</span> : ((c + <span class="num">0.055</span>) / <span class="num">1.055</span>) ** <span class="num">2.4</span>;
+    <span class="kw">return</span> c &lt;= <span class="num">0.03928</span> ? c / <span class="num">12.92</span> : ((c + <span class="num">0.055</span>) / <span class="num">1.055</span>) ** <span class="num">2.4</span>;
   });
   <span class="kw">return</span> <span class="num">0.2126</span> * r + <span class="num">0.7152</span> * g + <span class="num">0.0722</span> * b;
 }
@@ -1189,7 +1189,7 @@ badge.dataset.pass = ratio >= <span class="num">4.5</span>;</code></pre></div>
   <span class="kw">let</span> qi = <span class="num">0</span>;
   <span class="kw">const</span> t = target.toLowerCase(), q = query.toLowerCase();
   <span class="kw">for</span> (<span class="kw">const</span> ch <span class="kw">of</span> t) {
-    <span class="kw">if</span> (qi < q.length && ch === q[qi]) qi++;
+    <span class="kw">if</span> (qi &lt; q.length && ch === q[qi]) qi++;
   }
   <span class="kw">return</span> qi === q.length ? q.length / t.length : <span class="num">0</span>; <span class="cm">// 0 = no match</span>
 }
@@ -1661,7 +1661,7 @@ row.addEventListener(<span class="str">'touchmove'</span>, (e) => {
 
 row.addEventListener(<span class="str">'touchend'</span>, (e) => {
   <span class="kw">const</span> dx = e.changedTouches[<span class="num">0</span>].clientX - startX;
-  <span class="kw">if</span> (dx < -<span class="num">80</span>) row.classList.add(<span class="str">'action-revealed'</span>); <span class="cm">// tap the button to actually delete</span>
+  <span class="kw">if</span> (dx &lt; -<span class="num">80</span>) row.classList.add(<span class="str">'action-revealed'</span>); <span class="cm">// tap the button to actually delete</span>
   <span class="kw">else</span> row.style.transform = <span class="str">''</span>;
 });</code></pre></div>
 </div>
@@ -1821,7 +1821,7 @@ handle.addEventListener(<span class="str">'pointerdown'</span>, <span class="kw"
 handle.addEventListener(<span class="str">'pointermove'</span>, <span class="kw">function</span>(e){
   <span class="kw">var</span> raw = startH + (e.clientY - startY);
   <span class="kw">var</span> snapped = Math.round(raw / SNAP) * SNAP; <span class="cm">// snap to the grid, not the pixel</span>
-  <span class="kw">if</span> (snapped < MIN_DUR) snapped = MIN_DUR;
+  <span class="kw">if</span> (snapped &lt; MIN_DUR) snapped = MIN_DUR;
   event.style.height = snapped + <span class="str">'px'</span>; <span class="cm">// top never changes: start stays locked, only duration moves</span>
   hud.textContent = fmt(startMin) + <span class="str">' to '</span> + fmt(startMin + snapped) + <span class="str">' &middot; '</span> + snapped + <span class="str">'m'</span>;
 });</code></pre></div>
@@ -3965,6 +3965,7 @@ WRITING AND COPY
   <footer class="doc-footer">
     <p>Design Standards v1.0.0 &middot; @brightcoast.ai</p>
     <p>Copyright 2026 Bright Coast AI. For Bright Coast AI clients and people Bright Coast AI has given the guide to, not for copying or redistribution: see LICENSE at github.com/bright-coast/claude-power-setup-guide.</p>
+    <p>Install and update steps: github.com/bright-coast/design-standards</p>
   </footer>
 
 </div>

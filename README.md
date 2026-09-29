@@ -73,6 +73,8 @@ This repository is public so Bright Coast AI clients can download it in one clic
 - `release.json`: the same fingerprints, used when the skill is released to clients.
 - `CHANGELOG.md`: what changed in each version.
 
+Install and update steps: github.com/bright-coast/design-standards
+
 ## For contributors
 
 Read [`docs/AUTHORING.md`](docs/AUTHORING.md). In short: add or change one folder under `patterns/`, run `node scripts/build.js`, run the checks, add a changelog entry, bump `VERSION`, commit and tag.

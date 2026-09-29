@@ -267,7 +267,8 @@ function checkSkillShape(root) {
   }
   for (const h of ['## Before you do anything', '## What this does', '## Your changes']) if (!t.includes(`\n${h}\n`)) fails.push(`${f}: missing "${h}"`);
   if (!t.includes(LOCAL_MD_SENTENCE)) fails.push(`${f}: missing the standard local.md sentence`);
-  if (!t.includes('`skill-updates`')) fails.push(`${f}: missing the quiet skill-updates check`);
+  if (!t.includes(`\n## Before you do anything\n\n1. ${LOCAL_MD_SENTENCE}\n\n## `)) fails.push(`${f}: "Before you do anything" must hold only step 1, the local.md sentence`);
+  if (t.includes('skill-updates')) fails.push(`${f}: has a skill-updates step, which this skill does not use`);
   if (t.split('\n').length > 150) fails.push(`${f}: over 150 lines`);
   const refDir = path.join(root, 'skills/design-standards/references');
   if (fs.existsSync(refDir)) for (const r of fs.readdirSync(refDir)) {
@@ -303,6 +304,26 @@ function checkSourceAscii(root) {
   return fails;
 }
 
+// 12. A raw `<` inside a pattern's <pre><code> block. Code must write `<` as &lt; (docs/AUTHORING.md);
+// the only tags allowed inside code are the highlight spans (<span ...> and </span>).
+const RAW_LT = /<(?!span(\s[^>]*)?>|\/span>)/g;
+function checkCodeEscaping(root) {
+  const fails = [];
+  const dir = path.join(root, 'patterns');
+  if (!fs.existsSync(dir)) return fails;
+  for (const r of walk(dir).map((p) => relTo(root, p)).filter((x) => x.endsWith('/pattern.md'))) {
+    const t = readLf(path.join(root, r));
+    for (const m of t.matchAll(/<pre[^>]*>\s*<code[^>]*>([\s\S]*?)<\/code>\s*<\/pre>/gi)) {
+      const start = m.index + m[0].indexOf(m[1]);
+      for (const x of m[1].matchAll(RAW_LT)) {
+        const n = t.slice(0, start + x.index).split('\n').length;
+        fails.push(`${r}:${n} has a raw "<" inside code: write it as &lt;`);
+      }
+    }
+  }
+  return fails;
+}
+
 function runChecks(root, opts = {}) {
   const list = [
     ['1. Parity and freshness', () => checkFresh(root)],
@@ -315,6 +336,7 @@ function runChecks(root, opts = {}) {
     ['9. Licence', () => checkLicence(root, opts.licenceFile)],
     ['10. Skill shape', () => checkSkillShape(root)],
     ['11. Source ASCII', () => checkSourceAscii(root)],
+    ['12. Code escaping', () => checkCodeEscaping(root)],
   ];
   return list.map(([name, fn]) => {
     let failures;

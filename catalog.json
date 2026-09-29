@@ -10,7 +10,7 @@
       "name": "Design Standards",
       "status": "ready",
       "version": "1.0.0",
-      "sha256": "bddf4758fda2562f9c3649fee7c8be7e94b2fd42edc611021ca78bce92740ef4",
+      "sha256": "352e91a018c79056c07b4d95f7f0f23eee609c273a272cff45687a60dcb7b14b",
       "category": "Building",
       "summary": "Gives Claude a library of design rules for building clear, easy-to-use interfaces, loaded one category at a time, plus a checklist of the tells that make a screen look machine-made. It applies whenever you ask Claude to build, design, review or restyle a page, form, table or dashboard.",
       "needs": [],
@@ -36,7 +36,7 @@
         },
         {
           "path": "skills/design-standards/references/interaction.md",
-          "sha256": "44f3d00aec1d56ae7f29a5ae77780625ff5758224329e0add6dc2b1b6dcf6b1f"
+          "sha256": "9aa9e38eebd3be8b6b6cd67e50f4859fe4bb2587f2c396bd13e001df7fd08e66"
         },
         {
           "path": "skills/design-standards/references/motion.md",

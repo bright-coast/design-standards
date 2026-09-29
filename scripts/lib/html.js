@@ -12,11 +12,15 @@ function decodeEntities(s) {
 }
 const escapeHtml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+// Remove only the highlight span tags inside code. Any other `<` (a raw comparison such as
+// `a < b && c > d`) is code text and must survive; stripping every `<...>` used to eat it.
+const stripHighlight = (s) => s.replace(/<span(\s[^>]*)?>|<\/span>/gi, '');
+
 // HTML fragment to Markdown. Code spans are stashed first so their angle brackets survive tag stripping.
 function htmlToMd(html) {
   const stash = [];
   let s = html.replace(/<code[^>]*>([\s\S]*?)<\/code>/gi, (m, c) => {
-    const t = decodeEntities(c.replace(/<[^>]+>/g, ''));
+    const t = decodeEntities(stripHighlight(c));
     const tick = t.includes('`') ? '``' : '`';
     stash.push(tick + t + tick);
     return `\u0000${stash.length - 1}\u0000`;
@@ -30,7 +34,7 @@ function htmlToMd(html) {
 // The text of every <pre><code> block, highlight spans removed, joined by a blank line.
 function codeToText(html) {
   const blocks = [...html.matchAll(/<pre[^>]*>\s*<code[^>]*>([\s\S]*?)<\/code>\s*<\/pre>/gi)].map((m) => m[1]);
-  return (blocks.length ? blocks : [html]).map((b) => decodeEntities(b.replace(/<[^>]+>/g, '')).replace(/\s+$/, '')).join('\n\n');
+  return (blocks.length ? blocks : [html]).map((b) => decodeEntities(stripHighlight(b)).replace(/\s+$/, '')).join('\n\n');
 }
 function fence(text, lang) {
   let f = '```';
@@ -46,4 +50,4 @@ function fenceLang(label) {
   return '';
 }
 const textOf = (html) => decodeEntities(html.replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
-module.exports = { decodeEntities, escapeHtml, htmlToMd, codeToText, fence, fenceLang, textOf };
+module.exports = { decodeEntities, escapeHtml, stripHighlight, htmlToMd, codeToText, fence, fenceLang, textOf };

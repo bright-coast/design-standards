@@ -128,12 +128,14 @@ Code (JS):
 let selected = new Set(); // row ids, not DOM refs, survives paging
 
 function syncHeaderCheckbox(totalMatching) {
-  headerCheckbox.indeterminate = selected.size > 0 && selected.size  0;
+  headerCheckbox.indeterminate = selected.size > 0 && selected.size < totalMatching;
+  headerCheckbox.checked = selected.size === totalMatching && totalMatching > 0;
 }
 
 headerCheckbox.addEventListener('click', (e) => {
   e.preventDefault(); // we drive checked state manually
-  if (selected.size new Set(allMatchingIds); // ALL matching, not just this page
+  if (selected.size < allMatchingIds.length) {
+    selected = new Set(allMatchingIds); // ALL matching, not just this page
   } else {
     selected.clear();
   }
@@ -159,7 +161,7 @@ Code (JS):
 function relativeLuminance(hex) {
   const [r, g, b] = hexToRgb(hex).map(c => {
     c /= 255;
-    return c 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
   });
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
@@ -193,7 +195,9 @@ function fuzzyScore(query, target) {
   let qi = 0;
   const t = target.toLowerCase(), q = query.toLowerCase();
   for (const ch of t) {
-    if (qi return qi === q.length ? q.length / t.length : 0; // 0 = no match
+    if (qi < q.length && ch === q[qi]) qi++;
+  }
+  return qi === q.length ? q.length / t.length : 0; // 0 = no match
 }
 
 function searchCommands(query, commands) {
@@ -715,7 +719,7 @@ row.addEventListener('touchmove', (e) => {
 
 row.addEventListener('touchend', (e) => {
   const dx = e.changedTouches[0].clientX - startX;
-  if (dx 80) row.classList.add('action-revealed'); // tap the button to actually delete
+  if (dx < -80) row.classList.add('action-revealed'); // tap the button to actually delete
   else row.style.transform = '';
 });
 ```
@@ -885,7 +889,8 @@ handle.addEventListener('pointerdown', function(e){
 handle.addEventListener('pointermove', function(e){
   var raw = startH + (e.clientY - startY);
   var snapped = Math.round(raw / SNAP) * SNAP; // snap to the grid, not the pixel
-  if (snapped 'px'; // top never changes: start stays locked, only duration moves
+  if (snapped < MIN_DUR) snapped = MIN_DUR;
+  event.style.height = snapped + 'px'; // top never changes: start stays locked, only duration moves
   hud.textContent = fmt(startMin) + ' to ' + fmt(startMin + snapped) + ' · ' + snapped + 'm';
 });
 ```

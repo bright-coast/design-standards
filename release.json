@@ -3,7 +3,7 @@
   "files": [
     {
       "path": "skills/design-standards/SKILL.md",
-      "sha256": "bddf4758fda2562f9c3649fee7c8be7e94b2fd42edc611021ca78bce92740ef4"
+      "sha256": "352e91a018c79056c07b4d95f7f0f23eee609c273a272cff45687a60dcb7b14b"
     },
     {
       "path": "skills/design-standards/references/ai-slop.md",
@@ -23,7 +23,7 @@
     },
     {
       "path": "skills/design-standards/references/interaction.md",
-      "sha256": "44f3d00aec1d56ae7f29a5ae77780625ff5758224329e0add6dc2b1b6dcf6b1f"
+      "sha256": "9aa9e38eebd3be8b6b6cd67e50f4859fe4bb2587f2c396bd13e001df7fd08e66"
     },
     {
       "path": "skills/design-standards/references/motion.md",

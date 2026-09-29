@@ -9,7 +9,6 @@ version: {{VERSION}}
 ## Before you do anything
 
 1. {{LOCAL_MD_SENTENCE}}
-2. Run the `skill-updates` check quietly, once per session. Skip it if that skill is not installed or you already ran it in this conversation. Say nothing unless something is newer. If something is, say so in one line at the end of your first reply and carry on.
 
 ## What this does
 

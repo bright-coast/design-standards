@@ -15,7 +15,7 @@ order: 5
 <pre><code><span class="kw">function</span> <span class="fn">relativeLuminance</span>(hex) {
   <span class="kw">const</span> [r, g, b] = hexToRgb(hex).map(c => {
     c /= <span class="num">255</span>;
-    <span class="kw">return</span> c <= <span class="num">0.03928</span> ? c / <span class="num">12.92</span> : ((c + <span class="num">0.055</span>) / <span class="num">1.055</span>) ** <span class="num">2.4</span>;
+    <span class="kw">return</span> c &lt;= <span class="num">0.03928</span> ? c / <span class="num">12.92</span> : ((c + <span class="num">0.055</span>) / <span class="num">1.055</span>) ** <span class="num">2.4</span>;
   });
   <span class="kw">return</span> <span class="num">0.2126</span> * r + <span class="num">0.7152</span> * g + <span class="num">0.0722</span> * b;
 }

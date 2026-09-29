@@ -22,6 +22,6 @@ row.addEventListener(<span class="str">'touchmove'</span>, (e) => {
 
 row.addEventListener(<span class="str">'touchend'</span>, (e) => {
   <span class="kw">const</span> dx = e.changedTouches[<span class="num">0</span>].clientX - startX;
-  <span class="kw">if</span> (dx < -<span class="num">80</span>) row.classList.add(<span class="str">'action-revealed'</span>); <span class="cm">// tap the button to actually delete</span>
+  <span class="kw">if</span> (dx &lt; -<span class="num">80</span>) row.classList.add(<span class="str">'action-revealed'</span>); <span class="cm">// tap the button to actually delete</span>
   <span class="kw">else</span> row.style.transform = <span class="str">''</span>;
 });</code></pre>

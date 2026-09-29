@@ -25,7 +25,7 @@ handle.addEventListener(<span class="str">'pointerdown'</span>, <span class="kw"
 handle.addEventListener(<span class="str">'pointermove'</span>, <span class="kw">function</span>(e){
   <span class="kw">var</span> raw = startH + (e.clientY - startY);
   <span class="kw">var</span> snapped = Math.round(raw / SNAP) * SNAP; <span class="cm">// snap to the grid, not the pixel</span>
-  <span class="kw">if</span> (snapped < MIN_DUR) snapped = MIN_DUR;
+  <span class="kw">if</span> (snapped &lt; MIN_DUR) snapped = MIN_DUR;
   event.style.height = snapped + <span class="str">'px'</span>; <span class="cm">// top never changes: start stays locked, only duration moves</span>
   hud.textContent = fmt(startMin) + <span class="str">' to '</span> + fmt(startMin + snapped) + <span class="str">' &middot; '</span> + snapped + <span class="str">'m'</span>;
 });</code></pre>

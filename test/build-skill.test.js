@@ -16,7 +16,8 @@ test('SKILL.md follows the guide format', () => {
   assert.ok(t.includes(H.HEADER));
   assert.ok(t.includes(H.LOCAL_MD_SENTENCE));
   for (const h of ['## Before you do anything', '## What this does', '## Your changes']) assert.ok(t.includes('\n' + h + '\n'), h);
-  assert.ok(t.includes('`skill-updates`'));
+  assert.ok(!t.includes('skill-updates'));
+  assert.ok(t.includes('\n## Before you do anything\n\n1. ' + H.LOCAL_MD_SENTENCE + '\n\n## What this does\n'));
   assert.ok(!/\{\{[A-Z_]+\}\}/.test(t));
   assert.ok(t.split('\n').length <= 150);
   assert.ok(t.includes('| Interaction | 1 | `references/interaction.md` |'));

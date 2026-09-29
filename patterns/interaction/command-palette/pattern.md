@@ -17,7 +17,7 @@ order: 6
   <span class="kw">let</span> qi = <span class="num">0</span>;
   <span class="kw">const</span> t = target.toLowerCase(), q = query.toLowerCase();
   <span class="kw">for</span> (<span class="kw">const</span> ch <span class="kw">of</span> t) {
-    <span class="kw">if</span> (qi < q.length && ch === q[qi]) qi++;
+    <span class="kw">if</span> (qi &lt; q.length && ch === q[qi]) qi++;
   }
   <span class="kw">return</span> qi === q.length ? q.length / t.length : <span class="num">0</span>; <span class="cm">// 0 = no match</span>
 }
