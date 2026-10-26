@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.0 (October 2026)
+## 1.1.0 (26 Oct 2026)
 
 Adds 20 rules and enriches many more: checkout, pricing, success states, data states, phone checks, machine-made copy tells and more.
 
