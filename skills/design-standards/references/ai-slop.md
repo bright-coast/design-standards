@@ -7,7 +7,7 @@ The defaults that make an interface, a page or a piece of writing read as machin
 
 **Standing rule for this category.** Any new AI-slop tell goes here, not only in the Visual category.
 
-7 patterns. Use when: always, for any new screen: the tells that make an interface look machine-made.
+9 patterns. Use when: always, for any new screen: the tells that make an interface look machine-made.
 
 ## Dashboard Tells
 
@@ -186,6 +186,62 @@ hooks and beats
 test: would this draft be equally plausible under 50 other people's names? If yes, it is too generic.
 ```
 
+## Pricing Page Tells
+
+**Don’t.** Ship three identical tier cards, a Popular badge on every one, twelve repeated check marks per card, a gradient button on each plan, and a percent-off chip as the only statement of the saving.
+
+**Why it reads as machine-made.** Each one is the default of a generator that was never asked to recommend anything: three equal cards are no recommendation, and a badge on every card is a badge on none.
+
+**Fix.** One line per tell in the list below. The full write-up, with the numbers and the percent versus dollars variants, lives in Pricing Table (Visual, entry 27); this entry only points to it.
+
+Avoid:
+- Three identical tiers. Fix: one tier highlighted, two quiet.
+- A badge on every card. Fix: one badge, no runner-up badges.
+- Twelve repeated checks per tier. Fix: list the difference (Everything in Starter, plus).
+- A gradient button on every plan. Fix: one filled button, the rest outlined, labels naming the plan or action.
+- A bare -17% chip. Fix: show the saving in the unit that reads bigger (percent under about $100, dollars over), with the old price struck through.
+
+Code (TEXT):
+
+```
+review pass, pricing page (details and CSS: Visual, entry 27)
+[ ] three identical tier cards                 -> one highlighted, two quiet
+[ ] a badge on every card                      -> one badge, no runner-up
+[ ] twelve repeated checks per tier            -> list the difference
+[ ] a gradient button on every plan            -> one filled, the rest outlined
+[ ] a bare percent chip                        -> the unit that reads bigger, old price struck
+```
+
+## Copy That Reads Machine-Made
+
+**Don’t.** Ship interface copy with four habits of machine text. **Heading echo:** the first sentence restates the heading, so the reader spends a line learning nothing. **Fake candour:** openers such as Honestly?, Here’s the thing and Let’s be real, which perform frankness instead of delivering a fact. **Strawman openers:** This isn’t about X. It’s about Y., which knocks down a claim nobody made before getting to the point. **Fake options:** a set of choices nobody would pick, laid out so one looks obvious, which reads as manipulation the moment anyone notices.
+
+**Why it reads as machine-made.** Each one is filler shaped like emphasis. It adds a beat of rhythm and no information, and once a reader spots one they start discounting the rest of the screen. The strawman is a close cousin of the negation pivot in Writing and Copy Tells (entry 06), and fake candour overlaps its hero-line hooks; this entry covers how the same habits show up in interface copy: headings, empty states, settings and plan pickers.
+
+**Fix.** Make the first sentence carry new information. Cut the candour opener and keep the fact that followed it. Open with the claim itself, not the claim you are not making. Offer only options someone could genuinely want, and when one is recommended, say so plainly with a Recommended label and the reason.
+
+Do:
+- Under the heading Invoices: “Nothing sent yet. Your first invoice takes about a minute.”
+- “Export to CSV or PDF. Large reports arrive by email.”
+- “Backups run every night and are kept for 30 days.”
+- “Turn on backups” beside “Not now”, with a Recommended label and the reason on the first.
+
+Avoid:
+- Heading echo. Under the heading Invoices: “Invoices help you manage your invoices.”
+- Fake candour. “Honestly? Exporting is easy.”
+- Strawman opener. “This isn’t about storage. It’s about peace of mind.”
+- Fake options. “Keep my data safe” beside “No thanks, I like losing my work.”
+
+Code (TEXT):
+
+```
+review pass, interface copy
+[ ] the first sentence restates the heading        -> make it carry new information
+[ ] Honestly? / Here's the thing / Let's be real   -> cut the opener, keep the fact
+[ ] This isn't about X. It's about Y.              -> open with Y
+[ ] options nobody would pick                      -> real options, a plain Recommended label
+```
+
 ## Quick Checklist
 
 **Don’t.** Ship a screen, a page or a piece of copy that trips any of these lines without having decided it on purpose. This is the whole category as one line per tell, grouped by family, for a fast review pass. The fix for each line is in the entry for its family above. Two lines are marked unverified, where the original claim has not been checked.
@@ -217,13 +273,23 @@ Avoid:
 - **Writing.** The negation pivot (“not X, not Y, but Z”).
 - **Writing.** Hero-line openers and hooks (“X is broken.”, “Here’s the thing.”).
 - **Writing.** Rule-of-three beats, parallel negation lists and one sentence per line.
+- **Writing.** A first sentence that restates the heading (heading echo).
+- **Writing.** Fake candour openers (“Honestly?”, “Here’s the thing”, “Let’s be real”).
+- **Writing.** Strawman openers (“This isn’t about X. It’s about Y.”).
+- **Writing.** Fake options nobody would pick, laid out so one looks obvious.
+- **Pricing.** Three identical pricing tiers.
+- **Pricing.** A badge on every pricing card.
+- **Pricing.** Twelve repeated check marks per tier.
+- **Pricing.** A gradient button on every plan.
+- **Pricing.** A bare percent chip as the only statement of the saving.
+- **Cards.** A card around everything; a form section is not a card (fix in Card Treatment System, Visual entry 28).
 
 Note: **A review aid, not a detector.** A hit means a default nobody decided, not proof that a machine made it.
 
 Code (TEXT):
 
 ```
-AI SLOP CHECKLIST (23 lines, paste-ready)
+AI SLOP CHECKLIST (33 lines, paste-ready)
 DASHBOARD
 [ ] a gradient header that encodes nothing
 [ ] four accent colours on four stat tiles
@@ -253,4 +319,16 @@ WRITING AND COPY
 [ ] the negation pivot: not X, not Y, but Z
 [ ] hero-line openers and hooks
 [ ] rule-of-three beats, parallel negation lists, one sentence per line
+[ ] heading echo: the first sentence restates the heading
+[ ] fake candour openers: Honestly?, Here's the thing, Let's be real
+[ ] strawman openers: this isn't about X, it's about Y
+[ ] fake options nobody would pick
+PRICING PAGE
+[ ] three identical pricing tiers
+[ ] a badge on every pricing card
+[ ] twelve repeated check marks per tier
+[ ] a gradient button on every plan
+[ ] a bare percent chip as the only statement of the saving
+CARDS
+[ ] a card around everything (a form section is not a card)
 ```

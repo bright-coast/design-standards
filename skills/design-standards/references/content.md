@@ -18,6 +18,8 @@ Do:
 Avoid:
 - A generic “Try refreshing” as the only action
 
+Variant: **Illustration, two variants.** Variant A: a small illustration or icon plus a short line of copy (this entry). Use when: the design system has illustrations or icons ready for empty states. Variant B: text only, with the copy doing all the teaching. Use when: there is no illustration set yet, since a borrowed or generic picture is worse than none. Both are kept on purpose.
+
 Code (JS):
 
 ```js

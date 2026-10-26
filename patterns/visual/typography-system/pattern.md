@@ -20,6 +20,8 @@ order: 24
 - Bold on everything, or one line height everywhere
 ## Extra: caveat-box
 <div class="caveat-box"><b>Defaults, not laws.</b> A 45 to 75 character measure, tabular figures, tighter tracking on large display type, looser tracking on small uppercase labels and a line height that falls as size rises are all standard typographic practice, and 1.25 is the classic major-third scale. &ldquo;Five sizes max&rdquo;, &ldquo;two weights only&rdquo; and &ldquo;three text colours&rdquo; are a tidy opinion: good defaults, but not laws, and some products legitimately use 500 as a third weight. The claim that one line height everywhere is an &ldquo;AI tell&rdquo; is plausible but unverified.</div>
+## Extra: variant-note
+<div class="variant-note"><b>Font families, two variants.</b> Variant A: one family for the whole product (rule 1 above). Use when: a product UI, a dashboard or a dense tool, where hierarchy comes from size, weight and colour. Variant B: up to two families from different classes (serif with sans, or mono with sans), with display type at 2.5 times the body size or more. Use when: an editorial, marketing or brand surface needs a voice of its own. Two near-identical faces are never the answer. Variant B comes from Visual Character (entry 31). Both are kept on purpose.</div>
 ## Code: CSS
 <pre><code>:root {
   --font: system-ui, sans-serif; <span class="cm">/* 1. one family only */</span>

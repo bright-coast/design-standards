@@ -34,9 +34,11 @@ How people perceive, choose and remember. Everything here is a research-backed h
 
           Visual, 08Gestalt Laws how the brain groups visual elements
 
+          Psychology, 04Chunking working memory holds about four chunks
+
           Content, 04Serial Position the first and last items are remembered best
 
-3 patterns. Use when: how people perceive, choose and remember.
+4 patterns. Use when: how people perceive, choose and remember.
 
 ## Fitts’s Heuristic
 
@@ -105,4 +107,25 @@ Code (CSS):
 ```css
 /* the familiar mobile layout: a bottom bar with a few evenly spaced tabs, as in the apps people already use */
 .tab-bar { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-around; }
+```
+
+## Chunking
+
+Working memory holds about four chunks (Cowan, 2001), not the seven that is often quoted. Ten loose digits (4155550123) overflow four slots and six are lost; the same number in three groups (415 555 0123) fits, with all three chunks kept. Group anything people must hold in their heads while they act on it: phone numbers, card numbers, reference numbers, codes, long IDs, and the steps of a flow.
+
+It is a research-backed heuristic about memory, not a law of layout. The rules in this library that apply it are Input Masking (Forms, entry 06), which formats as people type, and OTP Input (Forms, entry 07).
+
+Do:
+- Show and accept long numbers in groups of 3 to 4
+- Keep what people must remember to about four chunks
+
+Avoid:
+- A 10-digit reference shown as one unbroken string
+
+Code (JS):
+
+```js
+// show and type in chunks: 415 555 0123, not 4155550123
+const chunk = (d, sizes = [3, 3, 4]) => { let i = 0; return sizes.map(n => d.slice(i, i += n)).filter(Boolean).join(' '); };
+chunk('4155550123'); // "415 555 0123": 3 chunks fit 4 slots
 ```

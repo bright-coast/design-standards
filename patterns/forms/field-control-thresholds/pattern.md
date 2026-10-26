@@ -14,6 +14,8 @@ order: 15
 - A 20-option dropdown with no search, forcing a scroll-and-squint
 ## Extra: variant-note
 <div class="variant-note"><b>Variant B of the dropdown search threshold.</b> A plain dropdown for 8 to 15 options, a searchable combobox from 16, async search past 50. Use when: you are picking the control from the option count. Variant A, search from about 10 items, is in Dropdown Design. Both are kept on purpose.</div>
+## Extra: variant-note
+<div class="variant-note"><b>Variant C of the option-count thresholds.</b> A segmented control for 2 to 4 exclusive options that must stay in view (7 segments is too many); visible radios up to 5; more than 5 becomes a dropdown, because a longer radio list pushes the rest of the settings off screen. Use when: the choice sits in a settings page with other controls below it. Variant B (visible radios to 7, dropdown 8 to 15) suits a choice that has the screen to itself. All kept on purpose.</div>
 ## Code: Notes
 <pre><code><span class="cm">// option count decides the control, not house habit</span>
 <span class="kw">function</span> <span class="fn">pickControl</span>(optionCount) {

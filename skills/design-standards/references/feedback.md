@@ -7,7 +7,7 @@ What the interface says back after an action, the difference between a product t
 
 **Six states, not one.** Any view that fetches data or handles input needs an explicit answer for all six: Loading (see Skeleton Loading / Loading States System below), Empty (says why it’s empty and what to do next, not “no data”), Partial, Error (see Error States below), Success (a visible confirmation, not silence, see Toast Notifications / Undo UX below), and Offline. Partial and Offline are the two most commonly skipped, since neither has an obvious home the way a spinner or an error banner does. **Partial** covers the moment some data is in and some isn't: keep whatever already loaded on screen and slot skeleton placeholders in only for what's still coming, mark a single field that failed with an inline “Failed to load, retry” instead of erroring the whole component out, and when paginating to a next page, keep the current page visible with loading confined to the bottom rather than clearing everything first. Never blank a screen that already had real content on it, that's a step backward from where someone already was. **Offline** means detecting the drop (`navigator.onLine` plus actual failed requests, since the flag alone lies often enough not to trust on its own), surfacing a persistent banner that names the degraded mode in plain terms, queuing any mutation that can wait and retrying once the connection returns, disabling only the actions that strictly require the network, and never showing a generic error for a failure that offline status already explains.
 
-11 patterns. Use when: loading, empty and error states, toasts, progress and confirmations.
+13 patterns. Use when: loading, empty and error states, toasts, progress and confirmations.
 
 ## Doherty Threshold
 
@@ -70,6 +70,8 @@ Do:
 
 Avoid:
 - A skeleton for every fetch regardless of duration
+
+Variant: **The first moment of a wait, two variants.** Variant A: show nothing for the first ~300ms of a content load, so a fast response never flickers a skeleton (this entry). Use when: data is loading into a screen or a panel. Variant B: acknowledge within 100ms, with the pressed state and a spinner inside the button from the moment of the press (Interactive State and Affordance, Interaction entry 24). Use when: the person just clicked or tapped something. Both are kept on purpose; one action often needs both, B on the button and A on the panel it fills.
 
 Code (JS):
 
@@ -228,6 +230,8 @@ Do:
 Avoid:
 - Blocking every delete behind a confirm nobody reads
 
+Variant: **Undo toast duration, two variants.** Variant A: about 4 seconds for a reversible, low-stakes change such as a notification setting (Success States, entry 12). Use when: the change is trivial to redo by hand. Variant B: 5 to 10 seconds, longer for anything destructive, with the countdown visible. Use when: the undo recovers something deleted or sent. Both are kept on purpose.
+
 Code (JS):
 
 ```js
@@ -337,4 +341,64 @@ async function writeClipboard(text) {
   }
 }
 <!-- <div id="copy-live" aria-live="polite"></div>  the live region must already exist in the DOM -->
+```
+
+## Success States
+
+A done screen is not a dead end, and five decisions keep the person moving. **Say what happened:** what, who and when, with the specifics (Invoice sent to Northwind Labs, INV-2051, EUR 2,400, due 12 Oct, sent just now) instead of Success! Your action was completed; specifics are the proof it worked, and a vague success feels like a maybe. **Offer the next action:** one primary next step and one way back (View invoice, Send another, Back to invoices); a check mark with no button is a dead end, and the person closes the tab right there.
+
+**Dismissal follows stakes:** a reversible, low-stakes change (notification settings) gets a toast with Undo that leaves after about 4 seconds; money gets a page that stays, with the plan, amount, card, date, a downloadable receipt and a copy by email, because nobody screenshots a toast. **Leave one open loop:** one thread to pull, such as tracking the payment (sent, opened, paid, notify me when paid), sharing the report, or inviting teammates; a finished task with a thread to pull brings people back (Zeigarnik Effect, Feedback entry 09). **Celebrate the rare win:** confetti is for milestones such as the first invoice paid, never every save; rare joy lands, constant joy is noise (Peak-End Rule, Interaction entry 18).
+
+Do:
+- What, who and when, with real specifics
+- One primary next action and one way back
+- Reversible = toast with Undo; money = a page with a receipt
+- Confetti for milestones only
+
+Avoid:
+- Success! with an OK button and nothing else
+- A payment confirmed only by a toast
+- Confetti on every save
+
+Code (JS):
+
+```js
+// success = what + who + when, one primary next step, one way back
+function onDone(r) {
+  if (r.reversible && !r.money) toast(`${r.what} saved`, { action: 'Undo', ms: 4000 }); // low stakes
+  else showPage('receipt', r); // money: a page that stays, receipt plus email
+  if (r.milestone) confetti(); // first invoice paid, never every save
+}
+```
+
+## Six Data States
+
+Anything that fetches data, accepts input or does async work has six states, and each one is designed rather than left to whatever the happy path happens to render. **Loading** shows a skeleton that matches the final layout, or a progress indicator with intent (Loading States System, entry 03). **Empty** explains why and offers the next action (Empty States, Content entry 01). **Partial** shows what did load and marks what did not. **Error** says what happened and offers a way out (Error States, entry 02). **Success** is a visible confirmation, never just the absence of an error (Success States, entry 12). **Offline** is a degraded mode with an explanation.
+
+**Partial is the most skipped state.** When some items have loaded and more are coming, show the loaded items with skeleton placeholders for the rest. When one field or panel fails, mark only that spot with Failed to load, Retry, rather than turning the whole component into an error. When the next page is loading, keep the current page visible and show the loader at the bottom. Never blank the screen on a partial failure; that throws away data the person already had.
+
+**Offline, at minimum.** Detect it (navigator.onLine plus failed requests). Say so in a persistent banner (Offline, your changes are saved on this device). Queue changes and replay them on reconnect where possible (Autosave, Forms entry 01). Disable the actions that strictly need the network, and raise no errors for failures that being offline already explains. If the product genuinely cannot work offline, say so the first time it happens rather than failing silently. Before calling a data component done, tick all six states; any unticked one is a gap to fix or to name out loud.
+
+Do:
+- All six states handled: loading, empty, partial, error, success, offline
+- A partial failure marks one spot and keeps everything else on screen
+- A persistent offline banner, with changes queued for reconnect
+
+Avoid:
+- A component that only renders the happy path
+- Blanking the screen when one request out of five fails
+- A wall of network errors for something being offline already explains
+
+Code (JSX):
+
+```jsx
+// all six states, in the order they are checked
+if (offline && !data)  return <OfflineState onRetry={refetch} />;   // degraded mode, explained
+if (isLoading)         return <ListSkeleton rows={5} />;           // same shape as the real list
+if (isError)           return <ErrorState title="We couldn't load invoices" onRetry={refetch} />;
+if (data.length === 0) return <EmptyState action="Create your first invoice" />;
+return (<>
+  {offline && <Banner>Offline, your changes are saved on this device</Banner>}
+  <List items={data} failed={failedIds} />  {/* partial: a failed row shows Retry inline */}
+</>);
 ```

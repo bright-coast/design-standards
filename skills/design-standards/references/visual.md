@@ -5,7 +5,7 @@
 
 The layer people notice consciously least and judge most: colour, depth, spacing, and the perceptual rules underneath them.
 
-25 patterns. Use when: colour, type, spacing, depth, icons and layout.
+32 patterns. Use when: colour, type, spacing, depth, icons and layout.
 
 ## Border Radius
 
@@ -360,6 +360,8 @@ Do:
 Avoid:
 - Cramped padding, near-zero radius
 
+Note: **A note on the finish.** A dark, glossy card is often read as machine-generated. The numbers are sound; the finish is a style choice to check against AI Slop: What Not To Do.
+
 Code (CSS):
 
 ```css
@@ -654,6 +656,8 @@ Avoid:
 
 Note: **Defaults, not laws.** A 45 to 75 character measure, tabular figures, tighter tracking on large display type, looser tracking on small uppercase labels and a line height that falls as size rises are all standard typographic practice, and 1.25 is the classic major-third scale. “Five sizes max”, “two weights only” and “three text colours” are a tidy opinion: good defaults, but not laws, and some products legitimately use 500 as a third weight. The claim that one line height everywhere is an “AI tell” is plausible but unverified.
 
+Variant: **Font families, two variants.** Variant A: one family for the whole product (rule 1 above). Use when: a product UI, a dashboard or a dense tool, where hierarchy comes from size, weight and colour. Variant B: up to two families from different classes (serif with sans, or mono with sans), with display type at 2.5 times the body size or more. Use when: an editorial, marketing or brand surface needs a voice of its own. Two near-identical faces are never the answer. Variant B comes from Visual Character (entry 31). Both are kept on purpose.
+
 Code (CSS):
 
 ```css
@@ -706,4 +710,224 @@ Code (CSS):
 /* same rule for flex: a flex item also defaults to min-width: auto */
 .row { display: flex; gap: 16px; }
 .row > * { flex: 1; min-width: 0; }
+```
+
+## Equal-Height Cards in a Row
+
+Cards that sit in the same row of a grid are always the same height. Whichever card is tallest sets the height of the row, and the others grow to match it. This holds on every screen width, including two-up on a phone, where a mismatch is most visible because the two cards sit directly side by side with nothing else on the screen to distract from the gap.
+
+Let the grid do the work. A grid stretches its items by default, so do not set `align-items` to `start` or `center` on a grid of cards. The trap is the wrapper. When a card is wrapped in another element (a tooltip cell, a link, a button, a motion wrapper), the wrapper becomes the grid item and stretches, but a stretched wrapper does not stretch its child by itself, so the card inside keeps its content height. Give every wrapper in the chain a full-height rule (`h-full`, or `height: 100%`) and give the card itself `h-full`. Do not fake equal heights with magic pixel numbers; the one exception is a set of cards whose inner rows are deliberately fixed so that they line up internally.
+
+Do:
+- Let the grid stretch its items, so the tallest card sets the row
+- Pass `h-full` through every wrapper (tooltip cell, link, button, motion wrapper) and onto the card itself
+- Check the two-up layout on a phone, not only the desktop row
+
+Avoid:
+- `align-items: start` on a card grid
+- Leaving an unwrapped card that stretches next to a wrapped card that does not
+- Fixed heights or magic pixel numbers to fake it
+
+Code (Tailwind):
+
+```
+<!-- grid stretches by default: no items-start, no fixed heights -->
+<div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+
+  <!-- unwrapped card -->
+  <Card className="h-full" />
+
+  <!-- wrapped card: EVERY wrapper in the chain is h-full, and so is the card -->
+  <Tooltip>
+    <TooltipTrigger asChild className="h-full">
+      <div className="h-full">
+        <Card className="h-full" />
+      </div>
+    </TooltipTrigger>
+  </Tooltip>
+
+</div>
+```
+
+## Pricing Table
+
+A pricing table sells by ending the comparison. **Hierarchy:** one loud number per column, the price at about 52px weight 800, the plan name dropped to 14px capitals and the details dimmed, so it reads price, plan, details; with every line at 18px the eye has nowhere to land. **Spacing:** more space between plans than inside them (cards 20px apart, 24px padding, 14px rows, features as checks on one scan line); a single grid with 4px rows reads as a wall of text.
+
+**One highlighted tier:** three equal cards are no recommendation, so one plan lifts and two step back. The pick gets the only badge (Most popular; no runner-up badges, since a badge on every card is a badge on none, and silence is what makes the label work), a 2px accent border, and the only filled button; the others get outlined buttons whose labels name the plan or the action (Start with Team, Choose Starter, Talk to sales). **Depth:** raise the choice, not everything, the pick raised about 16px on a soft downward shadow (y 24, blur 48) with a 1px lit top edge and an 18px radius.
+
+**Features:** list what changes, not what repeats; the first tier lists its few features (12 lines cut to 4) and each higher tier opens with Everything in Starter, plus, then three lines, because twelve identical checks per card are a wall, not a comparison. **Anchor:** a billing toggle that defaults to yearly, with the old price struck through next to the new one ($30 struck under $24 a month), so the saving needs no maths. **Motion:** hover lifts a plan 4px in 150ms, the toggle rolls the prices in 300ms, and the trial button’s spinner becomes a check: feedback in 100ms, done in 300.
+
+Do:
+- One loud price per column
+- One recommended plan, one badge, one filled button
+- Higher tiers list only what they add
+- Old price struck through beside the new one
+
+Avoid:
+- Three identical cards with a badge on each
+- Twelve repeated checks on every tier
+- A gradient button on every plan
+
+Variant: **How to show the saving, two variants.** Variant A: a percent chip on the yearly toggle (-20%). Use when: prices are under about $100, where a percent reads as the bigger number (Jonah Berger’s Rule of 100). Variant B: write the saving in money (Save $98 / year: $49 x 12 = $588 against $490 billed annually). Use when: the price or the yearly saving is over about $100, where dollars read bigger. Note that 40% off may still beat save $50, which is the same Rule of 100 split. Both kept on purpose; either way, keep the struck-through old price beside the new one.
+
+Note: **An alternative framing worth testing.** Some teams prefer good, better, best tiers that emphasise what each tier gains more than what it costs. Not tested here; note it as an option, not a rule.
+
+Code (CSS):
+
+```css
+.plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; } /* more space between plans */
+.plan { padding: 24px; display: grid; gap: 14px; border: 1px solid var(--border); border-radius: 18px; } /* than inside them */
+.plan .price { font-size: 52px; font-weight: 800; font-variant-numeric: tabular-nums; } /* one loud number */
+.plan .name { font-size: 14px; text-transform: uppercase; color: var(--ink-2); }
+.plan.pick { border: 2px solid var(--accent); transform: translateY(-16px);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .1), 0 24px 48px rgb(0 0 0 / .18); } /* raise the choice only */
+.plan .btn { border: 1px solid var(--border); background: none; }  /* outlined */
+.plan.pick .btn { background: var(--accent); color: #fff; }       /* the only filled button */
+.plan { transition: transform 150ms ease-out; } .plan:hover { translate: 0 -4px; }
+```
+
+## Card Treatment System
+
+A card is a component with rules, not a box for everything. **One card, one entity:** one title, one subject, one place to go (a project, its client and progress, its page). A settings form wrapped in three cards is three cards and zero entities, so use sections with headings instead; a form section is not a card, and cards for everything is a machine-made tell. **The background picks the treatment:** on white, a border; on a tinted page, a shadow; inside a panel, flat. A shadow on white barely reads, a border on grey is noise, and a border plus a shadow on a tint is a double outline.
+
+**One surface, one action:** a clickable card is clickable everywhere, the whole surface opens it and hover lifts the whole thing; two buttons inside means it is a panel, not a card, and list rows move the other actions into a (...) menu. **Never nest cards:** a card inside a card is a box inside a box, so flatten the inner one and let dividers do the grouping (a 24px rhythm). **One media ratio across the grid:** every image cropped to the same ratio (16:9, for example), never stretched, because one tall image breaks the row. **Dark mode kills shadows:** borders come back one step lighter than the surface, and elevation becomes surface tint, with surface 0, 1 and 2 each a step lighter (Dark Mode, Visual entry 04).
+
+Do:
+- One entity per card: title, subject, destination
+- Border on white, shadow on tint, flat inside a panel
+- The whole card is the one click target
+- All card media at one cropped ratio
+
+Avoid:
+- A settings form split into cards
+- A card nested inside a card
+- Archive and Open buttons inside a clickable card
+- Shadows as elevation in dark mode
+
+Code (CSS):
+
+```css
+.bg-white  .card { border: 1px solid var(--border); box-shadow: none; } /* white: border */
+.bg-tinted .card { border: 0; box-shadow: 0 1px 2px rgb(0 0 0 / .06), 0 4px 12px rgb(0 0 0 / .06); } /* tinted: shadow */
+.panel     .card { border: 0; box-shadow: none; } /* panel: flat */
+.card { position: relative; } .card .stretched::after { content: ""; position: absolute; inset: 0; } /* one surface, one action */
+.card img { aspect-ratio: 16 / 9; object-fit: cover; } /* one ratio, cropped, never stretched */
+@media (prefers-color-scheme: dark) {
+  .card { box-shadow: none; border: 1px solid var(--surface-2); background: var(--surface-1); } /* elevation = tint */
+}
+```
+
+## Phone Check at 375px
+
+A layout that fits the laptop breaks in five predictable spots on a 375px phone, and each has a one-line fix. **Tables:** six columns at 375px hide status and deadline behind a swipe, so under 640px each row becomes a card (ID, status chip, needed by, cost, approver). **Big numbers:** a 48px figure wraps in a narrow card and its plus sign lands alone on a line, so keep amounts on one line (nowrap, tabular digits) and cap the size at about 30px on a phone. **Inputs:** under 16px, iOS Safari zooms the page when the field is tapped, so inputs are 16px on phones, with the right keyboard per field (inputmode, autocomplete, enterkeyhint).
+
+**Touch targets:** thumbs miss 28px buttons, so touch screens get 44px targets, scoped to a coarse pointer so a mouse keeps the dense layout. **Bottom bar:** a fixed bottom bar slides under the home indicator and covers the last row, so pad it with the safe area inset and leave room under the content. Make it a habit to check every screen at 375px before calling a layout done.
+
+Do:
+- Under 640px, table rows become cards
+- Big figures on one line, capped at about 30px
+- Inputs at 16px with the right keyboard
+- 44px targets on a coarse pointer only
+- Safe-area padding under a fixed bottom bar
+
+Avoid:
+- A six-column table squeezed into 375px
+- 14px inputs that make iOS zoom
+- A fixed bar covering the last row
+
+Variant: **Table-to-card breakpoint, two values.** This entry uses a 640px media query; the phone-table rules under Data Table (Interaction, entry 08) use a container query at about 700px. Both are demo numbers. Use the media query when the table spans the page; use the container query when the same table appears in panels of different widths.
+
+Code (CSS + HTML):
+
+```css
+@media (max-width: 640px) { .table-wide { display: none; } .row-cards { display: grid; gap: 8px; } } /* under 640px: cards */
+.kpi-value { white-space: nowrap; font-variant-numeric: tabular-nums; font-size: 30px; } /* one line, capped */
+input, select, textarea { font-size: 16px; } /* under 16px, iOS Safari zooms in */
+<input inputmode="numeric" autocomplete="cc-number" enterkeyhint="next">
+@media (pointer: coarse) { button, .tap { min-height: 44px; } } /* touch only; a mouse stays dense */
+.bottom-bar { position: fixed; bottom: 0; padding-bottom: env(safe-area-inset-bottom); }
+main { padding-bottom: calc(64px + env(safe-area-inset-bottom)); } /* room below the last row */
+<!-- env() insets need <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"> -->
+```
+
+## 60-30-10 Colour Balance
+
+A simple starting ratio for colour balance. **60% neutral (base):** backgrounds, surfaces, containers and large areas, such as white, light grey or off-white (for example #F7F7F5). **30% secondary (support):** UI elements, icons, borders and secondary content, in grey, muted tones or soft colours (#A3A3A3). **10% accent (highlight):** calls to action, important actions, links and key elements, in the brand colour (a near-black such as #0F0F0F also works, where the accent is contrast rather than hue). Kept to that balance, an interface reads clean, professional and easy to navigate without being boring.
+
+Two cautions. The ratio comes from interior design and is a heuristic, not a measurement anyone checks. And the 30% support grey is for borders, icons and large secondary shapes, not body text: #A3A3A3 on #F7F7F5 is only about 2.4:1, under the 4.5:1 text minimum (Color Accessibility, Visual entry 03).
+
+Do:
+- Large areas neutral, accent kept for actions
+- One accent colour, used sparingly
+- Support grey for borders and icons
+
+Avoid:
+- Accent colour spread across large surfaces with no reason
+- The light support grey used for body text
+
+Variant: **Strict ratio versus a dark hero surface, two variants.** Variant A: strict 60-30-10, the accent only on actions and key elements. Use when: list, form and settings screens where the actions should be the only loud thing. Variant B: one dark hero surface well past 10% (for example a finance screen that puts the balance on a large black card, which strictly breaks the rule). Use when: one object is the subject of the screen, such as an account balance or a featured item, and everything else stays neutral. Both kept on purpose.
+
+Code (CSS):
+
+```css
+:root {
+  --base:    #F7F7F5; /* 60%: backgrounds, surfaces, containers, large areas */
+  --support: #A3A3A3; /* 30%: UI elements, icons, borders, secondary shapes (not body text, about 2.4:1) */
+  --accent:  #0F0F0F; /* 10%: calls to action, important actions, links, key elements */
+}
+```
+
+## Visual Character: One Decision per Axis
+
+Every generator has a default look, and a screen left on it reads as machine-made whatever this year’s default happens to be. Character comes from making one explicit decision on each of four axes, written down once (in the Project Design Contract, entry 32) and applied everywhere. This entry does not choose a style; it rules out not choosing. **Type: where does the contrast live?** Either high contrast (display type at 2.5 times the body size or more, a hard weight jump, or a second family) or deliberately low contrast for a dense expert tool; the comfortable middle is no decision. The one family versus two families choice is held as two variants in Typography as a System (entry 24). **Colour: what is the signature?** One signature colour, picked for the product’s temperament and used rarely enough to mean something: the primary action and the one thing that must be found. Its contrast is decided with it: label text on the signature clears 4.5:1, and the signature clears 3:1 against the surface behind it, or the lightness changes until it does. Neutrals are calibrated warm, cool or pure to match the temperament, never the framework’s default grey ramp, and status colours stay semantic.
+
+**Space: what is the rhythm?** Dense and efficient or airy and editorial, chosen once and then applied everywhere, with compression inside groups and release between them; uniform gaps of about 16px everywhere are the tell of undecided space. **Finish: what is the separation language?** One primary way for surfaces to separate: borders, shadows or flat colour planes. All three on one screen means no decision was made. Finish also lives in consistent radii, optical alignment and real hover, focus and active states. Two checks before shipping. Strip the accent: the screen should still work in neutrals alone, because hierarchy is not colour’s job. Then the lineup test: would this screenshot be recognisable among ten generated screens for the same prompt? If not, walk the four axes and find the one still sitting on its default.
+
+Do:
+- One written decision per axis: type, colour, space, finish
+- Label text on the signature at 4.5:1, the signature itself at 3:1 against its surface
+- The screen still works with the accent stripped out
+
+Avoid:
+- Borders, shadows and flat planes all separating surfaces on one screen
+- Uniform 16px gaps everywhere
+- A style adopted because it was the default, with no stated reason
+
+Code (TEXT):
+
+```
+## Character
+Type:    high contrast; serif display at 2.6 times the sans body (food is editorial)
+Colour:  saffron signature on Start cooking only; warm neutrals, kitchens are not grey
+Space:   airy; 8px inside a meta group, 32px between sections
+Finish:  flat warm planes, no borders, no shadows
+```
+
+## Project Design Contract
+
+Generated screens drift: screen one uses one blue and 24px card padding, screen two a different blue and 16px, and screen three invents a third button style. Each is fine alone, and the set is incoherent. The fix is a written contract per project, a DESIGN.md at the project root that every new screen reads and obeys. **Extract before inventing:** if the project already encodes decisions (a Tailwind config or @theme block, :root custom properties, a theme or tokens file, or the variants of its most reused component), consolidate those into the contract, list the gaps, and decide only the gaps. **Every value carries its reason:** a token without a why is a preference, not a decision. The contract covers colour (surfaces, text, one accent used only for the primary action and key status, semantic status colours), type (family, scale, weights), spacing (base unit, scale, rhythm), shape and elevation (radii and the one separation language), motion (durations and easing), the component variants the project actually uses, and voice (tone, sentence case, verbs on buttons). A short honest file beats a padded template, and it never holds invented placeholder values.
+
+**Enforcement is the point.** Every new screen pulls colour, type, spacing, radius, shadow and motion from the contract. A value outside it is either an extension (proposed, added to the contract with its reason, then used) or flagged and replaced with the closest token; it is never invented silently, because silent invention is how drift starts. New component variants are extensions too. The contract is versioned with the code and updated in the same commit as the change it blesses, and when a token changes, the screens it affects get listed. Precedence runs from the owner’s instruction, to the contract, to generic defaults. A one-off contradiction gets a one-line flag and is built; a run of them is a change of direction, so update the contract. No second screen gets built in a project that has neither a contract nor an explicit decision to go without one.
+
+Do:
+- Existing tokens extracted into the contract before anything new is invented
+- A one-line reason beside every value
+- The contract updated in the same commit as the change it blesses
+
+Avoid:
+- A silently invented colour, size or radius outside the contract
+- A contract filled from a template with made-up values
+- A second screen built with no contract and no decision to skip one
+
+Code (MARKDOWN):
+
+```
+# Design System: habit tracker
+Character: warm and encouraging, progress never guilt
+## Color
+- --bg #FAF7F2 / --surface #FFFFFF: warm off-white; clinical white reads like a report card
+- --accent #E8763A: only on Done today and streak highlights
+## Spacing
+- base 4px; scale 4/8/12/20/32; airy, one habit at a time
+<!-- off-system: a red streak banner was requested; extension proposed: --warning #D97742 -->
 ```

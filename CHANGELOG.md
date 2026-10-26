@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.1.0 (October 2026)
+
+Adds 20 rules and enriches many more: checkout, pricing, success states, data states, phone checks, machine-made copy tells and more.
+
+- 20 new rules, bringing the library to 122.
+  - Interaction: Voice Message Recorder, Primary Button Anatomy, Before You Build: The Intent Brief, and UX Audit Order and Severity.
+  - Forms: Checkout That Feels Safe, Form Colour Semantics, and Input Field Details.
+  - Feedback: Success States, and Six Data States.
+  - Visual: Equal-Height Cards in a Row, Pricing Table, Card Treatment System, Phone Check at 375px, 60-30-10 Colour Balance, Visual Character: One Decision per Axis, and Project Design Contract.
+  - Motion: View Transitions.
+  - The Psychology of the User Experience: Chunking.
+  - AI Slop: Pricing Page Tells, and Copy That Reads Machine-Made.
+- Richer guidance on existing rules, each kept as a "two variants, and when to use each" note: Context Menu (the safe triangle for submenus), Disabled Buttons, Drag and Drop (drop placeholders), Field Control Thresholds, Loading States System (the first moment of a wait), Undo UX (how long the toast stays), Empty States (illustration or text only) and Typography as a System (one font family or two). Perfect Card gains a note on its finish.
+- The AI Slop Quick Checklist grows from 23 to 33 lines, with new writing, pricing page and card checks, and is now entry 9 of its category.
+- The psychology index now points to Chunking.
+
 ## 1.0.0 (29 Sep 2026)
 
 First release.

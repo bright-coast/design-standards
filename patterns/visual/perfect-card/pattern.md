@@ -10,6 +10,8 @@ order: 13
 - Real type hierarchy (bold title, muted body)
 ## Avoid
 - Cramped padding, near-zero radius
+## Extra: caveat-box
+<div class="caveat-box"><b>A note on the finish.</b> A dark, glossy card is often read as machine-generated. The numbers are sound; the finish is a style choice to check against AI Slop: What Not To Do.</div>
 ## Code: CSS
 <pre><code>.card {
   padding: 24px; <span class="cm">/* generous, the biggest single tell of quality */</span>

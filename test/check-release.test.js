@@ -43,6 +43,13 @@ test('a stale build is caught', () => {
   mutate(root, PAT, (t) => t.replace('Real', 'Genuine'), false);
   assert.ok(failuresOf(root)['Parity and freshness'].some((m) => /stale/.test(m)));
 });
+test('a "## " line inside a code sample is not counted as a rule in the reference file', () => {
+  const root = makeFullFixture();
+  mutate(root, PAT, (t) => t + '\n## Code: MARKDOWN\n<pre><code># Title\n&#35;&#35; Color\n&#35;&#35; Spacing</code></pre>\n');
+  const ref = fs.readFileSync(path.join(root, 'skills/design-standards/references/interaction.md'), 'utf8');
+  assert.ok(/^## Color$/m.test(ref), 'the fixture puts a ## line in the reference file');
+  assert.deepStrictEqual(failuresOf(root)['Parity and freshness'], []);
+});
 test('a creator handle, a Source line and save wording are caught; @media is allowed', () => {
   const root = makeFullFixture();
   mutate(root, PAT, (t) => t.replace(RULE, '<p>By @somecreator. Source: a reel. From the 20 Sep save.</p>'));

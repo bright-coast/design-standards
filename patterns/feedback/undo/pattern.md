@@ -10,6 +10,8 @@ order: 8
 - Soft-delete with a real recovery window
 ## Avoid
 - Blocking every delete behind a confirm nobody reads
+## Extra: variant-note
+<div class="variant-note"><b>Undo toast duration, two variants.</b> Variant A: about 4 seconds for a reversible, low-stakes change such as a notification setting (Success States, entry 12). Use when: the change is trivial to redo by hand. Variant B: 5 to 10 seconds, longer for anything destructive, with the countdown visible. Use when: the undo recovers something deleted or sent. Both are kept on purpose.</div>
 ## Code: JS
 <pre><code><span class="kw">function</span> <span class="fn">deleteWithUndo</span>(item) {
   softDelete(item.id); <span class="cm">// happens immediately, no "are you sure" dialog</span>

@@ -11,6 +11,8 @@ order: 11
 - Short undo toast after every drop
 ## Avoid
 - Making a wrong drop permanent with no way back
+## Extra: variant-note
+<div class="variant-note"><b>Drop placeholder, two variants.</b> Variant A: an insertion line between items. Use when: lists of short, uniform rows, where a line is enough. Variant B: a placeholder the exact height of the dragged card (a 96px card opens a 96px slot), so the column opens once and nothing else moves. Use when: kanban cards of varying height, where a thin line makes every card below jump on drop. Both kept on purpose.</div>
 ## Code: JS
 <pre><code>card.addEventListener(<span class="str">'dragstart'</span>, () => {
   card.classList.add(<span class="str">'lifted'</span>); <span class="cm">/* CSS: scale(1.03) + shadow + slight rotate */</span>

@@ -1,6 +1,6 @@
 {
   "name": "design-standards",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Brand-neutral design standards: a browsable page and a Claude skill, generated from one set of patterns.",
   "scripts": {

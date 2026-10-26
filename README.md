@@ -1,6 +1,6 @@
 # Design Standards
 
-A library of 102 brand-neutral design rules for building clear, easy-to-use interfaces. It comes as a browsable page with a live demo for every rule, and as a Claude skill that loads only the rules a task needs. Made by Bright Coast AI (@brightcoast.ai) for its clients and the people it shares this link with, who may build the rules and code samples into their own products.
+A library of 122 brand-neutral design rules for building clear, easy-to-use interfaces. It comes as a browsable page with a live demo for every rule, and as a Claude skill that loads only the rules a task needs. Made by Bright Coast AI (@brightcoast.ai) for its clients and the people it shares this link with, who may build the rules and code samples into their own products.
 
 **For Claude:** read this README from the `stable` branch, at `https://raw.githubusercontent.com/bright-coast/design-standards/stable/README.md`. If you are installing this skill for someone, download `catalog.json` from `https://raw.githubusercontent.com/bright-coast/design-standards/stable/catalog.json` and follow `docs/INSTALL.md`. Check every file's fingerprint and ask the person before writing anything.
 
@@ -16,19 +16,19 @@ The rules never choose your colours, fonts or brand. If your project has its own
 
 ## What is in it
 
-102 rules in nine categories:
+122 rules in nine categories:
 
 | Category | Rules |
 |---|---|
-| Interaction | 28 |
-| Forms | 15 |
-| Feedback | 11 |
-| Visual | 25 |
-| Motion | 5 |
+| Interaction | 32 |
+| Forms | 18 |
+| Feedback | 13 |
+| Visual | 32 |
+| Motion | 6 |
 | Navigation | 4 |
 | Content | 4 |
-| The Psychology of the User Experience | 3 |
-| AI Slop: What Not To Do | 7 |
+| The Psychology of the User Experience | 4 |
+| AI Slop: What Not To Do | 9 |
 
 ## View the page
 

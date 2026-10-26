@@ -5,7 +5,7 @@
 
 The smallest category, but the one where a wrong number is felt by everyone even when nobody can name what’s off.
 
-5 patterns. Use when: animation timing, easing and transitions.
+6 patterns. Use when: animation timing, easing and transitions.
 
 ## Animation Timing
 
@@ -164,4 +164,42 @@ Code (CSS):
 .bar { width: 100%; transform-origin: left; }
 .bar.loading { animation: fill 1.2s ease-out both; }
 @keyframes fill { from { transform: scaleX(.12); } to { transform: scaleX(1); } } /* not width: 12% to 100%, which relayouts every frame */
+```
+
+## View Transitions
+
+The View Transitions API morphs one state into another with no animation library. **A card becomes a page:** give the card image and the page header the same `view-transition-name`; the browser snapshots the old and new states and interpolates size, position and corner radius (in the demo width 379 to 1080px, top 201 to 64px, radius 15 to 0px). In a single-page app, one `document.startViewTransition()` call wraps the DOM update. **Every row, its own name:** give each list item a unique name and sorting or filtering slides every row with no animation code; one item, one name, because a duplicate name throws an InvalidStateError and the transition is skipped.
+
+**A theme toggle that spreads:** animate `::view-transition-new(root)` with a clip-path circle that grows from the click position, a circular wipe in one rule (600ms in the demo). **A modal born from its button:** the button holds the name, and on open the name moves to the dialog, so it grows out of the place that was tapped instead of fading in from nowhere. **Across real page loads:** `@view-transition { navigation: auto; }` on both pages gives the same morph on a multi-page site with no framework (Chrome 126+, Safari 18.2+); without support the page swaps instantly, so nothing breaks. Respect reduced motion by turning the animations off under `prefers-reduced-motion`.
+
+Do:
+- One shared name on the two states that should morph
+- A unique name per list row
+- Modals grow from the button that opened them
+- Instant swap as the fallback, reduced motion honoured
+
+Avoid:
+- An animation library for a morph the browser can do
+- Two elements sharing one name on the same page
+
+Code (CSS + JS):
+
+```css
+.card img, .page header { view-transition-name: hero; } /* same name, two snapshots */
+document.startViewTransition(() => showPage()); // SPA: wrap the DOM update
+
+li { view-transition-name: var(--trip); } /* <li style="--trip: trip-1">, one item, one name */
+
+::view-transition-new(root) { animation: reveal 600ms; }
+@keyframes reveal { from { clip-path: circle(0 at var(--x) var(--y)); } } /* --x, --y = click position */
+
+btn.style.viewTransitionName = "share";
+document.startViewTransition(() => {
+  btn.style.viewTransitionName = "none";
+  dialog.style.viewTransitionName = "share"; // the name moves to the dialog
+  dialog.showModal();
+});
+
+@view-transition { navigation: auto; } /* on both pages: cross-document, no framework */
+@media (prefers-reduced-motion: reduce) { ::view-transition-group(*) { animation: none; } }
 ```

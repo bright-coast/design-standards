@@ -5,7 +5,7 @@
 
 The mechanics of clicking, dragging, and typing through a screen, the largest category, and the one most directly reusable across products, from an existing app to a brand-new build.
 
-28 patterns. Use when: buttons, menus, tables, dialogs, drawers, drag and drop, keyboard and touch behaviour.
+32 patterns. Use when: buttons, menus, tables, dialogs, drawers, drag and drop, keyboard and touch behaviour.
 
 ## Accordion Disclosure
 
@@ -223,6 +223,8 @@ Do:
 Avoid:
 - Closing a submenu the instant the cursor drifts off the row
 
+Variant: **Safe triangle geometry, and two simpler options.** The triangle runs from the cursor’s current position (its apex) to the top and bottom corners of the submenu’s near edge. While the pointer moves inside it, the submenu stays open even as the pointer crosses the rows below; the moment the pointer steps outside, the menu switches to the row under it instantly. Nobody sees the triangle, they just never get annoyed. It is computed from pointer positions, not drawn as an element (the menu-aim technique made famous by a large retailer’s mega menu). Variant A: the safe triangle. Use when: hover-opened submenus where speed matters. Variant B: a short hover-intent delay before switching rows. Use when: a simpler build is acceptable and a small lag is fine. Variant C: open submenus on click, not hover. Use when: touch matters or the menu is rarely used, since a click menu has no diagonal problem.
+
 Code (JS):
 
 ```js
@@ -368,6 +370,8 @@ Do:
 Avoid:
 - Leaving users to guess why submit won’t fire
 
+Variant: **Disabled buttons, two variants.** Variant A: keep the button live and validate on click, moving focus to the first blocking field (this entry). Use when: the block is something the person can fix in the form in front of them. Variant B: a real disabled state at 50% opacity with a not-allowed cursor and aria-disabled (which, unlike the disabled attribute, keeps the button focusable), always with the reason written beside it. Use when: the block is a known state the form cannot fix, such as a plan limit or a missing permission. The full state list is in Interactive State and Affordance (entry 24). Both are kept on purpose.
+
 Code (JS):
 
 ```js
@@ -393,6 +397,8 @@ Do:
 
 Avoid:
 - Making a wrong drop permanent with no way back
+
+Variant: **Drop placeholder, two variants.** Variant A: an insertion line between items. Use when: lists of short, uniform rows, where a line is enough. Variant B: a placeholder the exact height of the dragged card (a 96px card opens a 96px slot), so the column opens once and nothing else moves. Use when: kanban cards of varying height, where a thin line makes every card below jump on drop. Both kept on purpose.
 
 Code (JS):
 
@@ -939,4 +945,147 @@ function place(ev, overlapping) { // overlapping = events sharing the same hour,
   ev.el.style.left   = col * (100 / n) + '%';
 }
 scroller.scrollTop = nowMinutes * PX_PER_MIN - 120; // open scrolled to now (with a little context above), not midnight
+```
+
+## Voice Message Recorder
+
+A hold-to-record voice button makes five decisions, and each one gives the gesture a visible way out. **Press:** the timer starts and the button swells out past the thumb in the same frame as the press, before the first word, so the person can see it is recording; feedback hidden under the thumb leaves them asking whether it heard them. **Cancel:** sliding left past a fixed line turns the hint into a trash can, so releasing before the line sends and releasing past it deletes. **Lock:** for a long message, sliding up locks the recording and frees the thumb; a stop button and a send button replace the gesture, so nothing ends by accident.
+
+**Mic check:** a live input waveform moves with the voice, and a flat line for 2 seconds raises a banner (No sound for 2 seconds. Your mic looks muted.) with an Unmute button, before a whole minute is wasted. **Playback:** the listener’s bubble shows the length as a scrubbable waveform, with a draggable playhead, timestamps as jump points, a 1x to 1.5x speed toggle, and the time shown as time left, counting down.
+
+Do:
+- Timer and swell visible past the thumb on press, before any sound
+- A fixed cancel line: past it, release deletes
+- Slide up to lock long messages, then explicit stop and send
+- A flat waveform for 2 seconds raises a muted-mic warning with Unmute
+
+Avoid:
+- Recording feedback hidden under the thumb
+- A long recording that ends the moment the thumb slips
+
+Code (JS):
+
+```js
+// hold to record, slide left to cancel, slide up to lock
+const CANCEL_X = -120; // px left of the start point: past it, release deletes
+const LOCK_Y = -80;    // px above the start point: past it, recording locks
+mic.addEventListener('pointerdown', e => {
+  start = { x: e.clientX, y: e.clientY }; recorder.start();
+  ui.showTimerAndSwell(); // same frame as the press, before any sound
+});
+mic.addEventListener('pointermove', e => {
+  ui.setCancelHint(e.clientX - start.x < CANCEL_X ? 'trash' : 'slide');
+  if (e.clientY - start.y < LOCK_Y) { locked = true; ui.showStopAndSend(); }
+});
+mic.addEventListener('pointerup', e => {
+  if (locked) return; // only the stop or send button ends a locked recording
+  (e.clientX - start.x < CANCEL_X) ? recorder.discard() : recorder.send();
+});
+// mic check: flat input for 2 seconds means a muted mic
+if (msSinceLevelAbove(0.02) > 2000) ui.banner('No sound for 2 seconds. Your mic looks muted.', 'Unmute');
+```
+
+## Primary Button Anatomy
+
+Six decisions make a primary button read as the main action, and none of them is the colour. **Size:** 48px tall (never under 44px; a 40px button is a target the thumb misses) with 24px of side padding. **Label:** 17px, weight 600, sentence case with no shouting capitals, and a verb plus an object that says exactly what the tap will do: Add to cart, never OK, Submit or Click here. **Contrast:** the label at 4.5:1 or better and the button’s edge at 3:1 or better against the page (7:1 is the AAA text level); a flat grey fill at 1.6:1 has no edge and disappears, so a 1px rim at about 4:1 and a white label at about 14:1 fix it.
+
+**Depth:** light comes from above, so a lit top edge (1px of white at 16%) and a shadow that falls down (y 8, blur 24); a recessed 6px track and a rim light in the one accent are optional extras (see the caveat). **Detail:** one icon only, 20px, sitting 10px from the label, and for a pill the radius is height / 2 (24 on a 48px button). **Motion:** hover answers in 200ms, a press sinks the button 1px in 120ms, and a slow action shows a spinner that becomes a check (Added), easing out over about 200ms: feedback in 100ms, done in 300.
+
+Do:
+- 48px tall, 24px side padding
+- A verb plus an object, 17px semibold, sentence case
+- Label at 4.5:1, edge at 3:1 against the page
+- A spinner that becomes a check on a slow action
+
+Avoid:
+- OK, Submit or Click here as the label
+- A flat grey fill with no visible edge
+- Two icons on one button
+
+Note: **The finish draws real pushback.** A glossy treatment (recessed track, rim light) is often read as dated, or as the way machine-generated buttons look. Treat size, label, contrast and motion as the rules and the depth finish as an optional style, checked against AI Slop: What Not To Do before use. Keyboard focus needs its own visible state too (Focus States, Navigation entry 01).
+
+Variant: **Corner shape, two variants.** Variant A: a pill, radius = height / 2. Use when: the product’s shapes and type are round and friendly and the button stands on its own. Variant B: a small-radius rectangle from the system radius scale. Use when: the product is dense or technical, or the button sits beside inputs and cards that share that small radius. Both kept on purpose.
+
+Variant: **Visible size versus hit area, two variants.** Variant A: the visible button is 48px tall. Use when: it is the primary action on a touch screen. Variant B: the visible button may be smaller as long as its hit area and clearance reach 44px (consistent with Click Target Sizing, Interaction entry 25). Use when: secondary or dense controls.
+
+Code (CSS):
+
+```css
+.btn-primary {
+  min-height: 48px; padding: 0 24px;      /* never under 44px tall */
+  border-radius: 24px;                /* height / 2 for a pill; variant B: var(--radius-sm) */
+  font-size: 17px; font-weight: 600;  /* sentence case, verb + object */
+  display: inline-flex; align-items: center; gap: 10px; /* one 20px icon, 10px from the label */
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .16), /* lit top edge */
+              0 0 0 1px var(--btn-edge),            /* edge at 3:1 or better against the page */
+              0 8px 24px rgb(0 0 0 / .22);          /* shadow falls down */
+  transition: box-shadow 200ms ease-out, transform 120ms ease-out;
+}
+.btn-primary:active { transform: translateY(1px); }  /* press sinks 1px */
+.btn-primary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+```
+
+## Before You Build: The Intent Brief
+
+A screen built straight from the data model comes out shaped like the database: every field, every filter and every action at the same volume. Five answers, written down before any markup, shape it around the person instead. **Who** uses it (role, expertise, how often). **Primary action:** the one thing they do here 80% of the time. **Secondary actions:** the next two or three, the 15% case. **Context:** where and how it is used (a phone between jobs, a focused desk session, a shared screen, an incident at 2am). **Worst case:** the worst thing that can happen here (data loss, the wrong recipient, an irreversible action, a missed deadline). Ask for any missing answers in one message, never drip-fed, and keep the five as a short brief at the top of the work; every later decision should trace back to it.
+
+**Turning answers into layout.** A primary action used 80% of the time gets one prominent button, never a menu item. An irreversible worst case gets a confirmation step plus undo, never a single click. A wrong-data worst case keeps the identifying context (name, ID, timestamp) on screen at all times. A phone check-in gets one column, no sideways scroll and actions within thumb reach. Focused desk work can carry several panes, visible keyboard shortcuts and higher density. An incident at 2am gets high contrast, big targets and no clever interactions. A frequent expert gets density and batch actions without hand-holding tooltips; an occasional novice gets space, progressive disclosure and inline help.
+
+**Shapes the brief rules out.** A table of every field when the primary action needs three. A destructive action sitting next to the primary one. Every available filter shown by default. A modal for the screen’s primary action, where inline editing or a dedicated page belongs (Modal Hierarchy, entry 17). Tabs for sections that are not mutually exclusive. Mockups and demos use realistic placeholder content (a plausible name, a real-looking invoice number), never Lorem Ipsum and never a real customer’s details. When the owner says just build it, write the brief from stated assumptions, mark it as assumed, and keep moving; if the owner overrides a rule after a one-line warning, build it their way.
+
+Do:
+- Five answers (who, primary, secondary, context, worst case) written down before any markup
+- The worst case sets the friction: irreversible means a confirmation plus undo
+- Realistic placeholder content in every mockup
+
+Avoid:
+- A table of every database field because the data model has them
+- A modal or a menu item for the action people take 80% of the time
+- Lorem Ipsum, or a real customer’s details, in a demo
+
+Code (TEXT):
+
+```
+INTENT BRIEF (assumed until confirmed)
+User:          support agent, daily, non-technical
+Primary:       look up one customer during a live call
+Secondary:     reset password, view recent activity
+Context:       desktop, sometimes a phone, always in a hurry
+Worst case:    acting on the wrong customer
+Implications:  search owns the top of the page
+               name, email and ID stay visible once a customer is open
+               suspend and delete sit behind a typed confirmation
+```
+
+## UX Audit Order and Severity
+
+An audit is useful when every line names one element and one concrete fix. Start by writing down the screen’s inferred intent (primary user, primary action, worst case); if the intent is unclear, ask before critiquing, because critique without intent comes out wrong. Then rank every finding on four levels. **P0** breaks the primary flow or risks data loss or a wrong action (a destructive button with no confirmation, the primary action below the fold). **P1** degrades usability for most people (unclear tab labels, a twelve-column table, no empty state). **P2** is friction people will hit but get past (missing autocomplete hints, missing hover states). **P3** is polish (a toast that leaves too soon, an inconsistent focus ring). Five to twelve findings is the healthy range: more than twelve is a list of nitpicks, and fewer than five is being too kind.
+
+**Walk the lenses in this order.** Intent and hierarchy: the primary action is obvious in three seconds, there is one primary, destructive actions are not styled as primary, and values trace back to the project’s tokens. Information architecture: grouped by the person’s mental model, one scanning pattern, tables cut to five to seven columns. States: loading, empty, partial, error, success and offline (Six Data States, Feedback entry 13). Affordance and feedback: clickable looks clickable, every state is designed, the focus ring is visible, targets are 44px, feedback lands inside 100ms, and friction matches the risk. Forms: seven visible fields at most, labels above, smart defaults, validation on blur, specific errors. Copy: verbs on buttons, tooltips that clarify, no Something went wrong, empty states that teach, you rather than the user. Accessibility: never colour alone, AA contrast on text, labelled icon buttons, focus order matching visual order, the whole flow usable by keyboard. Mobile: one column, no sideways scroll, a sticky primary action on long forms, modals the keyboard cannot cover. Perceived speed: skeletons that match the layout, optimistic updates where safe, progress on long work.
+
+**Report shape.** A table sorted P0 first with five columns: number, severity, issue, why it matters to a real person, and the fix. Then the three fixes worth the most, written out in full with code. Then what is working, so a good decision survives the rewrite. A review of a diff before merge uses the same scale grouped as must fix (P0 and P1), should fix (P2) and nice to fix (P3), each pointing at a file and line. A restyle pass is visual only: tokens, type, spacing, finish and interactive states change, while logic, structure and the meaning of the copy stay put, and any structural problem spotted on the way gets one flag line for the audit instead of a silent fix. If the owner disagrees with a finding, record the call once and move on.
+
+Do:
+- Inferred intent written first, with every finding tied to it
+- Every row names a specific element and an actionable fix
+- Five to twelve findings sorted P0 first, then the top three in full, then what is working
+
+Avoid:
+- Vague advice such as “consider improving the hierarchy”
+- More than twelve findings, or an audit with no what is working section
+- A restyle that quietly changes logic or structure
+
+Code (TEXT):
+
+```
+## Inferred intent
+Primary user: ...   Primary action: ...   Worst case: ...
+
+| # | Sev | Issue (named element)            | Why it matters        | Fix                               |
+|---|-----|----------------------------------|-----------------------|-----------------------------------|
+| 1 | P0  | Row Delete styled like Edit      | one misclick deletes  | move to overflow, typed confirm   |
+| 2 | P1  | 12 columns, 3 decision-relevant  | overload on every row | cut to 5, rest in a detail view   |
+
+## Top 3 fixes (in full, with code)
+## What is working
 ```

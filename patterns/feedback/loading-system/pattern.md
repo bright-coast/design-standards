@@ -12,6 +12,8 @@ order: 3
 - A button-internal spinner keeps its width and disables itself, so a second click can't double-submit
 ## Avoid
 - A skeleton for every fetch regardless of duration
+## Extra: variant-note
+<div class="variant-note"><b>The first moment of a wait, two variants.</b> Variant A: show nothing for the first ~300ms of a content load, so a fast response never flickers a skeleton (this entry). Use when: data is loading into a screen or a panel. Variant B: acknowledge within 100ms, with the pressed state and a spinner inside the button from the moment of the press (Interactive State and Affordance, Interaction entry 24). Use when: the person just clicked or tapped something. Both are kept on purpose; one action often needs both, B on the button and A on the panel it fills.</div>
 ## Code: JS
 <pre><code><span class="kw">function</span> <span class="fn">withLoadingState</span>(promise, { onSlow, delayMs = <span class="num">300</span> }) {
   <span class="kw">const</span> timer = setTimeout(onSlow, delayMs); <span class="cm">// nothing shown before this fires</span>

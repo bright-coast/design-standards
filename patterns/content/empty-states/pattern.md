@@ -11,6 +11,8 @@ order: 1
 - Copy answers why it's empty and what to do, distinct per cause (first-run, filtered, permissions, by design)
 ## Avoid
 - A generic &ldquo;Try refreshing&rdquo; as the only action
+## Extra: variant-note
+<div class="variant-note"><b>Illustration, two variants.</b> Variant A: a small illustration or icon plus a short line of copy (this entry). Use when: the design system has illustrations or icons ready for empty states. Variant B: text only, with the copy doing all the teaching. Use when: there is no illustration set yet, since a borrowed or generic picture is worse than none. Both are kept on purpose.</div>
 ## Code: JS
 <pre><code><span class="kw">const</span> EMPTY_STATES = {
   <span class="str">'first-run'</span>: { copy: <span class="str">'No projects yet'</span>, cta: { label: <span class="str">'Create your first project'</span>, action: createProject } },

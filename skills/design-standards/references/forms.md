@@ -5,7 +5,7 @@
 
 Data entry is where trust is won or lost fastest, a form that fights back gets abandoned.
 
-15 patterns. Use when: any input, validation, multi-step flow or settings screen.
+18 patterns. Use when: any input, validation, multi-step flow or settings screen.
 
 ## Autosave
 
@@ -453,6 +453,8 @@ Avoid:
 
 Variant: **Variant B of the dropdown search threshold.** A plain dropdown for 8 to 15 options, a searchable combobox from 16, async search past 50. Use when: you are picking the control from the option count. Variant A, search from about 10 items, is in Dropdown Design. Both are kept on purpose.
 
+Variant: **Variant C of the option-count thresholds.** A segmented control for 2 to 4 exclusive options that must stay in view (7 segments is too many); visible radios up to 5; more than 5 becomes a dropdown, because a longer radio list pushes the rest of the settings off screen. Use when: the choice sits in a settings page with other controls below it. Variant B (visible radios to 7, dropdown 8 to 15) suits a choice that has the screen to itself. All kept on purpose.
+
 Code (Notes):
 
 ```
@@ -464,4 +466,93 @@ function pickControl(optionCount) {
   if (optionCount <= 50) return 'searchable-combobox';
   return 'async-autocomplete';
 }
+```
+
+## Checkout That Feels Safe
+
+Five quiet decisions make a payment form feel safe. **The total stays in view:** the order summary is sticky beside the form (the form moves, the summary does not), and the amount on the pay button matches the order total exactly (Pay $148.00 under Total due $148.00), so nothing changes at the last step; short trust lines sit under it (card details are encrypted, free returns within 30 days). **The card is recognised on digit one:** the brand badge appears from the first digit (4 is Visa, 5 is Mastercard, 3 is Amex); recognised first, judged later.
+
+**Red waits until the field is left:** nothing turns red while the number is being typed; the field is checked on blur (Your card number is incomplete.), and once flagged it stays flagged on every keystroke until it is fixed. This is Form Validation Timing (Forms, entry 05) applied to the card field. **The fastest way to pay sits on top:** Apple Pay and Google Pay above every card field, one tap and no typing against six fields, with an Or pay with card divider below. **Eyes go straight down:** one column with every label above its field, so the eye path is one line and the label stays visible while typing; a two-column grid with placeholder-only labels makes the eye jump seven times.
+
+Do:
+- Pay button amount identical to the order total
+- Card brand badge from the first digit
+- Wallets above every card field
+- One column, labels above fields
+
+Avoid:
+- A card number flagged red on the first keystroke
+- Placeholder-only labels that vanish while typing
+- A two-column payment grid
+
+Code (HTML + JS):
+
+```html
+<!-- one column, labels above, wallets first, summary pinned -->
+<form class="pay">
+  <div class="wallets"><button>Apple Pay</button><button>Google Pay</button></div>
+  <p class="divider">Or pay with card</p>
+  <label>Card number <input id="cc" inputmode="numeric" autocomplete="cc-number"></label>
+  <button>Pay $148.00</button> <!-- same figure as Total due -->
+</form>
+<aside class="summary">Total due $148.00</aside>
+
+.summary { position: sticky; top: 24px; } /* the form moves, the summary does not */
+cc.addEventListener('input', () => {
+  badge.dataset.brand = { '4': 'visa', '5': 'mastercard', '3': 'amex' }[cc.value[0]] || ''; // digit one
+  if (cc.dataset.flagged) validate(cc); // once flagged, live until fixed
+});
+cc.addEventListener('blur', () => validate(cc)); // red waits until she leaves the field
+```
+
+## Form Colour Semantics
+
+In a settings-style form, give every colour exactly one job and the form explains itself. Labels are the primary text colour (black on light). Values and placeholders the person types are secondary grey and right aligned: grey means you type here. The tint colour (blue on iOS) means you can tap this, so date chips and pickers sit in the tint colour on a lightly tinted pill. A toggle’s on state uses the tint colour too, because active should look active; an orange or grey toggle leaves people unsure whether it is on or off.
+
+Then group by task: the title and location together, every timing control together (all-day, starts, ends, alert), links and notes together, three grouped sections (Form Field Grouping, Forms entry 14). The failure this fixes is a form where every row is the same grey pill, so nobody can tell what is tappable, where the input goes, or which text is a label, and every row costs a small pause. Same content, but clear, logical and systematic.
+
+Do:
+- Black = label, grey = typed value, tint colour = tappable
+- Toggle on state in the tint colour
+- All timing controls in one group
+
+Avoid:
+- Every row the same grey pill
+- A toggle colour that does not read as on or off
+- Tint colour on text that does nothing
+
+Code (CSS):
+
+```css
+.row-label { color: var(--ink); }  /* black = a label */
+.row-value, .row input::placeholder { color: var(--ink-2); text-align: right; }  /* grey = you type here */
+.row-chip { color: var(--tint); background: color-mix(in srgb, var(--tint) 12%, transparent); } /* tint = you can tap this */
+.switch[aria-checked="true"] { background: var(--tint); }  /* active looks active */
+```
+
+## Input Field Details
+
+The small attributes on a field decide whether it is quick or a fight, especially on a phone. **Width hints the answer:** a postcode field is narrow and an address field is wide, so the box tells people how much to type. **Every text field sets inputmode and autocomplete** (email, tel, postal-code, one-time-code, name), which brings up the right keyboard and lets the browser fill in what it already knows. **A maximum length exists only for a real business limit,** and then a visible counter appears as the limit gets close, never a field that silently stops accepting characters. **An availability check** (is this username free?) runs on blur or after a 500ms pause in typing, never on every keystroke. **A server error lands on its field:** map every error the server returns to the field it belongs to; a generic Form invalid banner is not acceptable.
+
+**Habits to refuse.** A Reset or Clear button beside Submit, where one wrong click loses everything. A CAPTCHA before anyone has tried to submit; add it only when it is needed. A sign-up that confirms the email before showing the password field, which forces an extra step for no reason. Separate first and last name fields where one full name field works. A date field that demands one fixed day and month order with no awareness of locale. A phone field with no country code. Confirm email and confirm password fields, when a show toggle does that job. A money field with no currency symbol in view. Clearing any filled field after a validation error, ever.
+
+Do:
+- Field width matched to the expected answer
+- inputmode and autocomplete on every text field
+- Server errors mapped to the specific field
+
+Avoid:
+- A Reset or Clear button next to Submit
+- Confirm email or confirm password fields
+- A phone field without a country code, or a money field without its currency symbol
+
+Code (HTML):
+
+```html
+<!-- width hints the answer; the right keyboard and autofill on every field -->
+<input name="postcode" inputmode="numeric" autocomplete="postal-code" style="width:8ch">
+<input name="address" autocomplete="street-address" style="width:100%">
+<input name="email" type="email" inputmode="email" autocomplete="email">
+<input name="phone" type="tel" autocomplete="tel">  <!-- beside a country code picker -->
+<textarea name="bio" maxlength="160"></textarea>  <!-- a real limit: show 152 / 160 near the end -->
 ```

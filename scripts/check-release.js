@@ -65,7 +65,8 @@ function checkFresh(root) {
     if (!items.length) continue;
     const refPath = path.join(refDir, `${c.id}.md`);
     if (!fs.existsSync(refPath)) { fails.push(`references/${c.id}.md is missing`); continue; }
-    const titles = [...readLf(refPath).matchAll(/^## (.+)$/gm)].map((m) => m[1]);
+    // A "## " line inside a fenced code sample (a markdown template, say) is code, not a rule heading.
+    const titles = [...readLf(refPath).replace(/^```[^\n]*\n[\s\S]*?^```$/gm, '').matchAll(/^## (.+)$/gm)].map((m) => m[1]);
     for (const p of items) if (!titles.includes(p.title)) fails.push(`references/${c.id}.md is missing "${p.title}"`);
     if (titles.length !== items.length) fails.push(`references/${c.id}.md has ${titles.length} patterns, patterns/ has ${items.length}`);
     const badge = new RegExp(`id="lib-${c.id}"[\\s\\S]*?lib-cat-count">(\\d+) patterns`).exec(page);

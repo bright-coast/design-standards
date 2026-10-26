@@ -9,38 +9,38 @@
       "id": "design-standards",
       "name": "Design Standards",
       "status": "ready",
-      "version": "1.0.0",
-      "sha256": "d37ecbe2b2600e35047022dba09b23ee1a7b9bfd752625c960e5df9e2ff2d280",
+      "version": "1.1.0",
+      "sha256": "935fb8842fbabd694e3d499dbf50afef657147cf5d7751574f440e1fad35c111",
       "category": "Building",
       "summary": "Gives Claude a library of design rules for building clear, easy-to-use interfaces, loaded one category at a time, plus a checklist of the tells that make a screen look machine-made. It applies whenever you ask Claude to build, design, review or restyle a page, form, table or dashboard.",
       "needs": [],
       "offer_if": "builds or designs web pages, apps or dashboards",
       "path": "skills/design-standards/SKILL.md",
-      "changes": "First release.",
+      "changes": "Adds 20 rules and enriches many more: checkout, pricing, success states, data states, phone checks, machine-made copy tells and more.",
       "files": [
         {
           "path": "skills/design-standards/references/ai-slop.md",
-          "sha256": "ca3641d16940f74fe06bcf26b81a35ec2ec56f332b1b796a26c0d8d312bf9eeb"
+          "sha256": "923386ac9bc7d1c1aef5c119ddbcfb8197090ae4d3330cb97e25d22e3cd50193"
         },
         {
           "path": "skills/design-standards/references/content.md",
-          "sha256": "0cef795c358ef89612f8dd69a9b5d24ce188fcbb18b0320b3bf6fcee7e218739"
+          "sha256": "35313b3f36309662508a594bf213cc3bfa701e6a086c68f360c56da1d19755df"
         },
         {
           "path": "skills/design-standards/references/feedback.md",
-          "sha256": "e7a582504cfbe361312dac13a73a7fd966d661131780fe6fa3a1230500fd9456"
+          "sha256": "d4628c36c9fc1044350034082c8afa8938bcf16e852252c80459e46b0e25b44a"
         },
         {
           "path": "skills/design-standards/references/forms.md",
-          "sha256": "df34c8cdae985494faf40e819dc5fdea6b5c3511429cce054853951f4434b321"
+          "sha256": "889dfa08d42b97923d080c2e3d76b59f22c19fbd37a1ba2b2f7118d802805514"
         },
         {
           "path": "skills/design-standards/references/interaction.md",
-          "sha256": "0f5bcd06656d9ff94b742e246b44cccd44daa0a2a57ed172f02a56863ce3fa3e"
+          "sha256": "bec1f1e154964bb0d4fa99314296999c47a7a19bd122ccade68f0b1bb717fc33"
         },
         {
           "path": "skills/design-standards/references/motion.md",
-          "sha256": "6aed80a602859cbb0f24682e4e024413fe63b212bc8fcd4ead7917e89be20b78"
+          "sha256": "535bc3988403e6aac2189739a6369b8dbf480fd338fa30c815fc506900bcc2f8"
         },
         {
           "path": "skills/design-standards/references/navigation.md",
@@ -48,11 +48,11 @@
         },
         {
           "path": "skills/design-standards/references/psychology.md",
-          "sha256": "893abec0a58e133a4bd61b83ac53089a2ee27e7e9be7d6eb20dda3f7413adc27"
+          "sha256": "f7e40d8b62cf0b0fc2690db5fbbb7674cdfde5a4a08376779e388b6c98bfa87e"
         },
         {
           "path": "skills/design-standards/references/visual.md",
-          "sha256": "5e57163fb00b1ea33f127b9414d51a850c82239d3bfdd5c5001073b43b0ee2ef"
+          "sha256": "85a19a68973d9b98cf64b87ea6bc8081cbcd96cc72bfa82674aaa4f810a8a485"
         }
       ]
     }
