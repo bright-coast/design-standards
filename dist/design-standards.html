@@ -995,14 +995,14 @@
 <div class="container">
 
   <section class="hero">
-    <div class="eyebrow">Reference &middot; v1.1.0</div>
+    <div class="eyebrow">Reference &middot; v1.2.0</div>
     <h1>Design Standards</h1>
-    <p class="hero-sub">A working library of 122 design rules for building clear, easy-to-use interfaces. Every rule has a live demo, a short explanation, what to do and what to avoid, and a code sketch. Neutral by design: the rules never choose your colours, fonts or brand.</p>
+    <p class="hero-sub">A working library of 123 design rules for building clear, easy-to-use interfaces. Every rule has a live demo, a short explanation, what to do and what to avoid, and a code sketch. Neutral by design: the rules never choose your colours, fonts or brand.</p>
     <div class="hero-invoke">
       <span class="invoke-pill">&quot;apply the design standards to &lt;screen&gt;&quot;</span>
     </div>
     <div class="hero-meta">
-      <div class="hero-meta-item"><span class="num">122</span><span class="lbl">Patterns, each with a live demo</span></div>
+      <div class="hero-meta-item"><span class="num">123</span><span class="lbl">Patterns, each with a live demo</span></div>
       <div class="hero-meta-item"><span class="num">9</span><span class="lbl">Categories</span></div>
     </div>
   </section>
@@ -1010,12 +1010,12 @@
   <section class="part" id="full-library">
 <div class="part-head">
       <h2>Pattern library</h2>
-      <span class="part-status">122 patterns &middot; 9 categories</span>
+      <span class="part-status">123 patterns &middot; 9 categories</span>
     </div>
     <p class="part-dek">Every pattern has a live demo, a short rule, what to do and what to avoid, and a code sketch. Where sources disagree, each variant is kept and labelled with when to use it.</p>
 
     <div class="lib-cat" id="lib-interaction">
-      <div class="lib-cat-head"><h3>Interaction</h3><span class="lib-cat-count">32 patterns</span></div>
+      <div class="lib-cat-head"><h3>Interaction</h3><span class="lib-cat-count">33 patterns</span></div>
 <p class="lib-cat-dek">The mechanics of clicking, dragging, and typing through a screen, the largest category, and the one most directly reusable across products, from an existing app to a brand-new build.</p>
 <div class="lib-pattern" id="lp-accordion">
 <div class="demo"><div class="demo-toolbar"><span class="demo-label">Click to expand</span></div><div class="demo-stage" data-demo-theme="light"><div class="a-frame">
@@ -2000,6 +2000,32 @@ Primary user: ...   Primary action: ...   Worst case: ...
 
 &#35;&#35; Top 3 fixes (in full, with code)
 &#35;&#35; What is working</code></pre></div>
+</div>
+
+<div class="lib-pattern" id="lp-crowded-toolbar">
+<div class="demo"><div class="demo-toolbar"><span class="demo-label">Twelve equal icons vs. five labelled tools and More</span></div><div class="demo-stage" data-demo-theme="light"><div class="a-frame"><div class="vd-col" style="gap:12px;align-items:flex-start;">
+  <div style="display:flex;gap:4px;"><i style="display:block;width:16px;height:16px;border-radius:4px;border:1px solid var(--a-border);background:var(--a-card);"></i><i style="display:block;width:16px;height:16px;border-radius:4px;border:1px solid var(--a-border);background:var(--a-card);"></i><i style="display:block;width:16px;height:16px;border-radius:4px;border:1px solid var(--a-border);background:var(--a-card);"></i><i style="display:block;width:16px;height:16px;border-radius:4px;border:1px solid var(--a-border);background:var(--a-card);"></i><i style="display:block;width:16px;height:16px;border-radius:4px;border:1px solid var(--a-border);background:var(--a-card);"></i><i style="display:block;width:16px;height:16px;border-radius:4px;border:1px solid var(--a-border);background:var(--a-card);"></i><i style="display:block;width:16px;height:16px;border-radius:4px;border:1px solid var(--a-border);background:var(--a-card);"></i><i style="display:block;width:16px;height:16px;border-radius:4px;border:1px solid var(--a-border);background:var(--a-card);"></i><i style="display:block;width:16px;height:16px;border-radius:4px;border:1px solid var(--a-border);background:var(--a-card);"></i><i style="display:block;width:16px;height:16px;border-radius:4px;border:1px solid var(--a-border);background:var(--a-card);"></i><i style="display:block;width:16px;height:16px;border-radius:4px;border:1px solid var(--a-border);background:var(--a-card);"></i><i style="display:block;width:16px;height:16px;border-radius:4px;border:1px solid var(--a-border);background:var(--a-card);"></i></div><span class="vd-caption" style="text-align:left;">12 equal icons: slow before anyone taps</span>
+  <div style="display:flex;gap:10px;align-items:flex-end;"><div style="display:flex;flex-direction:column;align-items:center;gap:2px;"><i style="display:block;width:18px;height:18px;border-radius:5px;background:var(--a-accent);border:1px solid var(--a-accent);"></i><span style="font-size:8px;color:var(--a-ink);">Crop</span></div><div style="display:flex;flex-direction:column;align-items:center;gap:2px;"><i style="display:block;width:18px;height:18px;border-radius:5px;border:1px solid var(--a-border);background:var(--a-card);"></i><span style="font-size:8px;color:var(--a-ink);">Adjust</span></div><div style="display:flex;flex-direction:column;align-items:center;gap:2px;"><i style="display:block;width:18px;height:18px;border-radius:5px;border:1px solid var(--a-border);background:var(--a-card);"></i><span style="font-size:8px;color:var(--a-ink);">Filter</span></div><span style="width:1px;height:26px;background:var(--a-border);"></span><div style="display:flex;flex-direction:column;align-items:center;gap:2px;"><i style="display:block;width:18px;height:18px;border-radius:5px;border:1px solid var(--a-border);background:var(--a-card);"></i><span style="font-size:8px;color:var(--a-ink);">Text</span></div><div style="display:flex;flex-direction:column;align-items:center;gap:2px;"><i style="display:block;width:18px;height:18px;border-radius:5px;border:1px solid var(--a-border);background:var(--a-card);"></i><span style="font-size:8px;color:var(--a-ink);">More</span></div></div><span class="vd-caption" style="text-align:left;">one accent, a word under every icon, grouped by job, rare tools behind More</span>
+</div></div></div></div>
+<div>
+<div class="lib-pattern-head"><span class="lib-pattern-num">33</span><h4>Crowded Toolbar: Six Fixes</h4></div>
+<div class="lib-pattern-body">
+<p>Find the crop tool. That pause has a name: Hick&rsquo;s heuristic (<a href="#lp-hick">Psychology, entry 02</a>). The more equal choices you show, the longer people take to pick one, and decision time grows with every doubling of options, so twelve icons feel slow before anyone taps. Stop showing every tool. Six fixes for a crowded toolbar:</p>
+<p><strong>1. Keep the 3 to 5 tools people use every day.</strong> Count what they tap, not what you shipped. <strong>2. Give one action the accent.</strong> The rest stay quiet so the eye lands on the first try. <strong>3. Put a word under every icon.</strong> A label turns a guess into a glance. <strong>4. Move rare tools behind More.</strong> Rotate, flip and stickers stay one tap away, never in the way. <strong>5. Group what is left by job.</strong> Edit, then adjust: two short groups read faster than one long row. <strong>6. One exception, experts.</strong> Give them shortcuts so they skip the menu entirely.</p>
+<p>Where it meets the rest of this library: one accent is Action Priority (entry 26), and the labels under icons are the same call as labelled icon buttons in the UX Audit accessibility lens (entry 32).</p>
+</div>
+<ul class="lib-dodont"><li><span class="mk">&check;</span>Three to five everyday tools visible, chosen from usage counts</li><li><span class="mk">&check;</span>One accented action, a word under every icon</li><li><span class="mk">&check;</span>Rare tools behind More, the rest grouped by job, shortcuts for experts</li><li class="avoid"><span class="mk">&times;</span>A long row of equal, unlabelled icons for every feature that shipped</li></ul>
+</div>
+<div class="code-panel"><div class="code-panel-bar"><span class="code-panel-lang">HTML</span><button class="code-toggle" type="button"><span class="txt">Show code</span><span class="chev">▾</span></button></div><pre><code><span class="tag">&lt;div</span> <span class="prop">role</span>=<span class="str">"toolbar"</span> <span class="prop">aria-label</span>=<span class="str">"Edit photo"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="prop">role</span>=<span class="str">"group"</span> <span class="prop">aria-label</span>=<span class="str">"Edit"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;button</span> <span class="prop">class</span>=<span class="str">"tool is-accent"</span> <span class="prop">aria-keyshortcuts</span>=<span class="str">"C"</span><span class="tag">&gt;</span><span class="tag">&lt;svg</span> <span class="prop">aria-hidden</span>=<span class="str">"true"</span><span class="tag">/&gt;</span>Crop<span class="tag">&lt;/button&gt;</span>
+    <span class="tag">&lt;button</span> <span class="prop">class</span>=<span class="str">"tool"</span><span class="tag">&gt;</span><span class="tag">&lt;svg</span> <span class="prop">aria-hidden</span>=<span class="str">"true"</span><span class="tag">/&gt;</span>Adjust<span class="tag">&lt;/button&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;div</span> <span class="prop">role</span>=<span class="str">"group"</span> <span class="prop">aria-label</span>=<span class="str">"Add"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;button</span> <span class="prop">class</span>=<span class="str">"tool"</span><span class="tag">&gt;</span><span class="tag">&lt;svg</span> <span class="prop">aria-hidden</span>=<span class="str">"true"</span><span class="tag">/&gt;</span>Text<span class="tag">&lt;/button&gt;</span>
+    <span class="tag">&lt;button</span> <span class="prop">class</span>=<span class="str">"tool"</span> <span class="prop">aria-haspopup</span>=<span class="str">"menu"</span><span class="tag">&gt;</span>More<span class="tag">&lt;/button&gt;</span> <span class="cm">&lt;!-- rotate, flip, stickers --&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></code></pre></div>
 </div>
     </div>
 
@@ -3088,8 +3114,10 @@ img, video { filter: brightness(0.9); } <span class="cm">/* dim photos to about 
 <div class="lib-pattern-head"><span class="lib-pattern-num">10</span><h4>Gradient Design</h4></div>
 <div class="lib-pattern-body">
 <p>Neighbouring hues on the colour wheel blend cleanly into each other, while hues from opposite sides create a muddy grey dead zone in the middle of the transition. A blue-to-orange gradient always passes through a flat grey band, an indigo-to-blue gradient never does. Keep lightness moving in one direction only across the gradient; a value that dips and rises again creates a visible, unintentional banding seam. A subtle grain or noise overlay on top of a large gradient hides colour-banding artifacts on cheaper screens, and body text should never sit on a gradient&rsquo;s unpredictable mid-transition zone where contrast is impossible to guarantee.</p>
+<p><strong>Five rules for gradients that stay vivid and readable.</strong> Blue to yellow looks simple, but by default the browser mixes in RGB, so the middle drops to a muddy grey (#3b5bdb to #f5d90a passes through #989a72). <strong>1. Interpolate in OKLCH.</strong> One clause in your CSS, same two colours, and the middle stays bright (the same pair passes through a bright green, about #22b573). <strong>2. Add a middle stop.</strong> You pick the colour in between instead of letting the math pick it. <strong>3. Far apart needs a route.</strong> Opposite hues (168&deg; apart) go grey on a straight path, so use OKLCH and a middle stop; neighbours (55&deg; apart) blend fine. <strong>4. Add grain.</strong> On big dark gradients, a faint noise layer hides the banding. <strong>5. Calm behind text.</strong> Behind text, keep the stops close in lightness so every word stays readable: white text measures 1.2:1 on the pale end of a wide gradient and 8.2:1 on a calm, close-lightness one.</p>
 </div>
-<ul class="lib-dodont"><li><span class="mk">&check;</span>Keep lightness moving one direction only</li><li class="avoid"><span class="mk">&times;</span>Body text on a gradient&rsquo;s mid-transition</li></ul>
+<ul class="lib-dodont"><li><span class="mk">&check;</span>Keep lightness moving one direction only</li><li><span class="mk">&check;</span><code class="tok">linear-gradient(in oklch ...)</code> for any pair that is not neighbours</li><li><span class="mk">&check;</span>A hand-picked middle stop on far-apart hues</li><li><span class="mk">&check;</span>Stops close in lightness wherever text sits on top</li><li class="avoid"><span class="mk">&times;</span>Body text on a gradient&rsquo;s mid-transition</li><li class="avoid"><span class="mk">&times;</span>Default RGB mixing across opposite hues (the grey middle)</li></ul>
+<div class="variant-note"><b>Neighbouring hues only versus opposite hues with a route, two variants.</b> Variant A: neighbouring hues only, as in the first paragraph. Use when: the CSS has to work without OKLCH support, or the palette is fixed to analogous colours. Variant B: opposite hues with a route (rules 1 to 3). Use when: the design needs two far-apart colours; interpolate in OKLCH and add a middle stop rather than avoiding the pair. Both kept on purpose.</div>
 </div>
 <div class="code-panel"><div class="code-panel-bar"><span class="code-panel-lang">CSS</span><button class="code-toggle" type="button"><span class="txt">Show code</span><span class="chev">▾</span></button></div><pre><code><span class="cm">/* analogous hues (indigo → blue) blend clean; lightness moves one direction only */</span>
 .gradient-clean { background: linear-gradient(135deg, #3B5BDB 0%, #3A7CA5 100%); }
@@ -3100,7 +3128,12 @@ img, video { filter: brightness(0.9); } <span class="cm">/* dim photos to about 
   background-image: url(<span class="str">"data:image/svg+xml,..."</span>); <span class="cm">/* fractal noise SVG */</span>
 }
 <span class="cm">/* text never sits on the unpredictable mid-transition, pin it to the darker anchor end */</span>
-.gradient-clean .headline { color: white; text-shadow: 0 1px 3px rgb(0 0 0 / .3); }</code></pre></div>
+.gradient-clean .headline { color: white; text-shadow: 0 1px 3px rgb(0 0 0 / .3); }
+
+<span class="cm">/* far-apart hues: interpolate in OKLCH (rule 1) and pick the middle yourself (rule 2) */</span>
+.gradient-vivid { background: linear-gradient(in oklch 90deg, #3b5bdb, #22b573, #f5d90a); }
+<span class="cm">/* behind text: stops close in lightness (rule 5) */</span>
+.gradient-text-safe { background: linear-gradient(in oklch 135deg, #3b2fa0, #6a35b0); color: white; }</code></pre></div>
 </div>
 
 <div class="lib-pattern" id="lp-grid-system">
@@ -4113,6 +4146,7 @@ tabList.addEventListener(<span class="str">'keydown'</span>, (e) => {
 <div class="lib-pattern-body">
 <p>The more choices there are, the longer it takes to decide: three choices are quick to pick from, fifteen are slow. This is Hick&rsquo;s heuristic, often written up as &ldquo;Hick&rsquo;s law&rdquo;; it is a research-backed heuristic, not a law.</p>
 <p>Read it precisely. Decision time grows with the number of options; it does not say that fewer options is always better, so it is a cost to weigh against what people need to see, not an instruction to strip choices out. The related rules already in this library are Field Control Thresholds (Forms, entry 15), which picks the control from the option count, and Form Field Grouping (Forms, entry 14), which caps visible fields at seven.</p>
+<p><strong>Applied to a toolbar.</strong> Six concrete fixes for a crowded toolbar are in <a href="#lp-crowded-toolbar">Crowded Toolbar: Six Fixes</a> (Interaction, entry 33).</p>
 </div>
 <ul class="lib-dodont"><li><span class="mk">&check;</span>Weigh the number of options before designing the choice: more options, more time to decide (3 choices are quick, 15 are slow)</li><li><span class="mk">&check;</span>Pair it with the option-count thresholds in Field Control Thresholds</li><li class="avoid"><span class="mk">&times;</span>Reading it as &ldquo;fewer options is always better&rdquo;; it says decision time grows with the number of options, nothing more</li></ul>
 </div>
@@ -4438,7 +4472,7 @@ CARDS
   </section>
 
   <footer class="doc-footer">
-    <p>Design Standards v1.1.0 &middot; @brightcoast.ai</p>
+    <p>Design Standards v1.2.0 &middot; @brightcoast.ai</p>
     <p>Copyright 2026 Bright Coast AI. For Bright Coast AI clients and people Bright Coast AI has given this link to. You may build what you find here into your own work; you may not republish or resell the material itself. See LICENSE at github.com/bright-coast/design-standards.</p>
     <p>Install and update steps: github.com/bright-coast/design-standards</p>
   </footer>

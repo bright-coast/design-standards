@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.0 (15 Nov 2026)
+
+Adds a rule for crowded toolbars and five rules that keep gradients vivid and readable.
+
+- 1 new rule, bringing the library to 123.
+  - Interaction: Crowded Toolbar: Six Fixes (keep three to five everyday tools, one accent, a word under every icon, rare tools behind More, groups by job, shortcuts for experts).
+- Gradient Design gains five rules (interpolate in OKLCH, add a middle stop, route far-apart hues, add grain, keep stops calm behind text) and a "two variants, and when to use each" note: neighbouring hues only, or opposite hues with an OKLCH route.
+- Hick's Heuristic now points to the toolbar rule.
+
 ## 1.1.0 (26 Oct 2026)
 
 Adds 20 rules and enriches many more: checkout, pricing, success states, data states, phone checks, machine-made copy tells and more.

@@ -9,14 +9,14 @@
       "id": "design-standards",
       "name": "Design Standards",
       "status": "ready",
-      "version": "1.1.0",
-      "sha256": "935fb8842fbabd694e3d499dbf50afef657147cf5d7751574f440e1fad35c111",
+      "version": "1.2.0",
+      "sha256": "0d5402a2361e1d377b4aff38890753df7df2159d6258f891f386a503ece2fd34",
       "category": "Building",
       "summary": "Gives Claude a library of design rules for building clear, easy-to-use interfaces, loaded one category at a time, plus a checklist of the tells that make a screen look machine-made. It applies whenever you ask Claude to build, design, review or restyle a page, form, table or dashboard.",
       "needs": [],
       "offer_if": "builds or designs web pages, apps or dashboards",
       "path": "skills/design-standards/SKILL.md",
-      "changes": "Adds 20 rules and enriches many more: checkout, pricing, success states, data states, phone checks, machine-made copy tells and more.",
+      "changes": "Adds a rule for crowded toolbars and five rules that keep gradients vivid and readable.",
       "files": [
         {
           "path": "skills/design-standards/references/ai-slop.md",
@@ -36,7 +36,7 @@
         },
         {
           "path": "skills/design-standards/references/interaction.md",
-          "sha256": "bec1f1e154964bb0d4fa99314296999c47a7a19bd122ccade68f0b1bb717fc33"
+          "sha256": "fbf6a28125d9cd716ede3304ff780cdf6cbb865ad8df26c67da9275918f50bed"
         },
         {
           "path": "skills/design-standards/references/motion.md",
@@ -48,11 +48,11 @@
         },
         {
           "path": "skills/design-standards/references/psychology.md",
-          "sha256": "f7e40d8b62cf0b0fc2690db5fbbb7674cdfde5a4a08376779e388b6c98bfa87e"
+          "sha256": "4b86305c75b1760801c23cf86c92a0aaf50dd8eb4191485d2eeb0fc383fe11a6"
         },
         {
           "path": "skills/design-standards/references/visual.md",
-          "sha256": "85a19a68973d9b98cf64b87ea6bc8081cbcd96cc72bfa82674aaa4f810a8a485"
+          "sha256": "e7e378b180e8b8e34a62e477f988c2045f00a7cf49655ec4d59bf9b0b9cbaa27"
         }
       ]
     }

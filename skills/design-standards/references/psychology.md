@@ -68,6 +68,8 @@ The more choices there are, the longer it takes to decide: three choices are qui
 
 Read it precisely. Decision time grows with the number of options; it does not say that fewer options is always better, so it is a cost to weigh against what people need to see, not an instruction to strip choices out. The related rules already in this library are Field Control Thresholds (Forms, entry 15), which picks the control from the option count, and Form Field Grouping (Forms, entry 14), which caps visible fields at seven.
 
+**Applied to a toolbar.** Six concrete fixes for a crowded toolbar are in Crowded Toolbar: Six Fixes (Interaction, entry 33).
+
 Do:
 - Weigh the number of options before designing the choice: more options, more time to decide (3 choices are quick, 15 are slow)
 - Pair it with the option-count thresholds in Field Control Thresholds

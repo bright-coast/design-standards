@@ -5,7 +5,7 @@
 
 The mechanics of clicking, dragging, and typing through a screen, the largest category, and the one most directly reusable across products, from an existing app to a brand-new build.
 
-32 patterns. Use when: buttons, menus, tables, dialogs, drawers, drag and drop, keyboard and touch behaviour.
+33 patterns. Use when: buttons, menus, tables, dialogs, drawers, drag and drop, keyboard and touch behaviour.
 
 ## Accordion Disclosure
 
@@ -1088,4 +1088,35 @@ Primary user: ...   Primary action: ...   Worst case: ...
 
 ## Top 3 fixes (in full, with code)
 ## What is working
+```
+
+## Crowded Toolbar: Six Fixes
+
+Find the crop tool. That pause has a name: Hick’s heuristic (Psychology, entry 02). The more equal choices you show, the longer people take to pick one, and decision time grows with every doubling of options, so twelve icons feel slow before anyone taps. Stop showing every tool. Six fixes for a crowded toolbar:
+
+**1. Keep the 3 to 5 tools people use every day.** Count what they tap, not what you shipped. **2. Give one action the accent.** The rest stay quiet so the eye lands on the first try. **3. Put a word under every icon.** A label turns a guess into a glance. **4. Move rare tools behind More.** Rotate, flip and stickers stay one tap away, never in the way. **5. Group what is left by job.** Edit, then adjust: two short groups read faster than one long row. **6. One exception, experts.** Give them shortcuts so they skip the menu entirely.
+
+Where it meets the rest of this library: one accent is Action Priority (entry 26), and the labels under icons are the same call as labelled icon buttons in the UX Audit accessibility lens (entry 32).
+
+Do:
+- Three to five everyday tools visible, chosen from usage counts
+- One accented action, a word under every icon
+- Rare tools behind More, the rest grouped by job, shortcuts for experts
+
+Avoid:
+- A long row of equal, unlabelled icons for every feature that shipped
+
+Code (HTML):
+
+```html
+<div role="toolbar" aria-label="Edit photo">
+  <div role="group" aria-label="Edit">
+    <button class="tool is-accent" aria-keyshortcuts="C"><svg aria-hidden="true"/>Crop</button>
+    <button class="tool"><svg aria-hidden="true"/>Adjust</button>
+  </div>
+  <div role="group" aria-label="Add">
+    <button class="tool"><svg aria-hidden="true"/>Text</button>
+    <button class="tool" aria-haspopup="menu">More</button> <!-- rotate, flip, stickers -->
+  </div>
+</div>
 ```

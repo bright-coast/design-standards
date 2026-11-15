@@ -261,11 +261,19 @@ function typeScale(base) {
 
 Neighbouring hues on the colour wheel blend cleanly into each other, while hues from opposite sides create a muddy grey dead zone in the middle of the transition. A blue-to-orange gradient always passes through a flat grey band, an indigo-to-blue gradient never does. Keep lightness moving in one direction only across the gradient; a value that dips and rises again creates a visible, unintentional banding seam. A subtle grain or noise overlay on top of a large gradient hides colour-banding artifacts on cheaper screens, and body text should never sit on a gradient’s unpredictable mid-transition zone where contrast is impossible to guarantee.
 
+**Five rules for gradients that stay vivid and readable.** Blue to yellow looks simple, but by default the browser mixes in RGB, so the middle drops to a muddy grey (#3b5bdb to #f5d90a passes through #989a72). **1. Interpolate in OKLCH.** One clause in your CSS, same two colours, and the middle stays bright (the same pair passes through a bright green, about #22b573). **2. Add a middle stop.** You pick the colour in between instead of letting the math pick it. **3. Far apart needs a route.** Opposite hues (168&deg; apart) go grey on a straight path, so use OKLCH and a middle stop; neighbours (55&deg; apart) blend fine. **4. Add grain.** On big dark gradients, a faint noise layer hides the banding. **5. Calm behind text.** Behind text, keep the stops close in lightness so every word stays readable: white text measures 1.2:1 on the pale end of a wide gradient and 8.2:1 on a calm, close-lightness one.
+
 Do:
 - Keep lightness moving one direction only
+- `linear-gradient(in oklch ...)` for any pair that is not neighbours
+- A hand-picked middle stop on far-apart hues
+- Stops close in lightness wherever text sits on top
 
 Avoid:
 - Body text on a gradient’s mid-transition
+- Default RGB mixing across opposite hues (the grey middle)
+
+Variant: **Neighbouring hues only versus opposite hues with a route, two variants.** Variant A: neighbouring hues only, as in the first paragraph. Use when: the CSS has to work without OKLCH support, or the palette is fixed to analogous colours. Variant B: opposite hues with a route (rules 1 to 3). Use when: the design needs two far-apart colours; interpolate in OKLCH and add a middle stop rather than avoiding the pair. Both kept on purpose.
 
 Code (CSS):
 
@@ -280,6 +288,11 @@ Code (CSS):
 }
 /* text never sits on the unpredictable mid-transition, pin it to the darker anchor end */
 .gradient-clean .headline { color: white; text-shadow: 0 1px 3px rgb(0 0 0 / .3); }
+
+/* far-apart hues: interpolate in OKLCH (rule 1) and pick the middle yourself (rule 2) */
+.gradient-vivid { background: linear-gradient(in oklch 90deg, #3b5bdb, #22b573, #f5d90a); }
+/* behind text: stops close in lightness (rule 5) */
+.gradient-text-safe { background: linear-gradient(in oklch 135deg, #3b2fa0, #6a35b0); color: white; }
 ```
 
 ## Grid System
