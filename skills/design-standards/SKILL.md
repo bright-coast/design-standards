@@ -1,7 +1,7 @@
 ---
 name: design-standards
 description: Use when someone asks you to build, design, review or restyle any user interface (a page, form, table, dashboard, navigation, settings screen, landing page, empty state or animation), says "apply the design standards to <screen>", or asks why a page looks generic or machine-made. It gives you 123 design rules, loaded one category at a time, and a checklist of the tells that make an interface look machine-made.
-version: 1.2.0
+version: 1.3.0
 ---
 
 > A Bright Coast AI skill, made by Rob Lee. github.com/bright-coast/design-standards
@@ -34,7 +34,7 @@ It gives you a library of 123 design rules for building clear, easy-to-use inter
 | AI Slop: What Not To Do | 9 | `references/ai-slop.md` | always, for any new screen: the tells that make an interface look machine-made |
 
 4. **Reviewing existing UI.** Go through the screen one element at a time. For each button, form, table, menu or message, find the matching rule and say whether it passes. Report each miss with the rule's name and the fix.
-5. **Building new UI.** Before you write code, list the rules you will apply. After you write it, check the result against them.
+5. **Building new UI.** First settle the project's `DESIGN.md` as the Project Design Contract rule describes: write it when it is missing, add only the missing sections when it is incomplete, and follow it when it is complete. Before you write code, list the rules you will apply. After you write it, check the result against them, reading the values back from the code (fonts and how they load, colours, gaps), not from memory.
 6. **Variants.** Some patterns keep more than one accepted approach, each labelled with when to use it. Pick by context, say which you picked and why, and never merge two variants into one.
 7. **Never invent a rule.** If nothing in the files covers the situation, say so plainly and use your own judgement, labelled as such.
 8. **Heuristics are not laws.** The psychology category holds research-backed heuristics. Present them as that.

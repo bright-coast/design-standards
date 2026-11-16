@@ -259,6 +259,7 @@ Sort is a three-state cycle, ascending, descending, back to the original order, 
 Do:
 - Sticky header + frozen first column
 - Whole row as the click target
+- One grid for the whole table: a real table element, or rows that share one set of column tracks (subgrid or fixed widths). A header and rows built as separate grids with content-sized tracks let the columns drift apart
 - A density toggle (comfortable/compact) as a first-class per-view setting
 - One identity column visually dominant; actions collapsed to the far right
 - A dash for an empty cell; text truncated to one line with a tooltip on hover; numbers never truncated

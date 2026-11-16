@@ -896,20 +896,30 @@ Every generator has a default look, and a screen left on it reads as machine-mad
 
 **Space: what is the rhythm?** Dense and efficient or airy and editorial, chosen once and then applied everywhere, with compression inside groups and release between them; uniform gaps of about 16px everywhere are the tell of undecided space. **Finish: what is the separation language?** One primary way for surfaces to separate: borders, shadows or flat colour planes. All three on one screen means no decision was made. Finish also lives in consistent radii, optical alignment and real hover, focus and active states. Two checks before shipping. Strip the accent: the screen should still work in neutrals alone, because hierarchy is not colour’s job. Then the lineup test: would this screenshot be recognisable among ten generated screens for the same prompt? If not, walk the four axes and find the one still sitting on its default.
 
+**Start from the product’s world.** Before the four axes, name three concrete things the product’s users handle, read or look at all day (a workshop: work orders, parts bins, service bays; payroll: ledgers, payslips, stamps). The family, the signature colour and one memorable element per screen come from those words, not from taste; everything around that one element stays quiet, and on a 1280px desktop the screen is composed (a header band, two columns, display-size type) rather than one narrow column on an empty page. **The font has to load.** Point at the line that loads each family: the project’s own font pipeline, a framework font loader, an installed font package, an @font-face with the file in the repo or, with none of those, a Google Fonts or Bunny Fonts link with preconnect and display=swap, always with a named fallback stack. A bare system stack is the operating system’s default, kept only when the project already uses it or the owner asks for it. In an existing project, read its font setup first and change it only when a new look was asked for. **Monospace is for codes, IDs and keys only;** figures stay in the text face with tabular-nums.
+
+**Colour on text, and the danger rule.** Any text in a colour clears 4.5:1 on what sits behind it: a word or a count in the signature, and a status tag’s text on its own tint. A signature that only reaches 3:1 is a fill, a dot or a rule, never text. The signature must not read as danger: red and orange-red (hue under about 30 degrees) mark failures and destructive actions in a work tool, so a signature in that range fills no primary button, and any signature keeps its hue at least 40 degrees away from the danger colour. **The drift check.** Generators fall into two default looks. The first is the system sans stack, monospace for figures and small labels, a warm off-white page (around #f6f5f2), 4px radii and a 1px border around every group; three of those five on one screen means it was not decided. The second appears once fonts load: the same few safe families on every product (IBM Plex Sans with Plex Mono, condensed headings, a soft display serif on every title) and a burnt orange signature (around #c2410c) a few degrees from the danger red. They are good faces, but reached for every time they become the new default, so pick from the product’s world first and then check against this list. **Read the result back from the code, not from memory:** list the sizes and weights used, point at each font-loading line, count the monospace uses, count where the signature appears (more than the primary action plus one thing to find is decoration), list the distinct gap values, count the separation devices, and search for framework palette names and raw hex values, because each hit is a default that slipped through. On a phone, headings and large figures stay around 28 to 32px under 640px, so a figure and its sign stay on one line.
+
 Do:
 - One written decision per axis: type, colour, space, finish
 - Label text on the signature at 4.5:1, the signature itself at 3:1 against its surface
 - The screen still works with the accent stripped out
+- A loading line for every font family, with a fallback stack
+- Monospace only on codes, IDs and keys; figures in the text face with tabular-nums
 
 Avoid:
 - Borders, shadows and flat planes all separating surfaces on one screen
 - Uniform 16px gaps everywhere
 - A style adopted because it was the default, with no stated reason
+- A red or orange-red signature filling the primary button
+- Three of the five default-look tells on one screen
 
 Code (TEXT):
 
 ```
 ## Character
+World:   recipe cards, kitchen timers, cast iron pans
+Loads:   Google Fonts link, preconnect, display=swap; fallback Georgia, serif
 Type:    high contrast; serif display at 2.6 times the sans body (food is editorial)
 Colour:  saffron signature on Start cooking only; warm neutrals, kitchens are not grey
 Space:   airy; 8px inside a meta group, 32px between sections
@@ -922,15 +932,19 @@ Generated screens drift: screen one uses one blue and 24px card padding, screen 
 
 **Enforcement is the point.** Every new screen pulls colour, type, spacing, radius, shadow and motion from the contract. A value outside it is either an extension (proposed, added to the contract with its reason, then used) or flagged and replaced with the closest token; it is never invented silently, because silent invention is how drift starts. New component variants are extensions too. The contract is versioned with the code and updated in the same commit as the change it blesses, and when a token changes, the screens it affects get listed. Precedence runs from the owner’s instruction, to the contract, to generic defaults. A one-off contradiction gets a one-line flag and is built; a run of them is a change of direction, so update the contract. No second screen gets built in a project that has neither a contract nor an explicit decision to go without one.
 
+**A complete contract has seven sections with real values.** The product’s world in one line; typography, with how each family loads; colour tokens as hex values, with the accent and the destructive colour at least 40 degrees of hue apart; radii, with where each applies; spacing, its base unit and scale; states (hover, focus and disabled), each derived from the tokens; and status badges, each with its text colour, its tint and the contrast ratio written down (at least 4.5:1). No placeholder survives (no [choice], TODO or TBD), and “not measured” leaves a section incomplete. **Settle it before any screen, in one of three states.** Absent: write it, and the tokens in the code; when nobody can answer the questions (an unattended run, a handed-over task), decide from the product’s world and mark the header (assumed, confirm before shipping). Incomplete: add the missing sections and nothing else. Every value, family and colour already there stays exactly as written, because it is the brand, and a missing value is derived from an existing token (color-mix(in oklab, var(--danger) 12%, white)) rather than a new hex, with the contract line naming the token it comes from. Complete: follow it.
+
 Do:
 - Existing tokens extracted into the contract before anything new is invented
 - A one-line reason beside every value
 - The contract updated in the same commit as the change it blesses
+- All seven sections filled, with each status contrast ratio written
 
 Avoid:
 - A silently invented colour, size or radius outside the contract
 - A contract filled from a template with made-up values
 - A second screen built with no contract and no decision to skip one
+- Rewriting a value already in the contract while filling a gap
 
 Code (MARKDOWN):
 
@@ -942,5 +956,10 @@ Character: warm and encouraging, progress never guilt
 - --accent #E8763A: only on Done today and streak highlights
 ## Spacing
 - base 4px; scale 4/8/12/20/32; airy, one habit at a time
+## States
+- hover: accent at 90%; focus: 2px ring in --accent; disabled: 40% opacity
+## Status and badges
+- done: #166534 on #DCFCE7, 6.5:1
+- missed: #9A3412 on #FFEDD5, 6.4:1
 <!-- off-system: a red streak banner was requested; extension proposed: --warning #D97742 -->
 ```

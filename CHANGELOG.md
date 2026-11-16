@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3.0 (16 Nov 2026)
+
+Sharper rules for choosing a look that is your own, for a complete design contract, and for tables that keep their columns lined up.
+
+- Visual Character now starts from the product's world (three concrete things its users handle all day), insists every font actually loads with a fallback stack, keeps monospace for codes, IDs and keys, sets 4.5:1 for any text in a colour, keeps the signature colour away from the danger red, and adds a drift check against the two default looks generators fall into, read back from the code.
+- Project Design Contract now lists the seven sections a complete contract needs (world, typography and how it loads, colour with the accent and danger apart, radii, spacing, states, status badges with their contrast ratios) and what to do before any screen when the contract is missing, incomplete or complete.
+- Data Table: one grid for the whole table, so header and rows cannot drift apart.
+- The skill's instructions now settle the project's DESIGN.md before building new UI, and check the result from the code rather than from memory.
+
 ## 1.2.0 (15 Nov 2026)
 
 Adds a rule for crowded toolbars and five rules that keep gradients vivid and readable.

@@ -23,7 +23,7 @@ It gives you a library of {{TOTAL}} design rules for building clear, easy-to-use
 {{CATEGORY_TABLE}}
 
 4. **Reviewing existing UI.** Go through the screen one element at a time. For each button, form, table, menu or message, find the matching rule and say whether it passes. Report each miss with the rule's name and the fix.
-5. **Building new UI.** Before you write code, list the rules you will apply. After you write it, check the result against them.
+5. **Building new UI.** First settle the project's `DESIGN.md` as the Project Design Contract rule describes: write it when it is missing, add only the missing sections when it is incomplete, and follow it when it is complete. Before you write code, list the rules you will apply. After you write it, check the result against them, reading the values back from the code (fonts and how they load, colours, gaps), not from memory.
 6. **Variants.** Some patterns keep more than one accepted approach, each labelled with when to use it. Pick by context, say which you picked and why, and never merge two variants into one.
 7. **Never invent a rule.** If nothing in the files covers the situation, say so plainly and use your own judgement, labelled as such.
 8. **Heuristics are not laws.** The psychology category holds research-backed heuristics. Present them as that.

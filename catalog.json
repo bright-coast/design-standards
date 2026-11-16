@@ -9,14 +9,14 @@
       "id": "design-standards",
       "name": "Design Standards",
       "status": "ready",
-      "version": "1.2.0",
-      "sha256": "0d5402a2361e1d377b4aff38890753df7df2159d6258f891f386a503ece2fd34",
+      "version": "1.3.0",
+      "sha256": "c4e1c4ea4075894cfb1a3931bfbaefcb448453a47cf0b4d4a4570025182f0a92",
       "category": "Building",
       "summary": "Gives Claude a library of design rules for building clear, easy-to-use interfaces, loaded one category at a time, plus a checklist of the tells that make a screen look machine-made. It applies whenever you ask Claude to build, design, review or restyle a page, form, table or dashboard.",
       "needs": [],
       "offer_if": "builds or designs web pages, apps or dashboards",
       "path": "skills/design-standards/SKILL.md",
-      "changes": "Adds a rule for crowded toolbars and five rules that keep gradients vivid and readable.",
+      "changes": "Sharper rules for choosing a look that is your own, for a complete design contract, and for tables that keep their columns lined up.",
       "files": [
         {
           "path": "skills/design-standards/references/ai-slop.md",
@@ -36,7 +36,7 @@
         },
         {
           "path": "skills/design-standards/references/interaction.md",
-          "sha256": "fbf6a28125d9cd716ede3304ff780cdf6cbb865ad8df26c67da9275918f50bed"
+          "sha256": "a332ec43e347f63e7393eb433abfcd248b7ea936fa1c2c1112aaecd77129af34"
         },
         {
           "path": "skills/design-standards/references/motion.md",
@@ -52,7 +52,7 @@
         },
         {
           "path": "skills/design-standards/references/visual.md",
-          "sha256": "e7e378b180e8b8e34a62e477f988c2045f00a7cf49655ec4d59bf9b0b9cbaa27"
+          "sha256": "47b62b9987c7332fb818ed373604360d40fe8f8981a0c9bda83c6cebed56d9e7"
         }
       ]
     }
