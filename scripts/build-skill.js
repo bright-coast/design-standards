@@ -30,7 +30,7 @@ function renderReference(cat, items, dekHtml, part) {
   const out = [HEADER, '', `# ${cat.title}`, ''];
   if (dekHtml) out.push(htmlToMd(dekHtml), '');
   if (part && part.count > 1) {
-    out.push(`Part ${part.index + 1} of ${part.count}: ${items.length} of the ${part.total} ${cat.title} patterns. Use when: ${cat.when}.`, '');
+    out.push(`File ${part.index + 1} of ${part.count}: ${items.length} of the ${part.total} ${cat.title} patterns. Use when: ${cat.when}.`, '');
     out.push(`In this part: ${items.map((p) => p.title).join('; ')}.`, '');
     for (const o of part.others) out.push(`In \`references/${o.file}\`: ${o.titles.join('; ')}.`, '');
   } else {

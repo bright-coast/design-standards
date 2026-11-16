@@ -71,5 +71,8 @@ test('a category over the size limit is split into parts that together hold ever
   const titles = parts.flatMap((k) => [...files[k].matchAll(/^## (.+)$/gm)].map((m) => m[1]));
   for (let i = 1; i <= 8; i++) assert.ok(titles.includes(`Filler ${i}`));
   assert.ok(files['skills/design-standards/references/forms.md'].includes('In `references/forms-2.md`: '));
+  // "Part N" is on the release scrub list (old page cross-references), so split headers say "File N of M"
+  assert.ok(files['skills/design-standards/references/forms.md'].includes(`File 1 of ${parts.length}: `));
+  for (const k of parts) assert.ok(!/\bPart \d/.test(files[k]), k);
   assert.ok(files['skills/design-standards/SKILL.md'].includes('`references/forms.md`, `references/forms-2.md`'));
 });

@@ -6,8 +6,10 @@ order: 5
 ---
 ## Rule
 <p>Update the interface the instant someone acts, sync the real request in the background, and roll back cleanly if it fails. The perceived latency drops to zero even though the network call still takes its normal time. This is reserved for reversible, low-stakes actions where a rollback costs nothing (a like, a follow, an inline edit); trust the success case and design failure as the rare exception rather than the default assumption. Never apply it to a payment or anything else unsafe to silently reverse.</p>
+<p><strong>A rollback is never silent.</strong> When the request fails, put the old state back and say so in the same place, with a way to try again: Could not save this post. Retry. A save, a bookmark or a follow that quietly undoes itself later leaves the person believing something that is no longer true, and they find out only when the thing they saved is gone. If they may already have moved on to another screen, tell them where they are now, not on the screen they left.</p>
 ## Do
 - Reserved for reversible, low-stakes actions
+- A failed request restores the old state and says so, with Retry
 ## Avoid
 - Optimistic payments or anything unsafe to undo
 ## Code: JS

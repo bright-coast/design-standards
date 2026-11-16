@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.5.1 (16 Nov 2026)
+
+Eight rules made more specific from a second pass over the same posts: their comments and the remaining carousel slides.
+
+- Optimistic UI: a rollback is never silent; say what failed, with Retry.
+- One Time Code: one verdict on the complete code, never per digit.
+- Autosave: Cmd+S or Ctrl+S still saves at once.
+- Grid System: fluid type keeps a rem term so text zoom still works.
+- Typography System: text-wrap balance on headings and pretty on paragraphs.
+- Dashboard Tells: forecasts and watch items stay neutral; red only for what needs action now.
+- Keyboard Shortcuts: single-key shortcuts stay off while someone types.
+- Avatar: use the status dot where a ring already means something else.
+
 ## 1.5.0 (16 Nov 2026)
 
 Fifteen new rules, about sixty existing rules made more specific, and skill files that split themselves when a category grows too large.

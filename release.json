@@ -1,9 +1,9 @@
 {
-  "version": "1.5.0",
+  "version": "1.5.1",
   "files": [
     {
       "path": "skills/design-standards/SKILL.md",
-      "sha256": "3dc18c05cc2cdfd07d75283699cf7bde43181fef0e4162c61f5392b07732bcf4"
+      "sha256": "1c9a94ab4d220c4f9ed75f8f47696010de1db264f0042070548a4d8f0ecee1f3"
     },
     {
       "path": "skills/design-standards/references/ai-slop.md",
@@ -15,15 +15,15 @@
     },
     {
       "path": "skills/design-standards/references/feedback.md",
-      "sha256": "7a93974edf68ccb2a87aaff7e4237d3b9cddad0bf9e95578228fd16e08363243"
+      "sha256": "d3dc718401cd5a2aecbc3fd5e46d0d9ab0d2ac48202abbe916a782f295207925"
     },
     {
       "path": "skills/design-standards/references/forms.md",
-      "sha256": "0f3ce2e148323d40458950d4948e2916e4cf2e7ebec1558b7df9377390276452"
+      "sha256": "2b904719b8589586c0fef0e095607161f1c4a6fa747ffc4be4325003a7d06839"
     },
     {
       "path": "skills/design-standards/references/interaction.md",
-      "sha256": "9f053b792ddfdf533a631c44362d61350074cdb0f87f0acedc01f1ccfb4bac39"
+      "sha256": "343a1712e3c3d0dad33f91041b9ce2380ca6bb3b751b7b96309a5a4144aea633"
     },
     {
       "path": "skills/design-standards/references/motion.md",
@@ -38,8 +38,12 @@
       "sha256": "7a1fed7add9c227a61dfb01546c9d46cb7346a6329ae17906832bf557fd05161"
     },
     {
+      "path": "skills/design-standards/references/visual-2.md",
+      "sha256": "97d563ff64379cce9ca953c1f00e8ddcbc65b3011fa2424fbf8580fd17974bd2"
+    },
+    {
       "path": "skills/design-standards/references/visual.md",
-      "sha256": "8050a756a3f40a955e4a7ce17f83d92ffd246b753891ec39300818b0d614345a"
+      "sha256": "b7f45fa79f2bc8a740039598415a41039bf3469dcc5314576c4ea82c730f0d2e"
     }
   ]
 }

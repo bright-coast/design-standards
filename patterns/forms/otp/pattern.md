@@ -8,10 +8,12 @@ order: 7
 <p>Model the code as a single string in state, not six independent input boxes each tracking their own value; six-box implementations are where paste handling reliably breaks. Treat paste as the primary entry path rather than an edge case, since most codes are copied from an SMS or authenticator app, not typed digit by digit. Auto-advance focus to the next box as each digit lands, let backspace on an empty box jump back to the previous one, and gate resend behind a visible countdown so the retry button isn&rsquo;t just sitting there inviting spam.</p>
 <p>Tag the input with <code class="tok">inputmode="numeric"</code> and <code class="tok">autocomplete="one-time-code"</code>. Together they are what let a phone autofill the SMS code.</p>
 <p>Colour is reserved for verdicts. Keep the UI neutral (light and grey) while the code is being entered: green appears only when the code is correct and red only when it is wrong, and those two are the only status colours in play. Keep those status colours separate from the brand accent, and see Color Accessibility (Visual, entry 03) for the second-signal rule that any colour-coded verdict still needs.</p>
+<p><strong>Judge the whole code, never one box.</strong> The verdict is for the complete code only. Marking single digits right or wrong as they are typed turns the code into a guessing game, because each box can be tried until it turns green; one verdict on the full entry keeps it a secret.</p>
 ## Do
 - Auto-advance focus, backspace jumps back a box
 - <span><code class="tok">inputmode="numeric"</code> and <code class="tok">autocomplete="one-time-code"</code> on the input, so phones autofill the SMS code</span>
 - Neutral UI until a verdict: green only when the code is correct, red only when it is wrong
+- One verdict on the complete code, never per digit
 ## Avoid
 - A wrong code sitting silently, no shake/refocus
 - Green or red on the boxes before the code has been judged

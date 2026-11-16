@@ -1343,10 +1343,13 @@ A shortcut nobody sees never gets learned. Show each action’s shortcut right-a
 
 **One action, one binding.** Give each action exactly one shortcut and keep it the same on every screen: if Cmd+D duplicates a row in one list, it duplicates in every list, and it never means delete somewhere else. Show the platform’s own modifier (Cmd on a Mac, Ctrl on Windows), and do not take over shortcuts the browser or system already owns.
 
+**Single-key shortcuts stay off while someone types.** A shortcut with no modifier (E to archive, R to rename) must not fire while focus is in a text field, a text area or anything editable, or typing a word runs commands. Check the focused element before handling the key, and keep shortcuts with Cmd or Ctrl for actions that must work everywhere.
+
 Do:
 - Shortcuts right-aligned on every menu row, and repeated in tooltips
 - One short tip after about three mouse uses of the same action, shown once
 - One binding per action, the same everywhere in the product
+- Ignore single-key shortcuts while focus is in a field
 
 Avoid:
 - A shortcut tip on the first use, or the same tip shown again

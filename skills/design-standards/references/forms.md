@@ -13,9 +13,12 @@ Firing a save on every keystroke floods the network with redundant requests, so 
 
 The full set of states is six, each with its own honest label: **idle** (nothing to save), **unsaved** while the person is typing and the debounce has not fired yet (Editing… or Unsaved changes), **saving**, **saved** (Saved 2 min ago), **offline** (Offline, changes kept on this device, with the edits queued locally), and **error** (Not saved, Retry). Offline is not an error: nothing is lost, and the label says so.
 
+**Save on Cmd+S or Ctrl+S anyway.** Many people press it out of habit, and some only trust a save they asked for. Catch the shortcut, save immediately instead of waiting for the debounce, and confirm with the same Saved label, rather than letting the browser open its own Save Page dialog.
+
 Do:
 - Queue edits offline, replay oldest-first on reconnect
 - Separate unsaved and offline states, so the label is never wrong
+- Cmd+S or Ctrl+S saves at once and shows the Saved label
 
 Avoid:
 - Silent last-write-wins across two open tabs
@@ -229,10 +232,13 @@ Tag the input with `inputmode="numeric"` and `autocomplete="one-time-code"`. Tog
 
 Colour is reserved for verdicts. Keep the UI neutral (light and grey) while the code is being entered: green appears only when the code is correct and red only when it is wrong, and those two are the only status colours in play. Keep those status colours separate from the brand accent, and see Color Accessibility (Visual, entry 03) for the second-signal rule that any colour-coded verdict still needs.
 
+**Judge the whole code, never one box.** The verdict is for the complete code only. Marking single digits right or wrong as they are typed turns the code into a guessing game, because each box can be tried until it turns green; one verdict on the full entry keeps it a secret.
+
 Do:
 - Auto-advance focus, backspace jumps back a box
 - `inputmode="numeric"` and `autocomplete="one-time-code"` on the input, so phones autofill the SMS code
 - Neutral UI until a verdict: green only when the code is correct, red only when it is wrong
+- One verdict on the complete code, never per digit
 
 Avoid:
 - A wrong code sitting silently, no shake/refocus

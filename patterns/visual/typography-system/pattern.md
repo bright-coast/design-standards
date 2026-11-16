@@ -8,6 +8,7 @@ order: 24
 <p>Typography is seven decisions made once, so every screen inherits them instead of re-deciding them. <strong>1. One font family.</strong> Use a single family for the whole product; hierarchy comes from size, weight and colour, not from mixing typefaces. <strong>2. Five sizes at most, on one ratio.</strong> Step the sizes by a single ratio (1.25), never hand-picked pixels; a typical cleanup collapses 11 sizes to 5. <strong>3. Three text colours.</strong> Primary, secondary and muted do more than ten sizes: colour ranks inside a line, size ranks between blocks. <strong>4. Two weights.</strong> Use 400 for reading and 600 for scanning; when everything is bold, nothing is. <strong>5. Line height moves opposite to size.</strong> About 1.1 on headings and about 1.5 on body text; the same line height everywhere is often called an AI tell. <strong>6. Letter spacing.</strong> Tighten headings above 24px by about minus 2%, and open small uppercase labels by about plus 5%. <strong>7. Measure and figures.</strong> Cap body text at 45 to 75 characters per line by capping the measure (<code class="tok">max-width</code> in <code class="tok">ch</code>), not the container, and set tabular figures (<code class="tok">font-variant-numeric: tabular-nums</code>) on prices, timers and table columns so digits do not wobble. The digit-width detail lives in Tabular Numbers (Visual, entry 19), which is the second half of this rule.</p>
 <p><strong>Ratio choice.</strong> This entry steps by 1.25 (the classic major third). Golden Ratio (entry 09) steps by 1.618, the opposite choice. From a 16px base, 1.25 gives roughly 16, 20 and 25px in two steps, while 1.618 gives roughly 16, 26 and 42px. The two entries disagree, so pick one ratio per product and stay on it. The demo uses a billing card as its worked example.</p>
 <p>On a phone, body text and metadata (dates, captions, counts) stay at 14px or more. Smaller text saves a line and costs every reader a squint.</p>
+<p><strong>Let the browser fix ragged lines.</strong> <code class="tok">text-wrap: balance</code> on headings evens out the line lengths, so a heading never ends on a single word; <code class="tok">text-wrap: pretty</code> on paragraphs avoids a lone last word without changing the rest. Both replace manual line breaks and non-breaking spaces, which break as soon as the width or the copy changes.</p>
 ## Do
 - One family; hierarchy from size, weight and colour
 - Five sizes at most, stepped by one ratio (1.25), never hand-picked pixels
@@ -17,6 +18,7 @@ order: 24
 - Tracking about minus 2% above 24px, about plus 5% on small uppercase labels
 - Body measure of 45 to 75ch through <code class="tok">max-width</code>, and <code class="tok">tabular-nums</code> on prices, timers and table columns
 - Body and metadata text at 14px or more on a phone
+- <code class="tok">text-wrap: balance</code> on headings, <code class="tok">text-wrap: pretty</code> on paragraphs
 ## Avoid
 - Ten hand-picked sizes for ten pieces of text
 - Bold on everything, or one line height everywhere

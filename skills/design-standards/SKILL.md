@@ -1,7 +1,7 @@
 ---
 name: design-standards
 description: Use when someone asks you to build, design, review or restyle any user interface (a page, form, table, dashboard, navigation, settings screen, landing page, empty state or animation), says "apply the design standards to <screen>", or asks why a page looks generic or machine-made. It gives you 140 design rules, loaded one category at a time, and a checklist of the tells that make an interface look machine-made.
-version: 1.5.0
+version: 1.5.1
 ---
 
 > A Bright Coast AI skill, made by Rob Lee. github.com/bright-coast/design-standards
@@ -26,7 +26,7 @@ It gives you a library of 140 design rules for building clear, easy-to-use inter
 | Interaction | 39 | `references/interaction.md` | buttons, menus, tables, dialogs, drawers, drag and drop, keyboard and touch behaviour |
 | Forms | 19 | `references/forms.md` | any input, validation, multi-step flow or settings screen |
 | Feedback | 13 | `references/feedback.md` | loading, empty and error states, toasts, progress and confirmations |
-| Visual | 37 | `references/visual.md` | colour, type, spacing, depth, icons and layout |
+| Visual | 37 | `references/visual.md`, `references/visual-2.md` | colour, type, spacing, depth, icons and layout (in 2 parts: the opening lines of each part say which part holds each pattern) |
 | Motion | 6 | `references/motion.md` | animation timing, easing and transitions |
 | Navigation | 5 | `references/navigation.md` | tabs, breadcrumbs, pagination and moving between screens |
 | Content | 5 | `references/content.md` | wording, headings and page-level structure |
