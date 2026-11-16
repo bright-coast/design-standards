@@ -5,16 +5,17 @@
 
 The layer people notice consciously least and judge most: colour, depth, spacing, and the perceptual rules underneath them.
 
-33 patterns. Use when: colour, type, spacing, depth, icons and layout.
+37 patterns. Use when: colour, type, spacing, depth, icons and layout.
 
 ## Border Radius
 
 Nested corners follow real math: a card with 12px radius and 8px padding needs an inner element radius of exactly 4px (outer minus padding), or the inner corner reads as visually off even though nobody can say why. Pick one radius scale for the whole system (4/8/12/16, or similar) instead of eyeballing a number per component, and scale the radius up with element size; a tiny badge and a full page card at the same 8px radius look proportionally wrong on the smaller one. Radius is also a brand lever: sharp corners read technical/serious, generous rounding reads friendly/approachable, so pick deliberately.
 
-The full checklist has six rules. **Nested:** inner radius equals outer radius minus padding (a 12px card with 8px padding gets a 4px inner corner), so nested corners share one centre; otherwise the inner corner bulges. **Scale:** size sets the radius (for example small 4, medium 8, large 16, which are sample values), not 8px on everything; a chip and a modal do not share a corner. **Pill:** full radius is a shape, not a number, so use 9999px only on a single-line element such as a chip, avatar or toggle, never on a multi-line card. **Edges:** an element that touches an edge has no corner there, so a bottom sheet flush to the screen edge gets its top corners rounded and its bottom corners at zero. **Ring:** a selection ring drawn as its own box sits outside the element, so ring radius equals the inner radius plus the gap (8 inside and a 2px gap gives 10 out); if the corners pinch, flip the formula. **Images:** an edge-to-edge image in a rounded card is clipped by the card (`overflow: hidden`) so square image corners do not poke through; for an inset image, subtract the padding and apply the same nested rule.
+The full checklist has six rules. **Nested:** inner radius equals outer radius minus padding (a 12px card with 8px padding gets a 4px inner corner), so nested corners share one centre; otherwise the inner corner bulges. A border counts too: inner radius equals outer radius minus padding minus border width, so a 16px card with a 2px border and 8px padding gets a 6px inner corner. **Scale:** size sets the radius (for example small 4, medium 8, large 16, which are sample values), not 8px on everything; a chip and a modal do not share a corner. **Pill:** full radius is a shape, not a number, so use 9999px only on a single-line element such as a chip, avatar or toggle, never on a multi-line card. **Edges:** an element that touches an edge has no corner there, so a bottom sheet flush to the screen edge gets its top corners rounded and its bottom corners at zero. **Ring:** a selection ring drawn as its own box sits outside the element, so ring radius equals the inner radius plus the gap (8 inside and a 2px gap gives 10 out); if the corners pinch, flip the formula. **Images:** an edge-to-edge image in a rounded card is clipped by the card (`overflow: hidden`) so square image corners do not poke through; for an inset image, subtract the padding and apply the same nested rule.
 
 Do:
 - Scale radius with element size
+- Subtract the border width as well as the padding when nesting radii
 - Focus ring radius matches the element’s own radius
 - Image corners clipped to their container’s radius, not left square
 - Pill radius (9999px) only on single-line shapes such as a chip, avatar or toggle
@@ -50,11 +51,18 @@ Code (CSS):
 
 Every bar chart’s y-axis starts at zero. Truncating it to, say, 90-100 turns a genuinely small 2% change into a bar that looks three times taller than its neighbour, which is a factual misrepresentation even if every number on the chart is technically correct. Match the chart type to the actual question being asked (trend over time is a line, comparison across categories is a bar, part-of-whole is rarely a pie), and title the chart with the takeaway itself, not the bare metric name. Skip gridlines, 3D extrusion, or decorative elements that encode no real data; they add visual noise without adding information.
 
+**Zero, and the line chart exception.** Bars always start at zero, because their length is the value. A line chart may skip zero when the change is the point (a temperature or a share price), but only with a clearly labelled axis that shows where it starts. **Pies:** a pie with more than about five slices cannot be read; use a sorted bar chart instead. **Palette type follows the data:** categorical colours (distinct hues) for separate groups, a sequential palette (one hue, light to dark) for magnitude, and a diverging palette (two hues meeting at a neutral midpoint) for values above and below a meaningful middle such as zero or a target.
+
+**Emphasis and labels.** The takeaway series is in the accent colour and every other series grey, so title and colour point at the same thing. Label lines at their ends instead of in a legend. Past about five series, a chart turns to spaghetti; switch to a sortable table or to small multiples (one small chart per series, on shared axes). Annotate notable spikes and dips on the chart itself with their cause (Pricing change, Outage). **Aspect ratio:** as a guideline rather than a law, pick a width and height for a line chart that keeps its important slopes near 45 degrees; too wide flattens real change, too tall exaggerates noise.
+
 Do:
 - Chart type matched to the actual question
+- One accent series, the rest grey
 
 Avoid:
 - Gridlines/3D that encode no real data
+- A pie with more than about five slices
+- A categorical rainbow on data that is really a magnitude
 
 Code (JS: chart config):
 
@@ -74,11 +82,15 @@ const chartConfig = {
 
 Contrast is always a ratio between a colour and whatever sits directly behind it; there’s no such thing as an accessible colour in isolation. Check every real foreground/background pair against WCAG (4.5:1 for body text, 3:1 for large text and UI components), and give every colour-coded cue a second signal (an icon, a pattern, a text label) so a red/green status distinction doesn’t collapse entirely for a colour-blind user. The usual failure spot is a “decorative” muted grey caption that nobody thought to check, not the obvious high-stakes error text.
 
+**Large text** means about 24px at regular weight or about 19px (18.7px) bold. Only text at that size may drop to 3:1; anything smaller needs 4.5:1. **Text over an image** needs a scrim or a dark gradient under it (for example black at 40 to 60% across the part the text covers), and its contrast is measured at the lightest spot the text crosses, never against the image’s average colour. **Exempt from the minimums:** disabled or inactive controls, logos and wordmarks, and pure decoration. A muted disabled button is not a failure, though it still needs another cue (no hover, a not-allowed cursor, a reason nearby) that it is disabled. **Judge a colour in place:** neighbouring colours change how light or strong a colour looks (the same mid grey reads darker on white than on black), so check swatches on the real surface beside their real neighbours, not alone on an empty artboard.
+
 Do:
 - Second signal (icon/pattern) with every colour cue
+- Text on an image sits on a scrim, checked at the lightest spot it crosses
 
 Avoid:
 - Red-vs-green as the only signal
+- Disabled controls and logos flagged as contrast failures
 
 Code (JS):
 
@@ -103,17 +115,22 @@ Dark mode is not black mode. Build the base surface on a near-black like `#12121
 
 Six rules, in full. **Near black, not black:** pure black saves OLED battery but kills depth, since nothing can sit lower than black, so start near black (for example a page at #0B0D10, with the card and chip lighter). **Lightness is elevation:** shadows die on dark, so raise surfaces by making them lighter, with page, card, menu and modal each one step lighter. **Three tiers of white:** never pure white text; primary at about 87%, secondary at about 60% and disabled at about 38%, one colour with three alphas. **Calm the accent:** a saturated brand blue glows past its edges on dark, so keep the hue but lighten and desaturate it. **Alpha hairlines:** edges need a 1px line of white at about 8% alpha rather than a fixed grey, because it adapts as the surface gets lighter. **Dim the photos:** bright images pull the eye on a dim page, so lower their brightness to about 90%, and give illustrations a redrawn dark variant rather than a filter.
 
+**Follow the system setting in CSS.** Use `prefers-color-scheme` as the default trigger, with a stored user choice overriding it, and set `color-scheme: light dark` so native form controls, scrollbars and the default canvas switch too; no detection script is needed. **Drop the weight about one step:** light text on a dark ground looks heavier and slightly blurred at the edges, so a heading at 600 on light reads right at 500 on dark, and body text at 400 can go to about 350 with a variable font.
+
 Do:
 - Layered surfaces signal elevation
 - Text tiers on one white: about 87% primary, 60% secondary, 38% disabled
 - Edges as a 1px white line at about 8% alpha, not a fixed grey
 - Photos dimmed to about 90% brightness; illustrations redrawn as a dark variant, not filtered
+- `color-scheme: light dark` so native controls and scrollbars follow the theme
 
 Avoid:
 - Pure white body text glaring on dark
 - A saturated brand colour left unchanged on dark, glowing past its edges
 
 Note: **Real trade-off, not a free upgrade:** near-black elevation surfaces cost more battery on OLED than true black, and several of the lighter "elevated" surface tones can quietly fail WCAG contrast if not checked; a low-contrast button on a near-black surface is the classic miss. Run every elevated surface + text pair through the Color Accessibility check above before shipping; don't assume "near-black" is automatically accessible just because it isn't pure black. Two fair objections: saving battery can matter more than depth, and most of these techniques lower contrast; and an accent desaturated too far looks disabled. Treat the 87, 60 and 38 percent tiers, the 8% alpha hairline and the 90% photo brightness as sensible defaults to check, not rules, and keep the contrast check above.
+
+Variant: **Text greys as alpha tiers versus solid greys, two variants.** Variant A: one white at about 87, 60 and 38% alpha, as above. Use when: text always sits on a known solid surface. Variant B: solid greys defined per theme (#E0E0E0, #A0A0A0, #6B6B6B on #121212). Use when: text can sit on images, tinted panels or overlapping layers, because alpha text takes on whatever is behind it. The same choice applies to the opacity captions in Visual Hierarchy. Both kept on purpose.
 
 Code (CSS):
 
@@ -127,6 +144,8 @@ Code (CSS):
   --accent: oklch(70% 0.12 175); /* ~20% less saturated than the light-mode accent */
   --border: rgb(255 255 255 / 0.08); /* alpha hairline: adapts as the surface gets lighter, unlike a fixed grey */
 }
+:root { color-scheme: light dark; } /* native controls and scrollbars follow the theme */
+:root[data-theme="dark"] h2 { font-weight: 500; } /* 600 on light: one step lighter on dark */
 img, video { filter: brightness(0.9); } /* dim photos to about 90%; give illustrations a redrawn dark variant instead of a filter */
 ```
 
@@ -134,8 +153,11 @@ img, video { filter: brightness(0.9); } /* dim photos to about 90%; give illustr
 
 Three CSS levers create real perceived depth without a visual redesign: layered box-shadows (a tight contact shadow plus a soft ambient one), a subtle parallax speed differential between background and foreground on scroll, and a small hover z-lift. Stack a tight shadow with a wider ambient one rather than one flat blur value; that combination is what makes an element read as physically raised. Keep hover lifts subtle: a few pixels of translateY and roughly 3% scale reads as responsive; push either further and it starts to feel gimmicky rather than tactile.
 
+**A perspective tilt, sparingly.** A tiny 3D tilt toward the pointer (about 2 to 4 degrees, under a perspective of around 800 to 1000px) can add lift to one hero card or product shot. Keep it to one element per screen, never on cards in a list or anything holding text people need to read, and switch it off under `prefers-reduced-motion`.
+
 Do:
 - Stack tight + mid + ambient shadows
+- A tilt of at most a few degrees, on one hero element only
 
 Avoid:
 - Parallax/scale pushed far enough to distract
@@ -154,6 +176,8 @@ Code (CSS):
   transform: translateY(-2px) scale(1.03); /* subtle: a few px, ~3% */
   box-shadow: 0 2px 4px rgb(0 0 0 / .1), 0 8px 16px rgb(0 0 0 / .08), 0 20px 32px rgb(0 0 0 / .06);
 }
+.hero-card { transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)); } /* set by the pointer, kept within 3deg */
+@media (prefers-reduced-motion: reduce) { .hero-card { transform: none; } }
 .parallax-bg { transform: translateY(calc(var(--scroll-y) * 0.3px)); } /* moves slower than foreground */
 ```
 
@@ -166,6 +190,8 @@ Do:
 
 Avoid:
 - Hardcoded hex and eyeballed gaps
+
+Variant: **8px unit versus 4px steps, two variants.** Variant A: a 4px scale (4, 8, 12, 16, 24), as above. Use when: dense product UI such as tables, forms and toolbars, where 12px and other in-between steps are needed. Variant B: one 8px unit and only its multiples (8, 16, 24, 32, 48). Use when: marketing pages and roomier layouts, where fewer, bigger steps keep the rhythm obvious. Either way, 4px is reserved for small adjustments inside a component, never between sections. Both kept on purpose.
 
 Code (CSS):
 
@@ -244,7 +270,7 @@ Do:
 Avoid:
 - Applying it so rigidly it fights real content
 
-Note: **Pick one ratio.** Typography as a System steps its type sizes by 1.25 (the major third) rather than 1.618. From a 16px base, 1.25 gives roughly 16, 20 and 25px in two steps, while 1.618 gives roughly 16, 26 and 42px. Pick one ratio per product and stay on it.
+Note: **Pick one ratio.** Typography as a System steps its type sizes by 1.25 (the major third) rather than 1.618. From a 16px base, 1.25 gives roughly 16, 20 and 25px in two steps, while 1.618 gives roughly 16, 26 and 42px. Pick one ratio per product and stay on it. 1.618 is too steep for dense product UI: its steps run about 16, 26, 42 and 68px, which suits a marketing page with a few big headings but leaves no usable sizes between body and heading in a dashboard or form. For product UI, a ratio of 1.2 to 1.25 fits (see Typography as a System).
 
 Code (JS):
 
@@ -268,13 +294,17 @@ Neighbouring hues on the colour wheel blend cleanly into each other, while hues 
 
 **Five rules for gradients that stay vivid and readable.** Blue to yellow looks simple, but by default the browser mixes in RGB, so the middle drops to a muddy grey (#3b5bdb to #f5d90a passes through #989a72). **1. Interpolate in OKLCH.** One clause in your CSS, same two colours, and the middle stays bright (the same pair passes through a bright green, about #22b573). **2. Add a middle stop.** You pick the colour in between instead of letting the math pick it. **3. Far apart needs a route.** Opposite hues (168&deg; apart) go grey on a straight path, so use OKLCH and a middle stop; neighbours (55&deg; apart) blend fine. **4. Add grain.** On big dark gradients, a faint noise layer hides the banding. **5. Calm behind text.** Behind text, keep the stops close in lightness so every word stays readable: white text measures 1.2:1 on the pale end of a wide gradient and 8.2:1 on a calm, close-lightness one.
 
+**Angle, mesh and gradient text.** On surfaces, prefer a diagonal of about 135 degrees (top left to bottom right) over a flat left-to-right gradient, which reads like a progress bar. For a hero background, a mesh of about three colour points (two or three layered radial gradients over a base colour) reads more natural than a two-stop linear gradient. A gradient fill on the text itself (`background-clip: text`) belongs on display headlines only; body text, labels and links stay a solid colour, and the headline’s contrast is checked at its palest stop.
+
 Do:
 - Keep lightness moving one direction only
 - `linear-gradient(in oklch ...)` for any pair that is not neighbours
 - A hand-picked middle stop on far-apart hues
 - Stops close in lightness wherever text sits on top
+- A diagonal of about 135 degrees on surfaces; a three-point mesh for hero backgrounds
 
 Avoid:
+- Gradient-filled body text, labels or links
 - Body text on a gradient’s mid-transition
 - Default RGB mixing across opposite hues (the grey middle)
 
@@ -298,23 +328,30 @@ Code (CSS):
 .gradient-vivid { background: linear-gradient(in oklch 90deg, #3b5bdb, #22b573, #f5d90a); }
 /* behind text: stops close in lightness (rule 5) */
 .gradient-text-safe { background: linear-gradient(in oklch 135deg, #3b2fa0, #6a35b0); color: white; }
+
+.hero-mesh { background: radial-gradient(at 15% 20%, #6a35b0, transparent 55%), radial-gradient(at 85% 30%, #3b5bdb, transparent 50%), radial-gradient(at 50% 90%, #c2417a, transparent 55%), #1b1442; } /* three-point mesh */
+.display-headline { background: linear-gradient(135deg, #3b5bdb, #6a35b0); -webkit-background-clip: text; background-clip: text; color: transparent; }
 ```
 
 ## Grid System
 
-A 12-column grid maps almost any layout because 12 divides cleanly into halves, thirds, and quarters, giving enough flexibility without infinite arbitrary choices. Gutter width sets the emotional register of a layout: tight gutters read technical and dense, wide gutters read editorial and calm. Collapse the column count at each breakpoint (12 on desktop down to 6, then 4, then a single column on mobile) rather than shrinking 12 narrow columns onto a phone screen. Only break the grid deliberately once it’s clearly established as the norm; an occasional full-bleed image is a strong device precisely because everything else respects the grid.
+A 12-column grid maps almost any layout because 12 divides cleanly into halves, thirds, and quarters, giving enough flexibility without infinite arbitrary choices. Gutter width sets the emotional register of a layout: tight gutters read technical and dense, wide gutters read editorial and calm. As defaults, about 8px for a dense tool, 24px for a balanced layout and 40px for an editorial one. Collapse the column count at each breakpoint (12 on desktop down to 6, then 4, then a single column on mobile) rather than shrinking 12 narrow columns onto a phone screen. Only break the grid deliberately once it’s clearly established as the norm; an occasional full-bleed image is a strong device precisely because everything else respects the grid.
 
 A layout also has to hold still when a scrollbar appears. When content grows past its container, a classic scrollbar takes a few pixels of width and the content nudges sideways. Put `scrollbar-gutter: stable` on the scrolling element and the scrollbar’s space is reserved from the start, so nothing shifts when it appears. For a centred layout use `scrollbar-gutter: stable both-edges`, which reserves the gutter on both sides so the content stays symmetrical. The caveat is that the gutter is a placeholder: with plain `stable` the left and right spacing can look unequal, which is what `both-edges` addresses. It matters mainly with classic, always-visible scrollbars (Windows and Linux); on macOS with overlay scrollbars there is nothing to reserve, and the reserved space is visible as an empty strip when there is no scrollbar. It is supported in current Chrome, Edge and Firefox, with Safari support arriving in recent versions, so check the current support table before relying on it in a Safari-first product.
 
 Write the one-column version first, then add columns at breakpoints. Starting from the single column keeps the narrow screen as the default, instead of a squeezed copy of the desktop.
+
+**Fluid values and container queries before more breakpoints.** Sizes that should grow smoothly with the screen (gutters, section padding, display type) use `clamp()`, such as `clamp(16px, 4vw, 40px)`, instead of a new media query at every width. A component that can sit in panels of different widths (a card in a sidebar and in the main column) responds to its container with `@container`, not to the viewport, because the viewport says nothing about the space the component actually has. Keep media queries for page-level layout changes.
 
 Do:
 - Collapse columns per breakpoint (12→6→4→1)
 - `scrollbar-gutter: stable` on any scrolling element, so nothing shifts when a scrollbar appears
 - `scrollbar-gutter: stable both-edges` when the layout is centred
 - The one-column version written first, with columns added at breakpoints
+- `clamp()` for sizes that grow with the screen, `@container` for components that live in panels of different widths
 
 Avoid:
+- A media query for every small size change
 - Breaking the grid before establishing it
 - A scrolling panel with no reserved gutter, so its content nudges sideways the moment a scrollbar appears
 
@@ -332,6 +369,10 @@ Code (CSS):
 @media (max-width: 1024px) { .grid { grid-template-columns: repeat(6, 1fr); } }
 @media (max-width: 768px)  { .grid { grid-template-columns: repeat(4, 1fr); } }
 @media (max-width: 480px)  { .grid { grid-template-columns: 1fr; } } /* single column, not shrunk 12-col */
+
+.page { padding-inline: clamp(16px, 4vw, 40px); } /* fluid, no breakpoint needed */
+.panel { container-type: inline-size; }
+@container (min-width: 480px) { .card { grid-template-columns: 120px 1fr; } } /* responds to its panel, not the viewport */
 
 .full-bleed { grid-column: 1 / -1; } /* deliberate break, reads as a device because the grid is otherwise respected */
 
@@ -352,11 +393,16 @@ Code (CSS):
 
 A round or organic icon shape needs to sit slightly larger than a square one to read as the same optical size. This is the same overshoot correction typography uses for round letterforms like O against flat ones like H. Snap every icon to a fixed grid (typically 24px) with one consistent stroke weight across the whole set, and give every icon a fixed bounding box even as the internal shape varies, so a row of mixed icons stays visually aligned. Mixing filled and outline styles within the same icon set at random reads as an inconsistent, unfinished system.
 
+**Live area, caps and joins.** Inside the 24px box, draw within a live area of about 20px, leaving 2px of padding so strokes and round shapes have room to overshoot. One stroke width goes with one cap and one join style for the whole set (round caps and round joins, for example), never round on some icons and square on others. **Snap to whole pixels:** keep coordinates on whole numbers so lines render sharp; with an odd stroke width (1px or 3px) place the line on a half pixel (x = 12.5) so the stroke fills whole pixels rather than blurring across two. **Few sizes, matched to text:** use three icon sizes at most, each paired with a text size, for example 16px icons beside 12 to 14px text, 20px beside 15 to 16px text and 24px beside 18 to 20px text. Optical centring of asymmetric glyphs and icon alignment to a label’s cap height are in Optical Corrections.
+
 Do:
 - Snap to a fixed grid, one stroke weight
+- One cap and join style across the whole set
+- Three icon sizes at most, each paired with a text size
 
 Avoid:
 - Mixing fill and outline styles at random
+- Fractional coordinates that blur a 1px stroke across two pixels
 
 Code (CSS):
 
@@ -364,7 +410,11 @@ Code (CSS):
 .icon {
   width: 24px; height: 24px; /* fixed bounding box for every icon in the set */
   stroke-width: 1.5px; /* one consistent stroke weight, never mixed per-icon */
+  stroke-linecap: round; stroke-linejoin: round; /* one cap and join style for the set */
 }
+.icon-sm { width: 16px; height: 16px; } /* beside 12 to 14px text */
+.icon-md { width: 20px; height: 20px; } /* beside 15 to 16px text */
+.icon-lg { width: 24px; height: 24px; } /* beside 18 to 20px text */
 
 /* round/organic icon shapes overshoot the grid slightly to read as the same size */
 .icon-circle { transform: scale(1.06); } /* optical size-match against square icons */
@@ -422,11 +472,16 @@ Code (CSS):
 
 Real depth comes from stacking multiple shadow layers, not one blur value scaled up for “more elevation”. A genuinely floating element has a tight, dark contact shadow close to its edge, a softer mid-range shadow, and a very soft, wide ambient shadow, all three layered together. Tinting the shadow’s colour toward the brand accent instead of pure black adds a subtle glow that feels considered rather than generic. Reserve the strongest elevation tier for what actually matters most on screen (an open modal, a dragged card) rather than applying it uniformly and flattening the whole hierarchy.
 
+**One light source.** Every shadow in the interface assumes the same light direction, usually from straight above, so every shadow offsets the same way (down, never left on one card and right on another). **How tiers scale:** going up a tier, the offset and blur grow (y 1 and blur 2 at rest, y 20 and blur 32 on a modal) while the opacity of each layer stays roughly the same, about 4 to 8%; a higher element casts a longer, softer shadow, not a darker one. **Trim the halo:** give the wide ambient layer a negative spread (for example 0 20px 32px -8px) so the shadow sits under the element instead of glowing out past its sides. **On dark surfaces** black shadows barely read and Dark Mode raises surfaces with lightness instead; the one exception is a low-opacity glow tinted to the accent (about 15 to 25%), which can stand in for the black ambient layer on a floating element.
+
 Do:
 - Tint the glow to brand accent
+- Every shadow offset in the same direction
+- Offset and blur grow with elevation; opacity stays about the same
 
 Avoid:
 - One flat drop shadow used everywhere
+- A black ambient shadow on a dark surface
 
 Code (CSS):
 
@@ -434,7 +489,8 @@ Code (CSS):
 :root {
   --elevation-1: 0 1px 2px rgb(0 0 0 / .08);
   --elevation-2: 0 1px 2px rgb(0 0 0 / .06), 0 4px 8px rgb(0 0 0 / .05);
-  --elevation-3: 0 2px 4px rgb(0 0 0 / .06), 0 8px 16px rgb(0 0 0 / .05), 0 20px 32px rgb(0 0 0 / .04);
+  --elevation-3: 0 2px 4px rgb(0 0 0 / .06), 0 8px 16px rgb(0 0 0 / .05), 0 20px 32px -8px rgb(0 0 0 / .04); /* negative spread trims the side halo */
+  --elevation-glow-dark: 0 12px 32px -6px rgb(59 91 219 / .2); /* dark surfaces: a tinted glow instead of a black ambient layer */
   --elevation-glow: 0 8px 24px rgba(59, 91, 219, 0.25); /* tinted to brand accent, not black */
 }
 .card { box-shadow: var(--elevation-1); } /* resting */
@@ -447,6 +503,8 @@ Code (CSS):
 Size, colour, contrast, whitespace, and font weight all stack together to create exactly one clear focal point on a given screen. Hierarchy is what tells someone’s eye where to land first without them having to think about it. Spend the single accent colour on the one truly key action per screen; a screen with five differently-coloured buttons has no hierarchy at all, just noise. Colour carries meaning, not rank; the ranking itself comes from size, weight, and position working together. Whitespace itself is an importance signal: the element with the most breathing room around it reads as the most important one on the page, independent of its own size. The numbers make the rule testable rather than a matter of taste. Adjacent heading levels need at least a 1.25× size jump between them, and a primary call-to-action needs to stand at least 1.5× the height of body text, or the size difference doesn't actually register. Weight carries its own tier: 600 to 700 for a primary heading, 500 to 600 for a secondary one, 400 for body copy, and 400 at 60 to 70% opacity for captions and meta text, never colour alone doing that job. Spacing scales with the hierarchy it separates: 48 to 64px between major sections, 24 to 32px between subsections, 8 to 16px within one group, and a heading always carries more space above it than below, which is what visually ties it to the content that follows rather than the content it just left. A genuine test for any screen: squint at it, or blur it, and check whether the one thing that matters most is still obviously the one thing that matters most.
 
 **Treat spacing as ratios.** The gap between sections is at least twice the gap between subsections, and the gap between subsections is at least twice the gap inside a group, with every value taken from the project’s own spacing scale; the pixel ranges above are one example of those ratios, not the rule itself. Text levels need a real difference too: two sizes only 1 or 2px apart read as the same level, so count them as one, and either merge them or pull them further apart.
+
+**Three kinds of white space.** Micro white space is the space inside and between small elements: letter and line spacing, a button’s padding, the gap between a label and its field. Macro white space is the space between sections and around the main blocks of a page. Active white space is space added on purpose to pull attention to one thing, such as an empty band around a single call to action. Micro space decides whether a page is readable, macro space decides whether it is calm, and active space decides where the eye goes.
 
 Do:
 - Spend one accent colour on the one key action
@@ -499,8 +557,11 @@ Code (CSS):
 
 `z-index` does absolutely nothing on an element with the default `position: static`; it only takes effect once an element is positioned. A child element can also never out-rank its own parent’s stacking context from outside; if the parent sits at a lower z-index than a sibling, no z-index value on the child, however large, can escape above that sibling. Use `isolation: isolate` to deliberately contain a component’s whole stacking context so its internal z-index values can’t leak out and collide with the rest of the page, and reach for the DevTools Layers panel to see the real stacking order instead of guessing and escalating to `z-index: 9999`.
 
+**A small named scale.** Every z-index in the product comes from one short list of named layers, in order: base, dropdown, sticky, overlay, modal, toast. Each is a token with a gap of 100 between them, so a new layer can slot in without renumbering. Components use the names, never raw numbers, and anything stacking inside a component stays inside its own `isolation: isolate` context with small values (1, 2, 3), so stacking contexts are created on purpose rather than by accident through a stray `transform` or `opacity`.
+
 Do:
 - `isolation: isolate` to contain a component
+- Six named layer tokens: base, dropdown, sticky, overlay, modal, toast
 
 Avoid:
 - Escalating to `z-index: 9999` as the fix
@@ -509,7 +570,7 @@ Code (CSS):
 
 ```css
 :root {
-  --z-dropdown: 100; --z-sticky-header: 200; --z-modal: 300; --z-toast: 400;
+  --z-base: 0; --z-dropdown: 100; --z-sticky: 200; --z-overlay: 300; --z-modal: 400; --z-toast: 500;
 } /* one shared scale, never invent a one-off 9999 to "fix" a stacking bug */
 
 .dropdown-menu { position: relative; z-index: var(--z-dropdown); } /* z-index needs position to do anything */
@@ -522,11 +583,15 @@ Code (CSS):
 
 Default proportional fonts give each digit a different width (a “1” is narrower than an “8”), so a stacked column of numbers or decimals never quite lines up. The decimal points drift left and right down the column even though every value is correctly formatted. One line of CSS fixes it: `font-variant-numeric: tabular-nums;` forces every digit glyph to occupy the same fixed width, so a column of prices, stats, or table cells locks into a straight line without any manual padding or a monospace font swap. Apply it anywhere numbers stack vertically (pricing tables, dashboards, stat tiles), not globally on body text, since tabular spacing looks slightly loose in running prose.
 
+**Signed money rows.** In a list of transactions, every amount carries an explicit sign, +$120.00 for money in and &minus;$45.60 for money out, so incoming and outgoing rows never look alike. Colour (green for in, neutral or red for out) is only a second signal on top of the sign, never the only one. Use a real minus sign (U+2212), not a hyphen, so it matches the plus in width.
+
 Do:
 - `tabular-nums` on any stacked numeric column
+- An explicit + or &minus; on every money row, with colour as the second signal
 
 Avoid:
 - Manual padding or a monospace font swap to fake alignment
+- Money in and money out told apart by colour alone
 
 Note: **Timers too.** A number that changes in place, such as a countdown or a running timer, needs tabular figures as well, so the digits do not shift sideways as they tick.
 
@@ -545,8 +610,11 @@ body { font-variant-numeric: normal; }
 
 A UI built from independently-picked hex values (a pink here, a yellow there) reads as amateur even when each individual color looks fine in isolation, because nothing ties them together. A UI built from one generated color system, a single base hue expanded into a tonal scale (e.g. 50/100/200…900 lightness steps), reads as deliberate, because every shade on screen is provably related to every other shade. **Scope:** this is the principle, not a generation method. The principle (a systematic tonal scale over ad hoc hex picks) is well-established and safe to apply; how the scale is generated is a separate choice.
 
+**Three deliberate harmonies.** When a palette needs more than one hue, pick it from a harmony rather than by eye. **Monochromatic:** one hue in several lightnesses, the calmest and the default for product UI. **Complementary:** two hues opposite on the colour wheel (blue and orange), one dominant and the other kept for a small accent, which gives the strongest contrast. **Analogous:** three neighbouring hues (blue, indigo, violet), which reads harmonious and suits illustration and marketing surfaces. Each chosen hue still gets its own tonal scale.
+
 Do:
 - One base hue expanded into a tonal scale
+- Extra hues chosen from a harmony: monochromatic, complementary or analogous
 
 Avoid:
 - Independently-picked hex values with no shared relationship
@@ -569,13 +637,18 @@ Five small habits are what make a generated dashboard read as generated, and eac
 
 **Detail on the fifth tell.** The other half of that copy fix is the bare delta. A badge that says only “+12.5% from last month” gets the same treatment: name the period it compares against, set the digits in tabular figures (see Tabular Numbers), and replace the badge with a sparkline so the number has a shape.
 
+**Three more tells.** **Filled status cards:** a whole card or tile filled with green or red to show status. The fix is a neutral card with a small coloured dot and one word (Healthy, Failing). **Filler charts:** a chart on every card because there is room for one. Each card leads with its latest meaningful change and when (Deployed 4 minutes ago), and a chart appears only where it encodes a trend someone reads. **Bare KPI values:** in a KPI row, colour is spent only on the figure that is off track, so it stands out against neutral neighbours (the Von Restorff effect), and each figure is shown against its goal: the target, a bar showing progress toward it, and the deadline (340 of 500 signups, due 30 June).
+
 Do:
 - One flat accent, not a decorative gradient
 - One primary stat, three visibly smaller secondaries
 - Shadow reserved for what actually floats (dropdown/popover/toast)
+- Status as a dot plus one word on a neutral card
+- KPI tiles show the target, progress toward it and the deadline; only the off-track figure gets colour
 
 Avoid:
 - Four different tile colours doing the job one number should do
+- A whole card filled with a status colour
 
 Note: **A baseline, not proof.** Well-made products also use shadows, coloured icons and gradients, so none of these tells proves a screen was generated. Treat the list as defaults to depart from deliberately: each one is fine when it was decided on purpose and encodes something.
 
@@ -790,6 +863,8 @@ A pricing table sells by ending the comparison. **Hierarchy:** one loud number p
 
 **Features:** list what changes, not what repeats; the first tier lists its few features (12 lines cut to 4) and each higher tier opens with Everything in Starter, plus, then three lines, because twelve identical checks per card are a wall, not a comparison. **Anchor:** a billing toggle that defaults to yearly, with the old price struck through next to the new one ($30 struck under $24 a month), so the saving needs no maths. **Motion:** hover lifts a plan 4px in 150ms, the toggle rolls the prices in 300ms, and the trial button’s spinner becomes a check: feedback in 100ms, done in 300.
 
+**Every claim must be true.** The Most popular badge goes only on the tier customers actually choose most, and a struck-through price is a price people really paid before. Never invent a reference price, a popularity figure or a countdown. Within that limit, a real discount can be framed as a saving the customer would lose by not taking it (Monthly billing gives up $98 a year).
+
 Do:
 - One loud price per column
 - One recommended plan, one badge, one filled button
@@ -799,6 +874,7 @@ Do:
 Avoid:
 - Three identical cards with a badge on each
 - Twelve repeated checks on every tier
+- A Most popular badge, an old price or a figure that is not true
 - A gradient button on every plan
 
 Variant: **How to show the saving, two variants.** Variant A: a percent chip on the yearly toggle (-20%). Use when: prices are under about $100, where a percent reads as the bigger number (Jonah Berger’s Rule of 100). Variant B: write the saving in money (Save $98 / year: $49 x 12 = $588 against $490 billed annually). Use when: the price or the yearly saving is over about $100, where dollars read bigger. Note that 40% off may still beat save $50, which is the same Rule of 100 split. Both kept on purpose; either way, keep the struck-through old price beside the new one.
@@ -907,6 +983,8 @@ Avoid:
 
 Variant: **Strict ratio versus a dark hero surface, two variants.** Variant A: strict 60-30-10, the accent only on actions and key elements. Use when: list, form and settings screens where the actions should be the only loud thing. Variant B: one dark hero surface well past 10% (for example a finance screen that puts the balance on a large black card, which strictly breaks the rule). Use when: one object is the subject of the screen, such as an account balance or a featured item, and everything else stays neutral. Both kept on purpose.
 
+Variant: **What the 30% is, two variants.** Variant A: the 30% is a support grey for borders, icons and secondary shapes, and containers belong to the 60% neutral, as above. Use when: a neutral, mostly white product where the brand lives only in the accent. Variant B: the 30% is a lighter tone of the base hue, used as a surface layer on cards, navigation and containers (for example a pale blue-grey panel on a white page with a strong blue accent). Use when: the product should feel tinted by its brand throughout, and the tonal surface still keeps text on it at 4.5:1. Both kept on purpose.
+
 Code (CSS):
 
 ```css
@@ -923,7 +1001,7 @@ Every generator has a default look, and a screen left on it reads as machine-mad
 
 **Space: what is the rhythm?** Dense and efficient or airy and editorial, chosen once and then applied everywhere, with compression inside groups and release between them; uniform gaps of about 16px everywhere are the tell of undecided space. **Finish: what is the separation language?** One primary way for surfaces to separate: borders, shadows or flat colour planes. All three on one screen means no decision was made. Finish also lives in consistent radii, optical alignment and real hover, focus and active states. Two checks before shipping. Strip the accent: the screen should still work in neutrals alone, because hierarchy is not colour’s job. Then the lineup test: would this screenshot be recognisable among ten generated screens for the same prompt? If not, walk the four axes and find the one still sitting on its default.
 
-**Start from the product’s world.** Before the four axes, name three concrete things the product’s users handle, read or look at all day (a workshop: work orders, parts bins, service bays; payroll: ledgers, payslips, stamps). The family, the signature colour and one memorable element per screen come from those words, not from taste; everything around that one element stays quiet, and on a 1280px desktop the screen is composed (a header band, two columns, display-size type) rather than one narrow column on an empty page. **The font has to load.** Point at the line that loads each family: the project’s own font pipeline, a framework font loader, an installed font package, an @font-face with the file in the repo or, with none of those, a Google Fonts or Bunny Fonts link with preconnect and display=swap, always with a named fallback stack. A bare system stack is the operating system’s default, kept only when the project already uses it or the owner asks for it. In an existing project, read its font setup first and change it only when a new look was asked for. **Monospace is for codes, IDs and keys only;** figures stay in the text face with tabular-nums.
+**Start from the product’s world.** Before the four axes, name three concrete things the product’s users handle, read or look at all day (a workshop: work orders, parts bins, service bays; payroll: ledgers, payslips, stamps). The family, the signature colour and one memorable element per screen come from those words, not from taste; everything around that one element stays quiet, and on a 1280px desktop the screen is composed (a header band, two columns, display-size type) rather than one narrow column on an empty page. **The font has to load.** Point at the line that loads each family: the project’s own font pipeline, a framework font loader, an installed font package, an @font-face with the file in the repo or, with none of those, a Google Fonts or Bunny Fonts link with preconnect and display=swap, always with a named fallback stack. A bare system stack is the operating system’s default, kept only when the project already uses it or the owner asks for it. In an existing project, read its font setup first and change it only when a new look was asked for. **Check it on a clean machine:** after wiring up a font, confirm it renders on a computer that does not have it installed, or with local fonts ruled out, and see the font file load in the network panel. **Monospace is for codes, IDs and keys only;** figures stay in the text face with tabular-nums.
 
 **Colour on text, and the danger rule.** Any text in a colour clears 4.5:1 on what sits behind it: a word or a count in the signature, and a status tag’s text on its own tint. A signature that only reaches 3:1 is a fill, a dot or a rule, never text. The signature must not read as danger: red and orange-red (hue under about 30 degrees) mark failures and destructive actions in a work tool, so a signature in that range fills no primary button, and any signature keeps its hue at least 40 degrees away from the danger colour. **The drift check.** Generators fall into two default looks. The first is the system sans stack, monospace for figures and small labels, a warm off-white page (around #f6f5f2), 4px radii and a 1px border around every group; three of those five on one screen means it was not decided. The second appears once fonts load: the same few safe families on every product (IBM Plex Sans with Plex Mono, condensed headings, a soft display serif on every title) and a burnt orange signature (around #c2410c) a few degrees from the danger red. They are good faces, but reached for every time they become the new default, so pick from the product’s world first and then check against this list. **Read the result back from the code, not from memory:** list the sizes and weights used, point at each font-loading line, count the monospace uses, count where the signature appears (more than the primary action plus one thing to find is decoration), list the distinct gap values, count the separation devices, and search for framework palette names and raw hex values, because each hit is a default that slipped through. On a phone, headings and large figures stay around 28 to 32px under 640px, so a figure and its sign stay on one line.
 
@@ -934,6 +1012,7 @@ Do:
 - Label text on the signature at 4.5:1, the signature itself at 3:1 against its surface
 - The screen still works with the accent stripped out
 - A loading line for every font family, with a fallback stack
+- The web font checked on a machine that does not have it installed
 - Monospace only on codes, IDs and keys; figures in the text face with tabular-nums
 - One line describing the screen any similar app would get, and every matching part of the plan changed
 - Contrast ratios computed with a tool
@@ -945,6 +1024,8 @@ Avoid:
 - A red or orange-red signature filling the primary button
 - Three of the five default-look tells on one screen
 - Contrast judged by eye
+
+Variant: **Red alerts versus a domain alert colour, two variants.** Variant A: red or orange-red marks failures, as above. Use when: the default, for any work tool. Variant B: an alert colour from the product’s own palette (a deep magenta, a strong amber). Use when: red already means something else in the product’s world. It stays 40 degrees of hue from the signature, clears 3:1 (4.5:1 as text) and always comes with an icon or a word (Failed, Low). Both kept on purpose.
 
 Code (TEXT):
 
@@ -1027,4 +1108,108 @@ Code (CSS):
   .page { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
           grid-template-areas: "summary support" "action support"; } /* support beside, never above */
 }
+```
+
+## Avatar
+
+An avatar always shows something. It falls back in a fixed order: the photo, then initials, then a generic person icon, and an image error handler swaps in the initials the moment a photo fails. A broken image icon or an empty grey circle is never a state.
+
+**Initials and colour.** Two initials by default (Ada Lovelace becomes AL), one at the smallest size. The background comes from a hash of the name into a fixed palette of six to eight colours, so the same person gets the same colour everywhere, and every palette colour is checked at 4.5:1 against the initials. **Three sizes:** for example 24px in dense lists, 32px in tables and menus, 40px in headers and profile cards.
+
+**Groups.** Grouped avatars overlap by about a quarter of their width, each with a 2px ring in the surface colour. Show three to five, then a neutral +N circle, with the full list on hover or tap. **Presence** on an avatar is a coloured ring around it (2px, after a 2px gap), not a badge stuck to its corner; the small status dot stays the convention for lists without an avatar. Presence also needs a text equivalent (Online, Away) in the accessible name.
+
+Do:
+- Photo, then initials, then a generic icon
+- Initials colour hashed from the name, from a contrast-checked palette
+- Groups capped at three to five, with +N for the rest
+
+Avoid:
+- A broken image icon, or a colour that changes on every render
+- A separate presence badge on the avatar’s corner
+
+Code (CSS):
+
+```css
+.avatar { --size: 32px; width: var(--size); height: var(--size); border-radius: 9999px; display: grid; place-items: center; overflow: hidden; }
+.avatar-sm { --size: 24px; } .avatar-lg { --size: 40px; } /* three sizes only */
+.avatar.online { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--good); } /* gap, then presence ring */
+.avatar-group .avatar { box-shadow: 0 0 0 2px var(--surface); }
+.avatar-group .avatar + .avatar { margin-left: calc(var(--size) * -.25); } /* overlap by a quarter */
+```
+
+## CSS Layout Foundations
+
+Four habits keep layout CSS short and predictable. **Percentage heights need a parent height:** `height: 100%` only works when the parent has an explicit height; inside a parent sized by its content it does nothing. Instead of chaining it through every wrapper, let a flex or grid parent stretch its children (both stretch by default), or use `min-height` so the box can still grow.
+
+**Space siblings with gap:** `gap` on the flex or grid parent, not a margin on every child. Gap only appears between items, so nothing needs cancelling on the last one. **Centre with alignment:** a grid parent with `place-items: center`. Absolute positioning plus `translate(-50%, -50%)` takes the element out of the flow and can land on half pixels; keep it for overlays that genuinely float. **Control specificity with cascade layers:** declare `@layer reset, base, components, utilities;` once, and a later layer wins whatever the selectors, so nobody escalates to chained classes, IDs or `!important`.
+
+Do:
+- `gap` on the parent; `place-items: center` to centre
+- One `@layer` order at the top of the stylesheet
+
+Avoid:
+- `height: 100%` inside a parent with no set height
+- Longer selectors or `!important` to win a specificity fight
+
+Code (CSS):
+
+```css
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; } /* children stretch; gap, not margins */
+.empty-state { display: grid; place-items: center; min-height: 240px; }
+@layer reset, base, components, utilities;
+@layer utilities { .mt-0 { margin-top: 0; } } /* beats any components selector */
+```
+
+## Optical Corrections
+
+Mathematically centred is not the same as looking centred. The eye judges the visual weight of a shape, not its bounding box, so a few elements need a small deliberate nudge away from the numbers.
+
+**Asymmetric glyphs move toward their point.** A play triangle centred by its box looks pushed to the left, because most of its weight sits on the flat side. Shift it toward its point by roughly one sixth of its width (about 2px for a 12px triangle) inside its circle or button. The same applies to any arrow or chevron with a heavy side.
+
+**Icons align to the label’s cap height.** An icon centred on the text’s line box sits slightly low, because the line box includes space for descenders. Centre the icon on the cap height of the label instead, and make the nudge in em units (for example `translateY(-0.08em)`) so it stays correct when the text size changes.
+
+**Single-line labels sit slightly high.** A one-line button label centred by its line box looks low for the same reason. Trim the text box to the cap height and alphabetic baseline with `text-box: trim-both cap alphabetic` where it is supported, or nudge the label up 1 to 2px (about 0.06em) where it is not. Light text on a dark ground is the other common correction; it reads heavier, so it drops about one weight step (see Dark Mode). Round shapes overshooting square ones is in Icon Design Rules.
+
+Do:
+- A play triangle moved about one sixth of its width toward its point
+- Icon nudges in em units, so they scale with the text
+
+Avoid:
+- Trusting the bounding box for a triangle, arrow or chevron
+
+Code (CSS):
+
+```css
+.play-btn svg { transform: translateX(16.7%); } /* about one sixth of the glyph's width, toward the point */
+
+.btn { display: inline-flex; align-items: center; gap: 0.5em; }
+.btn .icon { transform: translateY(-0.08em); } /* onto the cap height, scales with the text */
+
+.btn-label { text-box: trim-both cap alphabetic; } /* trims the line box to the letters */
+```
+
+## Glass Panels
+
+A glass panel is four properties together: a semi-transparent fill (white at about 10 to 20% over dark content, 60 to 70% over light), a backdrop blur of about 12 to 20px, a faint light border (white at about 25%), and a soft shadow. It only reads over colourful or detailed content such as a photo, a gradient mesh or a map; over a plain white page there is nothing to blur and it just looks grey.
+
+**Check contrast over the busiest spot.** Text on glass takes its contrast from whatever is behind it, so measure it over the busiest, lightest part of the background the panel can cover, and raise the fill opacity until it passes 4.5:1 everywhere. **Blur is expensive:** `backdrop-filter` repaints everything behind the panel whenever anything under it moves, so use it on one or two panels per screen (a navigation bar, one overlay), never on every card in a scrolling list or on an animating layer, and keep a solid fallback.
+
+Do:
+- Fill, blur, light border and soft shadow together, over colourful content
+- One or two glass panels per screen
+
+Avoid:
+- Glass on a plain white page
+- Backdrop blur on every card in a list
+
+Code (CSS):
+
+```css
+.glass {
+  background: rgb(255 255 255 / .14);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgb(255 255 255 / .25);
+  box-shadow: 0 8px 32px rgb(0 0 0 / .18);
+}
+@media (prefers-reduced-transparency: reduce) { .glass { background: rgb(30 30 40 / .92); backdrop-filter: none; } }
 ```

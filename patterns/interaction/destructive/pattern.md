@@ -7,6 +7,7 @@ order: 9
 ## Rule
 <p>Name the action on the button itself: &ldquo;Delete project&rdquo; instead of a generic &ldquo;Yes&rdquo;, because the verb is the actual warning and nobody reads &ldquo;are you sure?&rdquo; Hold-to-confirm turns the gesture itself into the safeguard: a ring fills over roughly 300ms of a held press, and releasing early cancels outright. Never place a destructive button where a confirm button usually lives, since muscle memory clicks the familiar spot without reading it, and spend red only on real destruction; a red logout button cries wolf and makes the real delete look routine.</p>
 <p><strong>Quiet on the page, loud in the dialog.</strong> On the page, a destructive control stays quiet: a ghost button, a text button or an item in the overflow menu, above all when it repeats on every row of a list. Solid red belongs only on the confirming button inside the dialog, the one moment the person has chosen to destroy something.</p>
+<p><strong>Quiet, never hidden.</strong> Quiet styling is not concealment. A cancel subscription or close account path stays a plain, findable text link on the page where people expect it (billing or account settings), never buried three menus deep, removed, or routed through a phone call to stop people leaving.</p>
 ## Do
 - Hold-to-confirm as the actual safeguard, not a dialog
 - Cooldown/grace period for genuinely irreversible deletes
@@ -14,6 +15,7 @@ order: 9
 ## Avoid
 - Spending red on anything other than real destruction
 - A solid red Delete button repeated on every row
+- A cancel or close account path hidden or removed to stop people leaving
 ## Code: CSS + JS
 <pre><code>.hold-confirm { position: relative; overflow: hidden; }
 .hold-confirm .ring {

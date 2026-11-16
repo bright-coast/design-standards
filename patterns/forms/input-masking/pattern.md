@@ -6,8 +6,10 @@ order: 6
 ---
 ## Rule
 <p>Group long numbers into readable chunks as they&rsquo;re typed (a card number in 4-digit blocks, a phone number split by area code), and detect the card brand from the leading digit to show the right icon before the number is even complete. The caret needs to land after the character that was just typed, not jump to the end of the field, which is the usual bug in a hand-rolled mask. Store the raw digits internally and only format for display; validating the masked format on the very first keystroke rejects a perfectly valid number that just isn&rsquo;t finished yet.</p>
+<p>A pasted value is cleaned, never rejected: strip the spaces, dashes and dots people copy from statements and emails (4242-4242-4242-4242), keep the digits, and reformat them into the field&rsquo;s own grouping. The same goes for a pasted phone number with brackets or a leading country code the field already shows.</p>
 ## Do
 - Store raw digits, display the formatted grouping
+- Strip separators from a pasted value and reformat it
 ## Avoid
 - Validating format on the very first keystroke
 ## Code: JS

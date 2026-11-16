@@ -9,6 +9,7 @@ order: 20
 ## Do
 - Fractional fill for real averages (4.4 &rarr; 5th star at 44%)
 - Preview snaps back to saved value on pointer-leave
+- Optionally, one continuous indicator (a ring filled to 4.4 of 5) beside the stars in a rating summary
 ## Avoid
 - Rounding a 4.4 average up to a full 5 stars
 ## Code: CSS + JS

@@ -6,9 +6,12 @@ order: 13
 ---
 ## Rule
 <p>Every chip needs three visually distinct states: idle, active (filled + check), disabled (dimmed), because if active looks like idle the filter reads as broken. The combination logic should be legible: OR within a group widens the net, AND across groups narrows it. Update the result count on the same frame as the tap, since a number that doesn&rsquo;t move reads as &ldquo;nothing happened&rdquo; and gets tapped twice. Always ship one clear-all reset paired with a live count, and let overflowing chips scroll horizontally with an edge fade rather than wrapping into a wall.</p>
+<p><strong>Count on the button, filters in view.</strong> In a filter panel or sheet, put the live count on the apply button itself (Show 312 results), so the number and the action are one target. At zero the button says so (0 results) and the panel names the filter that emptied the list, so someone loosens it before applying their way into an empty page. Once applied, the active filters stay pinned above the results as chips, each with its own remove control, never hidden inside a closed panel.</p>
 ## Do
 - Result count updates the same frame as the tap
 - Single clear-all reset with a live count
+- Live count on the apply button (Show 312 results), with zero named before applying
+- Applied filters pinned above the results, each removable on its own
 ## Avoid
 - Active chips that look identical to idle ones
 ## Code: JS

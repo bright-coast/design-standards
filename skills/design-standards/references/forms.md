@@ -5,14 +5,17 @@
 
 Data entry is where trust is won or lost fastest, a form that fights back gets abandoned.
 
-18 patterns. Use when: any input, validation, multi-step flow or settings screen.
+19 patterns. Use when: any input, validation, multi-step flow or settings screen.
 
 ## Autosave
 
 Firing a save on every keystroke floods the network with redundant requests, so debounce writes to one clean save after roughly a second of pause. Status needs to be an honest state machine: idle, saving, saved, error, never a lie like a permanent “Saved” label that stopped being true the moment the network dropped. Queue edits made offline and replay them oldest-first on reconnect, and guard unsaved work with `beforeunload` so a stray tab-close doesn’t silently lose a paragraph.
 
+The full set of states is six, each with its own honest label: **idle** (nothing to save), **unsaved** while the person is typing and the debounce has not fired yet (Editing… or Unsaved changes), **saving**, **saved** (Saved 2 min ago), **offline** (Offline, changes kept on this device, with the edits queued locally), and **error** (Not saved, Retry). Offline is not an error: nothing is lost, and the label says so.
+
 Do:
 - Queue edits offline, replay oldest-first on reconnect
+- Separate unsaved and offline states, so the label is never wrong
 
 Avoid:
 - Silent last-write-wins across two open tabs
@@ -43,8 +46,11 @@ window.addEventListener('beforeunload', (e) => {
 
 Presets (Today, Last 7 days, Last 30 days, This month) cover roughly 90% of real use, so lead with them and treat a full custom range as the fallback, not the default view. Show two months side by side so a range can cross a month boundary without extra navigation, and support full keyboard control including month/year jumps for anyone picking a date far from today rather than forcing repeated “next” clicks. On mobile, hand the job to the platform's native date input rather than shipping a custom calendar; reach for a custom one on desktop only once the native control genuinely can't do what the screen needs. Either way, keep a typed text field as a real fallback, and let it parse plain language such as “tomorrow” or “next friday” rather than demanding a strict format.
 
+**Picking a range.** The first click sets the start and the second sets the end; between them, hovering a date previews the range as it would be, so people see the span before they commit. Once set, both edges can be dragged to adjust the range without starting again. On wide screens (about 1200px and up) show a third month, so a range of several weeks fits without paging.
+
 Do:
 - Two months side by side, ranges cross boundaries
+- Two clicks for a range, a hover preview between them, and draggable edges once set
 - A typed, parsed text field for far-past dates (birthdates), not arrow-only navigation
 - Native date input on mobile; a custom calendar only where native genuinely falls short
 
@@ -52,6 +58,8 @@ Avoid:
 - Repeated “next” clicks for a nearby date
 
 Note: **Concrete cost of arrow-only navigation:** a calendar that opens on today's date makes a 1994 birthday cost roughly 390 clicks of a single arrow. Nobody does that, they abandon the form.
+
+Variant: **Mobile date picking, two variants.** Variant A: hand the job to the platform’s native date input (this entry). Use when: picking a single date, which native inputs do well. Variant B: a full-screen sheet with months scrolling vertically, the range filled in as it is picked, and a large confirm button fixed at the bottom (Select 12 to 15 Mar). Use when: picking a range, which native inputs handle poorly, since they need two separate fields and show no span between them. Both are kept on purpose.
 
 Code (JS):
 
@@ -108,18 +116,33 @@ function uploadWithProgress(file) {
 
 Every field in a design system needs all six states actually designed, not improvised: default, focus, error, success, disabled, and loading. The label lives outside the field permanently. A placeholder pretending to be a label disappears the instant someone starts typing, so by the time they’re three fields deep they’ve forgotten what field four was asking for. Above the field is the right default placement: it scans fastest, works best on mobile, and survives translation into a longer language without crowding the control. A floating label that sits inside the field until focus is fine in genuinely tight spaces, but never on a multi-line textarea, where it collides with the first line typed. An inline label to the left of its control only earns its place on a wide settings page where label and control sit side by side on purpose. Placeholder text standing in as the only label is never acceptable at any width, it disappears exactly when someone needs it most. Errors need to combine colour with an icon and a written message; colour alone (a red border) is invisible to a colour-blind user and easy to miss at a glance regardless. Mark the exception, not the norm: label an optional field with a plain “(optional)” suffix rather than flagging every required field with an asterisk, since most fields in a well-scoped form should be required by design.
 
+**Placeholder colour.** Placeholder text looks clearly lighter than a typed value, so an example never reads as an answer already filled in, yet it is still text and still meets 4.5:1 against the field. On a white field, typed values near #1F2933 and placeholders near #6B7280 (about 4.8:1) keep both apart and both readable.
+
+**Reserve the error slot.** Every field keeps a fixed line under it for its message, about 20px tall and empty until needed, so an error appearing never pushes the fields below it or the submit button down the page.
+
+**Loading, specified.** While a field checks a value against the server (is this username free?), a small spinner sits inside the field at its trailing edge, the field stays editable, and submit is locked until the check settles, so a value nobody has checked yet cannot be sent twice or sent at all.
+
 Do:
 - Label outside the field, never placeholder-as-label
 - Above the field by default; floating only in tight spaces, never on a textarea; inline-left only on a wide settings page
 - “(optional)” on the exception, not an asterisk on every required field
+- Placeholder visibly lighter than typed text, and still 4.5:1
+- A reserved message line under each field, so an error never shifts the layout
+- An in-field spinner during an async check, with submit locked until it settles
 
 Avoid:
 - Border-only red, invisible to colour-blind users
+- An error message that pushes the submit button down when it appears
+
+Variant: **Placeholder colour, two variants.** Variant A: the placeholder is visibly lighter than the typed value, both at 4.5:1 or better (this entry). Use when: a stacked form with labels above fields, where the placeholder shows an example answer. Variant B: placeholders and typed values share one secondary grey, right aligned, because grey means you type here (Form Colour Semantics, entry 17). Use when: a settings-style row form where the label sits on the left of each row. Both are kept on purpose.
 
 Code (CSS):
 
 ```css
 .field { display: flex; flex-direction: column; gap: 6px; }
+.field input::placeholder { color: #6B7280; } /* lighter than typed text, still 4.8:1 on white */
+.field-msg { min-height: 20px; } /* reserved: an error never moves the submit button */
+.field.loading { background: url(spinner.svg) no-repeat right 10px center / 16px; } /* async check in the field */
 .field label { font-size: 13px; font-weight: 600; } /* always visible, never a placeholder */
 
 .field input { border: 1px solid var(--border); transition: border-color 150ms; }
@@ -136,12 +159,17 @@ Code (CSS):
 
 Validate on blur, once someone has finished with a field and moved on, not on every keystroke, which flags an email as invalid while it’s still half-typed, and not held back entirely until submit, which dumps every problem on the form at once. Once a field has errored, switch to live revalidation on every keystroke for that field alone, so the error clears the instant it’s actually fixed. Confirm correct fields too with a quiet success state, not just the broken ones; it tells someone they can stop worrying about that field. The message itself has three parts in order: what’s wrong, why it matters, how to fix it. So “Invalid email” becomes “This email is missing the @ symbol” or, for a taken address, “We already have an account with this email, sign in instead?”
 
+**On submit, add a summary.** When a submit fails with errors still open, show a short error summary at the top of the form (2 fields need attention) in addition to the inline messages, with each item a link that scrolls to its field and puts focus in it. Move focus to the summary itself when it appears, so a screen reader announces it and a keyboard user starts from it.
+
 Do:
 - Live revalidation once a field has errored
 - Message states what’s wrong and how to fix it, not just “Invalid”
+- An error summary at the top on a failed submit, each item linking to and focusing its field
 
 Avoid:
 - Dumping every error at submit, all at once
+
+Variant: **When checking starts, two variants.** Variant A: validate on blur, and live on every keystroke only once a field has errored (this entry). Use when: the field is checked against a format or a rule the person cannot see, such as an email address or a card number. Variant B: check while the person types, from the first character. Use when: the requirements are shown as a live checklist the person is working through, such as password rules ticking off (8 characters, a number) or a username availability check after a 500ms pause; there the feedback is guidance, not an error, and it never turns red mid-typing. Both are kept on purpose; A is the default.
 
 Code (JS):
 
@@ -165,8 +193,11 @@ function validate(field) {
 
 Group long numbers into readable chunks as they’re typed (a card number in 4-digit blocks, a phone number split by area code), and detect the card brand from the leading digit to show the right icon before the number is even complete. The caret needs to land after the character that was just typed, not jump to the end of the field, which is the usual bug in a hand-rolled mask. Store the raw digits internally and only format for display; validating the masked format on the very first keystroke rejects a perfectly valid number that just isn’t finished yet.
 
+A pasted value is cleaned, never rejected: strip the spaces, dashes and dots people copy from statements and emails (4242-4242-4242-4242), keep the digits, and reformat them into the field’s own grouping. The same goes for a pasted phone number with brackets or a leading country code the field already shows.
+
 Do:
 - Store raw digits, display the formatted grouping
+- Strip separators from a pasted value and reformat it
 
 Avoid:
 - Validating format on the very first keystroke
@@ -272,8 +303,12 @@ generateBtn.addEventListener('click', () => { input.value = generateStrongPasswo
 
 Fill the track up to the thumb so the value reads at a glance without needing the number label, and make the entire row a draggable hit area rather than a thin 4px hairline that’s genuinely hard to grab on a touch screen. Snap to defined steps whenever clean values actually matter (percentages, price bands), and float the live numeric value in a small bubble above the thumb while dragging so precision doesn’t depend on reading a separate, disconnected label.
 
+A minimum and maximum range is one slider with two thumbs, not two separate sliders. The track fills between the thumbs, the thumbs cannot cross (dragging the low thumb stops one step below the high one), and each thumb is its own focusable control with its own label (Minimum price, Maximum price). On the keyboard, the arrow keys move one step, Page Up and Page Down move a bigger step, and Home and End jump to the ends of the range.
+
 Do:
 - Float the live value above the thumb while dragging
+- Two thumbs in one control for a min and max range, filled between them, never crossing
+- Arrow keys for one step, Home and End to jump to the ends
 
 Avoid:
 - A slider that can’t be driven by arrow keys
@@ -331,15 +366,20 @@ Chunk a long form by meaning (Personal, Shipping, Payment, Review), not by an ar
 
 **Five more decisions.** Label every step and keep the total visible (Step 2 of 4, Shipping), so people know how far they have to go. Show a full summary of everything entered before the final submit, with a way to edit each part. Give each step one primary action. Never auto-advance when the last field is filled; people move on when they choose to. Make save and continue later easy to find, so a long form never has to be finished in one sitting.
 
+A Skip control, where a step can be skipped, sits in the same place on every step, so people never hunt for it; a skip that moves from corner to corner reads as a trap. Progress is remembered when someone leaves and comes back.
+
 Do:
 - Validate inside each step, block Next until valid
 - Labelled steps with the total count visible
 - A full summary before the final submit
 - One primary action per step, and an easy save and continue later
+- Skip in one fixed position across every step
 
 Avoid:
 - Surfacing a step-one error only at step four
 - Auto-advancing to the next step when the last field is filled
+
+Variant: **Step layout, two variants.** Variant A: one step per screen with Next and Back (this entry). Use when: the steps are long, or each needs the full screen. Variant B: every step on one screen, asked one at a time, and each finished step collapses into a single summary line (Where: Lisbon; When: 12 to 15 Mar) that reopens when tapped. Use when: each step is one or two inputs, such as a search or booking flow, so the whole journey stays visible and editable. Both are kept on purpose.
 
 Code (JS):
 
@@ -361,8 +401,13 @@ function goBack() { stepIndex--; render(); } // formState untouched, nothing los
 
 A good toggle morphs over roughly 250ms: the rail colour, the knob position, and the knob’s shadow all move together on the same curve, rather than snapping instantly between on and off. For an async toggle backed by a real API call, flip optimistically the instant it’s tapped and show a small spinner inside the knob itself while the request is in flight, rolling back with a shake if it fails. It must remain a real, focusable, keyboard- and screen-reader-operable control, built on `<button role="switch">` or a checkbox, never a plain `<div>` with a click handler.
 
+**Geometry.** The rail is about twice as wide as the knob’s diameter, and the padding around the knob is small and equal on every side, so the knob sits evenly inside the rail in both positions; a 20px knob in a 44 by 26px rail with 3px of padding is a good default. **Motion:** when a visible state label sits beside the switch (On, Off), it changes in the same motion as the rail and knob, on the same ease-out curve, never a beat later. **Keyboard and state:** Space toggles it, a visible focus ring shows on keyboard focus, and the state is exposed with `aria-checked` so a screen reader says on or off.
+
 Do:
 - Rail colour, knob position, shadow move together
+- Rail about twice the knob diameter, with even padding around the knob
+- The state label changes with the rail and knob, on the same ease-out curve
+- Space toggles, a visible focus ring, state in `aria-checked`
 
 Avoid:
 - A toggle that skips keyboard/screen readers
@@ -371,11 +416,11 @@ Code (CSS + JS):
 
 ```css
 .toggle { position: relative; width: 44px; height: 26px; border-radius: 999px;
-  background: var(--rail-off); transition: background 250ms ease; }
+  background: var(--rail-off); transition: background 250ms ease-out; }
 .toggle[aria-checked="true"] { background: var(--accent); }
 .toggle .knob { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px;
   border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgb(0 0 0 / .3);
-  transition: transform 250ms ease; } /* same curve as the rail */
+  transition: transform 250ms ease-out; } /* same curve as the rail */
 .toggle[aria-checked="true"] .knob { transform: translateX(18px); }
 
 toggle.addEventListener('click', async () => {
@@ -484,8 +529,11 @@ Five quiet decisions make a payment form feel safe. **The total stays in view:**
 
 **Red waits until the field is left:** nothing turns red while the number is being typed; the field is checked on blur (Your card number is incomplete.), and once flagged it stays flagged on every keystroke until it is fixed. This is Form Validation Timing (Forms, entry 05) applied to the card field. **The fastest way to pay sits on top:** Apple Pay and Google Pay above every card field, one tap and no typing against six fields, with an Or pay with card divider below. **Eyes go straight down:** one column with every label above its field, so the eye path is one line and the label stays visible while typing; a two-column grid with placeholder-only labels makes the eye jump seven times.
 
+**Moving money gets one review screen.** Before a transfer or payment is confirmed, one screen repeats the four things that matter together: who receives it, the amount, the fee, and when it will arrive (To Acme Supplies, $2,400.00, fee $0.00, arrives tomorrow by 5pm). The confirm button repeats the amount. Nothing on that screen is new information; it is the last chance to catch a wrong recipient or a wrong figure.
+
 Do:
 - Pay button amount identical to the order total
+- A review screen with recipient, amount, fee and arrival time together before confirm
 - Card brand badge from the first digit
 - Wallets above every card field
 - One column, labels above fields
@@ -544,14 +592,19 @@ Code (CSS):
 
 The small attributes on a field decide whether it is quick or a fight, especially on a phone. **Width hints the answer:** a postcode field is narrow and an address field is wide, so the box tells people how much to type. **Every text field sets inputmode and autocomplete** (email, tel, postal-code, one-time-code, name), which brings up the right keyboard and lets the browser fill in what it already knows. **A maximum length exists only for a real business limit,** and then a visible counter appears as the limit gets close, never a field that silently stops accepting characters. **An availability check** (is this username free?) runs on blur or after a 500ms pause in typing, never on every keystroke. **A server error lands on its field:** map every error the server returns to the field it belongs to; a generic Form invalid banner is not acceptable.
 
+**Codes are text, not numbers.** Postcodes, verification codes, card numbers and account numbers use `type="text"` with `inputmode="numeric"`, never `type="number"`, which drops leading zeros (0800 becomes 800), adds spinner arrows, and changes the value when someone scrolls over the field. **Autofill keeps the design:** style `:autofill` so a field the browser fills keeps the design’s background and text colours instead of the browser’s yellow or blue wash, which looks like an error state in some themes.
+
 **Habits to refuse.** A Reset or Clear button beside Submit, where one wrong click loses everything. A CAPTCHA before anyone has tried to submit; add it only when it is needed. A sign-up that confirms the email before showing the password field, which forces an extra step for no reason. Separate first and last name fields where one full name field works. A date field that demands one fixed day and month order with no awareness of locale. A phone field with no country code. Confirm email and confirm password fields, when a show toggle does that job. A money field with no currency symbol in view. Clearing any filled field after a validation error, ever.
 
 Do:
 - Field width matched to the expected answer
 - inputmode and autocomplete on every text field
 - Server errors mapped to the specific field
+- `inputmode="numeric"` on a text field for codes, postcodes and card numbers
+- Autofilled fields styled to match the design
 
 Avoid:
+- `type="number"` for anything with a leading zero or no arithmetic meaning
 - A Reset or Clear button next to Submit
 - Confirm email or confirm password fields
 - A phone field without a country code, or a money field without its currency symbol
@@ -565,4 +618,44 @@ Code (HTML):
 <input name="email" type="email" inputmode="email" autocomplete="email">
 <input name="phone" type="tel" autocomplete="tel">  <!-- beside a country code picker -->
 <textarea name="bio" maxlength="160"></textarea>  <!-- a real limit: show 152 / 160 near the end -->
+<input name="code" type="text" inputmode="numeric" autocomplete="one-time-code">  <!-- never type="number": 0800 stays 0800 -->
+
+input:autofill { box-shadow: inset 0 0 0 40px var(--field-bg); -webkit-text-fill-color: var(--ink); } /* no browser wash */
+input:-webkit-autofill { box-shadow: inset 0 0 0 40px var(--field-bg); -webkit-text-fill-color: var(--ink); }
+```
+
+## Billing Page
+
+People open a billing page for one number, so the page is laid out in zones, in the order people need them. **The next charge comes first:** the amount and the date (Next charge $120.00 on 1 Dec), at the top, above the plan name and everything else. **The payment method sits second, with its warning beside it:** when the saved card expires before the next charge, a warning appears next to the card itself (Expires 11/26, before your next charge. Update card), shown well ahead of the charge it would fail, not as an email after the payment has already bounced.
+
+**Invoice history is ordered the way people scan it:** date, amount, status, download, and the invoice number last. People look for an invoice by when it was, then check how much and whether it was paid; almost nobody searches by invoice number. This is a deliberate exception to the identity-column-first habit of a general Data Table (Interaction), where the identifier is what people scan for. **A plan change shows the money before the button:** the prorated amount due today sits directly above the confirm button, with the new recurring price under it ($63.33 due today, then $360.00 a month), so the first charge is never a surprise. It is the same no-surprise principle as the matching total in Checkout That Feels Safe (entry 16).
+
+**Cancel is plain and easy to find:** a text link at the bottom of the page, not a red alarm button and not hidden three screens deep, that opens one short confirmation with Keep plan as the other option. Cancelling is as easy as signing up (Dark Patterns, Psychology entry 07).
+
+Do:
+- Next charge amount and date at the very top
+- An expiring-card warning beside the payment method, before the charge it would fail
+- Invoice rows: date, amount, status, download, invoice number last
+- The prorated amount due today directly above the plan-change confirm button
+- A plain Cancel plan link at the bottom, one short confirmation
+
+Avoid:
+- A billing page that opens on the plan name and makes people hunt for the next charge
+- An invoice table that starts with an invoice number nobody remembers
+- A plan change confirmed without the amount due today in view
+
+Code (HTML):
+
+```html
+<!-- zones in the order people need them -->
+<section class="next-charge"><b>$120.00</b> on 1 Dec <small>Pro plan, monthly</small></section>
+<section class="method">Visa 4242, expires 11/26
+  <p class="warn">Expires before your next charge. <a href="#card">Update card</a></p> <!-- beside the card -->
+</section>
+<table class="invoices"> <!-- date, amount, status, download, number last -->
+  <tr><td>1 Nov 2026</td><td>$120.00</td><td>Paid</td><td><a>PDF</a></td><td>INV-2041</td></tr>
+</table>
+<p class="due">$63.33 due today, then $360.00 a month</p>
+<button>Confirm plan change</button> <!-- the amount sits right above it -->
+<a class="cancel" href="#cancel">Cancel plan</a> <!-- plain, findable, never red -->
 ```

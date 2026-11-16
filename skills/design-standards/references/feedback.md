@@ -40,12 +40,16 @@ Match the error’s surface to its actual severity: an inline message under the 
 
 **A system error message has three parts.** Say what happened, say why if you know, and say what the person can do now: Your invoice was not saved because the connection dropped. Your changes are still here, so select Retry. The default fallback, the message for an error nobody planned for, still names the thing that failed and the next step (We could not load your invoices. Refresh the page, or try again in a minute). It never says Something went wrong, which tells the person nothing and leaves them stuck.
 
+**Name the cause, then pick the pattern.** Four causes need four treatments. **Validation**, the input is wrong: inline under the field, with the fix (Form Validation Timing, Forms entry 05). **Network**, the request never arrived: keep everything on screen, say the connection dropped, retry once quietly where that is safe, then offer Retry. **Server**, the product failed: say so plainly, keep the person’s input, offer Retry and a support route, and log the technical detail for the team instead of showing it. **Permission**, the person is not allowed: say who can grant access and offer Request access, never a Retry that can only fail again.
+
 Do:
 - Every error needs a real way out
 - Whatever was already typed stays in the field after a failure
 - What happened, why if known, and what to do now
+- Classify the cause (validation, network, server, permission) and use its treatment
 
 Avoid:
+- A Retry button on a permission error
 - A dead-end “OK” with no path forward
 - A toast for an error that needs the user to actually do something about it
 - A Something went wrong fallback that names neither the thing nor the next step
@@ -69,15 +73,26 @@ Pick the loading pattern from what’s actually known about the wait: a known co
 
 **Open first, load inside.** A dialog opens the instant it is asked for, with a skeleton inside while its content loads, never after a pause while the data arrives. A route change renders the new page at once, with skeletons only in the parts that wait on async data, so the frame, the heading and the navigation appear straight away.
 
+**Pace a progress bar honestly.** Move the bar the moment work starts, so the person can see it is running, and keep the steadiest movement for the end: a slowdown or a stall near the finish feels far longer than the same pause at the start, and a bar parked at 99% while the slowest step runs is the most irritating wait there is. Where you control the order, run the slow, unpredictable steps early and the quick ones last. Never animate progress that is not tied to real work; a bar that fills on a timer and then waits is a lie people catch.
+
+**Refreshing content that is already on screen.** When cached results exist, show them at once and swap in the fresh ones in place, row by row, with each row keeping its height so nothing reflows. The indicator for that refresh is a thin progress line, 2 to 3px, along the top edge of the panel; never a spinner over content that was readable a moment ago, and never a skeleton that wipes it out (Six Data States, entry 13).
+
+**Guard a submit in code, not only on the button.** The disabled button is the visible half of the double-submit guard. The handler also keeps an in-flight flag and returns early while a request is running, because Enter in a field or a fast double tap can fire before the button repaints. Re-enable when the request settles, on success or on error, never after a fixed delay such as 2 seconds, which unlocks too early on a slow network and leaves a finished form locked on a fast one. For payments and other critical writes, send an idempotency key: one id created per attempt and reused on every retry of that attempt, so the server recognises a duplicate and returns the first result instead of charging twice (Checkout That Feels Safe, Forms entry 16).
+
 Do:
 - Nothing at all under ~300ms
 - Real context past 2s, a cancel option past 10s
 - A button-internal spinner keeps its width and disables itself, so a second click can't double-submit
 - Dialogs and new routes that render at once, with skeletons only where data is still coming
+- A progress bar that moves at once and never stalls near the end
+- Cached results first, refreshed in place under a thin progress line along the top
+- An in-flight guard in the handler, released when the request settles, and an idempotency key on payments
 
 Avoid:
 - A skeleton for every fetch regardless of duration
 - A dialog or page that waits for its data before it appears
+- A progress bar driven by a timer instead of real work
+- Re-enabling a submit button after a fixed delay
 
 Variant: **The first moment of a wait, two variants.** Variant A: show nothing for the first ~300ms of a content load, so a fast response never flickers a skeleton (this entry). Use when: data is loading into a screen or a panel. Variant B: acknowledge within 100ms, with the pressed state and a spinner inside the button from the moment of the press (Interactive State and Affordance, Interaction entry 24). Use when: the person just clicked or tapped something. Both are kept on purpose; one action often needs both, B on the button and A on the panel it fills.
 
@@ -97,9 +112,25 @@ function pickLoader({ knownShape, knownPercent }) {
 }
 ```
 
+Code (JS: submit guard):
+
+```js
+let inFlight = false;
+async function onSubmit(e) {
+  e.preventDefault();
+  if (inFlight) return; // Enter or a double tap can beat the disabled button
+  inFlight = true; button.disabled = true;
+  const key = form.dataset.attemptKey ||= crypto.randomUUID(); // same key on every retry of this attempt
+  try { await api.pay(data, { headers: { 'Idempotency-Key': key } }); delete form.dataset.attemptKey; }
+  finally { inFlight = false; button.disabled = false; } // released on settle, never on a timer
+}
+```
+
 ## Notification System
 
 A notification system is really four distinct surfaces (toast, banner, modal, badge), and severity is what should pick which one fires, not habit or whichever component was easiest to reach for. Toasts auto-dismiss and carry undo for low-stakes, reversible events; modals are reserved for things that genuinely block progress. Low-priority toasts need to stack and breathe with a visible gap between them rather than overlapping, and routing everything to the loudest available surface trains people to ignore all of them equally.
+
+**Banners stay, modals never stack.** A banner stays visible until the person dismisses it or the condition behind it is fixed (You are offline, Your card expires in 6 days); it never times out like a toast, because it describes something that is still true. Toasts may stack, up to three; modals never do. If a second blocking question comes up while a modal is open, finish or close the first one, or replace its content in place. A modal opened on top of another buries the first decision and confuses focus and Escape (Modal Hierarchy, Interaction entry 17).
 
 **Badges.** A badge carries two different signals that need different treatment. A count is an action: it says how many, asks you to act now, and changes with each new item. A status dot is a condition: it says which state, asks for nothing, and reads green for online and red for act now. Never put both on one row, since a dot says something changed, a number says how much, and both together is noise. Cap the count so the width is bounded (one unread shows a single dot or number, 200 shows 99+, whereas an uncapped 661 grows the pill and reflows the nav), and pin the badge to the icon’s top corner so the icon never moves whether it shows one digit or three.
 
@@ -112,9 +143,11 @@ Do:
 - One signal per row: a count or a status dot, never both
 - The badge clears the moment the view opens; the count ticks up and never blinks to zero
 - Only things that need a decision get a badge
+- A banner stays until it is dismissed or its condition is fixed
 
 Avoid:
 - Routing everything to the loudest surface
+- A modal opened on top of another modal
 - Badging every category, until the colour means nothing
 - A badge that lingers after the user has looked
 
@@ -175,8 +208,12 @@ async function optimisticUpdate(id, nextState, apiCall) {
 
 A skeleton previews the real content’s shape (card outlines, text-line bars) so the brain starts parsing the layout before the actual data has arrived, which measurably reduces the perceived wait versus a blank screen or spinner. It needs to animate (a shimmer sweep) and match the real content’s dimensions closely, or the layout visibly jumps the moment data replaces it. Skip a loading state entirely for an action just performed by the same user (like a submit that immediately shows its own result); they already know it’s working.
 
+Shape each block like the thing it stands in for: a circle for an avatar, a short bar for a name, longer bars for body text, a rounded rectangle for an image. The shimmer sweeps in the reading direction, left to right in a left-to-right language and right to left under `dir="rtl"`, so it travels the way the eye will read the content that replaces it.
+
 Do:
 - Animate the shimmer, match real dimensions
+- Circles for avatars, short bars for names, long bars for body text
+- Shimmer in the reading direction, reversed under `dir="rtl"`
 
 Avoid:
 - A skeleton that jumps to a different layout on load
@@ -190,7 +227,8 @@ Code (CSS):
   animation: shimmer 1.4s ease-in-out infinite;
   border-radius: 6px;
 }
-@keyframes shimmer { to { background-position: -200% 0; } }
+@keyframes shimmer { to { background-position: -200% 0; } } /* sweeps left to right */
+[dir="rtl"] .skeleton { animation-direction: reverse; } /* right to left for RTL reading */
 
 /* match the REAL element's exact dimensions so nothing jumps on swap */
 .skeleton-avatar { width: 40px; height: 40px; border-radius: 50%; }
@@ -204,11 +242,17 @@ Code (CSS):
 
 Position toasts deliberately (bottom-right on desktop, a top-edge banner on mobile) and never dead-centre over active content, where they block exactly what someone is trying to look at. Match the dismiss timing to severity: a routine confirmation clears in a few seconds, a warning holds longer or waits for a manual dismiss. Cap the visible stack at three and pause the auto-dismiss timer on hover so a toast doesn’t vanish mid-read, and always pair colour with an icon; colour alone is the same accessibility failure it is everywhere else in this document. The right confirmation still depends on what just happened. An inline edit gets a quiet green flash plus a checkmark on the field itself for about 1.5 seconds, no toast needed. A form submit that keeps someone on the same page gets a toast plus a visible change in the data they're looking at. A form submit that navigates somewhere new shows the confirmation as context on the destination itself, “Created John Smith” at the top of his new record, rather than a toast that's already gone by the time the new page renders. A batch action gets a plain summary count, “Suspended 12 users”, not a silent redirect that leaves someone guessing whether it worked.
 
+**Timing, controls and type markers.** Info and success toasts stay about 4 seconds, warnings about 7, and an error toast never dismisses itself: it waits until the person acknowledges it, because an error that leaves on its own takes the fix with it. Every toast has a visible close button, and on touch screens it can also be swiped away. Mark the type with an icon plus a coloured left border of about 3 to 4px, not a background tint alone, which fades in dark mode and says little to a colour-blind reader. When a toast enters or leaves, the others in the stack slide to their new places on a short spring (about 300ms, little or no overshoot) instead of jumping; under reduced motion they move without it.
+
 Do:
 - Cap the stack at 3, pause on hover
 - Confirmation matches the action: inline flash, toast, destination context, or a batch summary count
+- About 4s for info, about 7s for warnings, errors until acknowledged
+- A close button on every toast, and swipe to dismiss on touch
+- Icon plus a coloured left border to mark the type; the stack slides on a short spring
 
 Avoid:
+- An error toast that dismisses itself
 - Colour-only type signalling, no icon
 - Silent success, leaving someone to guess whether it actually worked
 
@@ -224,8 +268,21 @@ function pushToast(toast) {
 
 toastEl.addEventListener('mouseenter', () => clearTimeout(toastEl._timer)); // pause on hover
 toastEl.addEventListener('mouseleave', () => {
-  toastEl._timer = setTimeout(() => dismiss(toastEl), toastEl.dataset.severity === 'warning' ? 6000 : 3000);
+  toastEl._timer = setTimeout(() => dismiss(toastEl), toastEl.dataset.severity === 'warning' ? 7000 : 4000);
 });
+```
+
+Code (JS + CSS: durations, close and stack motion):
+
+```js
+const DURATION = { info: 4000, success: 4000, warning: 7000, error: null }; // null = stays until acknowledged
+const ms = DURATION[toast.type];
+if (ms) toastEl._timer = setTimeout(() => dismiss(toastEl), ms);
+toastEl.querySelector('.toast-close').onclick = () => dismiss(toastEl); // every toast, every type
+
+.toast { border-left: 4px solid var(--type-colour); } /* plus the type icon, never tint alone */
+.toast-stack > * { transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1); } /* the stack slides, never jumps */
+@media (prefers-reduced-motion: reduce) { .toast-stack > * { transition: none; } }
 ```
 
 ## Undo UX
@@ -259,8 +316,11 @@ function deleteWithUndo(item) {
 
 The mind keeps an unfinished task active in working memory and drops a finished one almost instantly. A visibly incomplete progress bar pulls attention back in a way a completed one never does. A profile-completeness meter with one deliberate box left unchecked (“Add a photo”) exploits exactly this to bring someone back to finish it. The open loop has to tie to an outcome the person actually wants, not a made-up metric; manufacturing progress nobody asked to track just reads as manipulative busywork.
 
+**The head start.** An onboarding checklist can open with one genuine item already ticked (Account created, 1 of 3 done). A task that is already under way feels worth finishing, so people carry on instead of closing the app. The ticked item has to be something the person really did; pre-ticking an invented step is the manufactured progress this entry warns against. Applied to a first run in First Run Without a Tour (Content, entry 05).
+
 Do:
 - One deliberate box left unchecked in onboarding
+- A checklist that opens with one real step already ticked (1 of 3)
 
 Avoid:
 - Manufacturing progress nobody asked to track
@@ -283,20 +343,25 @@ Not every destructive action deserves the same friction, and matching friction t
 
 **Write the dialog so it reads in one glance.** The title names the action and the object (Delete invoice #1247?), never a bare Are you sure? The body states the consequences in plain words: what disappears, who loses access, and whether it can be undone. Cancel is styled as the secondary button, so the destructive verb is the only strong action in the dialog.
 
+**The inverse tier: protective actions get no friction.** An action that protects the person and can be reversed at once (freeze a card, lock an account, pause payouts, sign out every device) gets no confirmation dialog at all. It sits one tap away on the screen where the risk is noticed, such as a Freeze card button on the card’s own page and beside a transaction that looks wrong, and the same control undoes it with one tap (Unfreeze). Friction here slows the person down at the exact moment speed matters most.
+
 Do:
 - Friction escalates with actual consequence, not with how severe the action feels
 - Confirmation dialog focus defaults to Cancel, never the destructive button
 - A dialog title that names the action and the object, with the consequences in the body
+- Freeze, lock and pause: one tap on the screen where the risk shows up, and one tap to undo
 
 Avoid:
 - One “are you sure?” modal used identically for a draft delete and an account close
 - An Are you sure? title that names no object
+- A confirmation dialog in front of a protective, reversible action
 
 Code (JS):
 
 ```js
 // tier -> UI treatment
 const DESTRUCTIVE_TIERS = {
+  protective: { ui: 'one-tap+same-control-undoes', confirm: false }, // freeze card, lock account
   low:      { ui: 'toast+undo',      confirm: false },
   medium:   { ui: 'modal',            confirm: 'click' },
   high:     { ui: 'modal-typed',      confirm: 'type-resource-name' },
@@ -363,16 +428,20 @@ A done screen is not a dead end, and five decisions keep the person moving. **Sa
 
 A success message leaves once it has been read. It never stays pinned on the page, where it goes stale and starts to look like part of the layout. A receipt page for a payment is a page in its own right, not a message left on another screen.
 
+**Pending is a state of its own.** When money has been sent but has not arrived, the receipt says so: a visible Pending status with the expected arrival (Arrives by Thu 14 Nov), shown on the receipt and on the same row in the history list. When the transfer settles, that row changes to Completed with the time it completed. Never show Completed for money that is still in flight, and never leave a settled transfer marked Pending.
+
 Do:
 - What, who and when, with real specifics
 - One primary next action and one way back
 - Reversible = toast with Undo; money = a page with a receipt
 - Confetti for milestones only
 - A success message that leaves once it has been read
+- A transfer shows Pending with its expected arrival, on the receipt and in history, until it settles to Completed
 
 Avoid:
 - Success! with an OK button and nothing else
 - A payment confirmed only by a toast
+- Completed shown for money that is still in flight
 - Confetti on every save
 - A success banner that stays on the page for good
 

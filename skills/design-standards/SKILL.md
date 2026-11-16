@@ -1,7 +1,7 @@
 ---
 name: design-standards
-description: Use when someone asks you to build, design, review or restyle any user interface (a page, form, table, dashboard, navigation, settings screen, landing page, empty state or animation), says "apply the design standards to <screen>", or asks why a page looks generic or machine-made. It gives you 125 design rules, loaded one category at a time, and a checklist of the tells that make an interface look machine-made.
-version: 1.4.0
+description: Use when someone asks you to build, design, review or restyle any user interface (a page, form, table, dashboard, navigation, settings screen, landing page, empty state or animation), says "apply the design standards to <screen>", or asks why a page looks generic or machine-made. It gives you 140 design rules, loaded one category at a time, and a checklist of the tells that make an interface look machine-made.
+version: 1.5.0
 ---
 
 > A Bright Coast AI skill, made by Rob Lee. github.com/bright-coast/design-standards
@@ -13,7 +13,7 @@ version: 1.4.0
 
 ## What this does
 
-It gives you a library of 125 design rules for building clear, easy-to-use interfaces, split into category files under `references/` so you only read what the task needs. It only reads its own files. It never changes the person's project files unless they ask you to build or change something, and it never sends, deletes, pays or publishes anything. The rules are neutral: they never choose colours, fonts or a brand.
+It gives you a library of 140 design rules for building clear, easy-to-use interfaces, split into category files under `references/` so you only read what the task needs. It only reads its own files. It never changes the person's project files unless they ask you to build or change something, and it never sends, deletes, pays or publishes anything. The rules are neutral: they never choose colours, fonts or a brand.
 
 ## How to use the rules
 
@@ -23,14 +23,14 @@ It gives you a library of 125 design rules for building clear, easy-to-use inter
 
 | Category | Patterns | File | Load it when the task involves |
 |---|---|---|---|
-| Interaction | 34 | `references/interaction.md` | buttons, menus, tables, dialogs, drawers, drag and drop, keyboard and touch behaviour |
-| Forms | 18 | `references/forms.md` | any input, validation, multi-step flow or settings screen |
+| Interaction | 39 | `references/interaction.md` | buttons, menus, tables, dialogs, drawers, drag and drop, keyboard and touch behaviour |
+| Forms | 19 | `references/forms.md` | any input, validation, multi-step flow or settings screen |
 | Feedback | 13 | `references/feedback.md` | loading, empty and error states, toasts, progress and confirmations |
-| Visual | 33 | `references/visual.md` | colour, type, spacing, depth, icons and layout |
+| Visual | 37 | `references/visual.md` | colour, type, spacing, depth, icons and layout |
 | Motion | 6 | `references/motion.md` | animation timing, easing and transitions |
-| Navigation | 4 | `references/navigation.md` | tabs, breadcrumbs, pagination and moving between screens |
-| Content | 4 | `references/content.md` | wording, headings and page-level structure |
-| The Psychology of the User Experience | 4 | `references/psychology.md` | how people perceive, choose and remember |
+| Navigation | 5 | `references/navigation.md` | tabs, breadcrumbs, pagination and moving between screens |
+| Content | 5 | `references/content.md` | wording, headings and page-level structure |
+| The Psychology of the User Experience | 7 | `references/psychology.md` | how people perceive, choose and remember |
 | AI Slop: What Not To Do | 9 | `references/ai-slop.md` | always, for any new screen: the tells that make an interface look machine-made |
 
 4. **Match the effort to the change.** A small change to an existing screen applies the rules quietly, with no brief and no list. Only a new screen, page or component gets the visible steps below.

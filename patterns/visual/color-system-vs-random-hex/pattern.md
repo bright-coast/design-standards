@@ -6,8 +6,10 @@ order: 20
 ---
 ## Rule
 <p>A UI built from independently-picked hex values (a pink here, a yellow there) reads as amateur even when each individual color looks fine in isolation, because nothing ties them together. A UI built from one generated color system, a single base hue expanded into a tonal scale (e.g. 50/100/200&hellip;900 lightness steps), reads as deliberate, because every shade on screen is provably related to every other shade. <strong>Scope:</strong> this is the principle, not a generation method. The principle (a systematic tonal scale over ad hoc hex picks) is well-established and safe to apply; how the scale is generated is a separate choice.</p>
+<p><strong>Three deliberate harmonies.</strong> When a palette needs more than one hue, pick it from a harmony rather than by eye. <strong>Monochromatic:</strong> one hue in several lightnesses, the calmest and the default for product UI. <strong>Complementary:</strong> two hues opposite on the colour wheel (blue and orange), one dominant and the other kept for a small accent, which gives the strongest contrast. <strong>Analogous:</strong> three neighbouring hues (blue, indigo, violet), which reads harmonious and suits illustration and marketing surfaces. Each chosen hue still gets its own tonal scale.</p>
 ## Do
 - One base hue expanded into a tonal scale
+- Extra hues chosen from a harmony: monochromatic, complementary or analogous
 ## Avoid
 - Independently-picked hex values with no shared relationship
 ## Code: CSS

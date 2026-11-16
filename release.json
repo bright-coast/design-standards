@@ -1,9 +1,9 @@
 {
-  "version": "1.4.0",
+  "version": "1.5.0",
   "files": [
     {
       "path": "skills/design-standards/SKILL.md",
-      "sha256": "4596a8c07b6272e110b53f37b4ae130d24675f9631456e83fc5dc91949387d0c"
+      "sha256": "3dc18c05cc2cdfd07d75283699cf7bde43181fef0e4162c61f5392b07732bcf4"
     },
     {
       "path": "skills/design-standards/references/ai-slop.md",
@@ -11,35 +11,35 @@
     },
     {
       "path": "skills/design-standards/references/content.md",
-      "sha256": "35313b3f36309662508a594bf213cc3bfa701e6a086c68f360c56da1d19755df"
+      "sha256": "bfee94c3a9ade66c339548654fdbd12b5df48086d63ac4659a9bb2f0bc6f36e6"
     },
     {
       "path": "skills/design-standards/references/feedback.md",
-      "sha256": "142ba826637d86458c337d8fea4982d79d6f69b9ca8e438dca7998e6e0dda198"
+      "sha256": "7a93974edf68ccb2a87aaff7e4237d3b9cddad0bf9e95578228fd16e08363243"
     },
     {
       "path": "skills/design-standards/references/forms.md",
-      "sha256": "415e74a96979b0245dbc9e19f83c7b38e18dee4cae9d2595e5498cf69854799e"
+      "sha256": "0f3ce2e148323d40458950d4948e2916e4cf2e7ebec1558b7df9377390276452"
     },
     {
       "path": "skills/design-standards/references/interaction.md",
-      "sha256": "e30dbbad91a61d68054aaf6447c61bafb149a1740f23a9454a473f7f75eefe29"
+      "sha256": "9f053b792ddfdf533a631c44362d61350074cdb0f87f0acedc01f1ccfb4bac39"
     },
     {
       "path": "skills/design-standards/references/motion.md",
-      "sha256": "535bc3988403e6aac2189739a6369b8dbf480fd338fa30c815fc506900bcc2f8"
+      "sha256": "7958cd981117182ee12c86cad25f0972aa5a3b546673715853af4dcbdd273386"
     },
     {
       "path": "skills/design-standards/references/navigation.md",
-      "sha256": "3f8cf07d8d455eeff722aeaef16bf103b17c90d747b4afccc317ab086af7170a"
+      "sha256": "644e7c05da7e5437565b4d3b2e3051da22c805a790ab89861107dd78436212ae"
     },
     {
       "path": "skills/design-standards/references/psychology.md",
-      "sha256": "4b86305c75b1760801c23cf86c92a0aaf50dd8eb4191485d2eeb0fc383fe11a6"
+      "sha256": "7a1fed7add9c227a61dfb01546c9d46cb7346a6329ae17906832bf557fd05161"
     },
     {
       "path": "skills/design-standards/references/visual.md",
-      "sha256": "494203536d0021ec90dea3e1e7c1b153fe6fb292f1bd28633759e3528d3fceb4"
+      "sha256": "8050a756a3f40a955e4a7ce17f83d92ffd246b753891ec39300818b0d614345a"
     }
   ]
 }

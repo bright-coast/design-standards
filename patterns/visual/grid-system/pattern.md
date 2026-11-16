@@ -5,15 +5,18 @@ category: visual
 order: 11
 ---
 ## Rule
-<p>A 12-column grid maps almost any layout because 12 divides cleanly into halves, thirds, and quarters, giving enough flexibility without infinite arbitrary choices. Gutter width sets the emotional register of a layout: tight gutters read technical and dense, wide gutters read editorial and calm. Collapse the column count at each breakpoint (12 on desktop down to 6, then 4, then a single column on mobile) rather than shrinking 12 narrow columns onto a phone screen. Only break the grid deliberately once it&rsquo;s clearly established as the norm; an occasional full-bleed image is a strong device precisely because everything else respects the grid.</p>
+<p>A 12-column grid maps almost any layout because 12 divides cleanly into halves, thirds, and quarters, giving enough flexibility without infinite arbitrary choices. Gutter width sets the emotional register of a layout: tight gutters read technical and dense, wide gutters read editorial and calm. As defaults, about 8px for a dense tool, 24px for a balanced layout and 40px for an editorial one. Collapse the column count at each breakpoint (12 on desktop down to 6, then 4, then a single column on mobile) rather than shrinking 12 narrow columns onto a phone screen. Only break the grid deliberately once it&rsquo;s clearly established as the norm; an occasional full-bleed image is a strong device precisely because everything else respects the grid.</p>
 <p>A layout also has to hold still when a scrollbar appears. When content grows past its container, a classic scrollbar takes a few pixels of width and the content nudges sideways. Put <code class="tok">scrollbar-gutter: stable</code> on the scrolling element and the scrollbar&rsquo;s space is reserved from the start, so nothing shifts when it appears. For a centred layout use <code class="tok">scrollbar-gutter: stable both-edges</code>, which reserves the gutter on both sides so the content stays symmetrical. The caveat is that the gutter is a placeholder: with plain <code class="tok">stable</code> the left and right spacing can look unequal, which is what <code class="tok">both-edges</code> addresses. It matters mainly with classic, always-visible scrollbars (Windows and Linux); on macOS with overlay scrollbars there is nothing to reserve, and the reserved space is visible as an empty strip when there is no scrollbar. It is supported in current Chrome, Edge and Firefox, with Safari support arriving in recent versions, so check the current support table before relying on it in a Safari-first product.</p>
 <p>Write the one-column version first, then add columns at breakpoints. Starting from the single column keeps the narrow screen as the default, instead of a squeezed copy of the desktop.</p>
+<p><strong>Fluid values and container queries before more breakpoints.</strong> Sizes that should grow smoothly with the screen (gutters, section padding, display type) use <code class="tok">clamp()</code>, such as <code class="tok">clamp(16px, 4vw, 40px)</code>, instead of a new media query at every width. A component that can sit in panels of different widths (a card in a sidebar and in the main column) responds to its container with <code class="tok">@container</code>, not to the viewport, because the viewport says nothing about the space the component actually has. Keep media queries for page-level layout changes.</p>
 ## Do
 - Collapse columns per breakpoint (12&rarr;6&rarr;4&rarr;1)
 - <span><code class="tok">scrollbar-gutter: stable</code> on any scrolling element, so nothing shifts when a scrollbar appears</span>
 - <span><code class="tok">scrollbar-gutter: stable both-edges</code> when the layout is centred</span>
 - The one-column version written first, with columns added at breakpoints
+- <span><code class="tok">clamp()</code> for sizes that grow with the screen, <code class="tok">@container</code> for components that live in panels of different widths</span>
 ## Avoid
+- A media query for every small size change
 - Breaking the grid before establishing it
 - A scrolling panel with no reserved gutter, so its content nudges sideways the moment a scrollbar appears
 ## Code: CSS
@@ -28,6 +31,10 @@ order: 11
 @media (max-width: 1024px) { .grid { grid-template-columns: repeat(6, 1fr); } }
 @media (max-width: 768px)  { .grid { grid-template-columns: repeat(4, 1fr); } }
 @media (max-width: 480px)  { .grid { grid-template-columns: 1fr; } } <span class="cm">/* single column, not shrunk 12-col */</span>
+
+.page { padding-inline: clamp(16px, 4vw, 40px); } <span class="cm">/* fluid, no breakpoint needed */</span>
+.panel { container-type: inline-size; }
+@container (min-width: 480px) { .card { grid-template-columns: 120px 1fr; } } <span class="cm">/* responds to its panel, not the viewport */</span>
 
 .full-bleed { grid-column: 1 / -1; } <span class="cm">/* deliberate break, reads as a device because the grid is otherwise respected */</span>
 

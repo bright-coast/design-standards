@@ -16,6 +16,8 @@ order: 1
 - A 600ms interface animation: it reads as broken past the 150 to 250ms band
 ## Extra: variant-note
 <div class="variant-note"><b>Variants held here.</b> A: entrances land at 200 to 300ms with ease-out. Use when: an element is entering the screen. B: nothing in a dense productivity UI runs past about 150ms, and exits run around 150ms. Use when: the screen is a dense productivity UI, which is this entry&rsquo;s own wording (Dropdown Design&rsquo;s 150ms open is variant B). C: interface motion stays in a 150 to 250ms band with 250ms as the shared ceiling. Use when: you want one number for general interface motion. All three are kept on purpose.</div>
+## Extra: variant-note
+<div class="variant-note"><b>Errors that must be noticed, an exception.</b> Default: no overshoot or bounce, and nothing past about 250ms in interface motion (this entry). Exception: an error or alert the person must not miss may use a short shake, three or four small horizontal moves of 4 to 6px over 300 to 400ms, played once when the error appears. Use when: a submit fails or a code is wrong and the eye is elsewhere on the screen. Never loop it, never go past about 400ms (a 500 to 800ms bounce reads as the interface breaking, not as a message), never use it on success or routine states, and under reduced motion drop it and rely on the colour, icon and message. Both are kept on purpose.</div>
 ## Code: CSS
 <pre><code>:root {
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);

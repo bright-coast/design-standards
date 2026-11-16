@@ -6,11 +6,15 @@ order: 6
 ---
 ## Rule
 <p>Cmd+K only works if the matching is fuzzy: typing &ldquo;stg&rdquo; should still surface &ldquo;Settings&rdquo; and &ldquo;Storage&rdquo;, because exact substring matching returns nothing and feels broken. Group results into labeled sections (Recent, Actions, Pages) so a long flat list reads as structure, and drive the whole thing from the keyboard: arrows move the highlight, Enter runs the selection, Escape closes. Never open to a blank void; prefill recent or suggested commands so there&rsquo;s a starting point before anyone types a character.</p>
+<p><strong>Matches, actions and levels.</strong> Highlight the matched letters in each result, so it is plain why stg found Settings. A fixed footer bar names the primary action for the selected row with its key (Open, Enter), and a secondary action list for the same item (Cmd+K again) shows every other action with its shortcut right-aligned. Nested commands open a sub-level with a breadcrumb at the top, and Escape steps back one level at a time; only Escape at the top level closes the palette.</p>
 ## Do
 - Prefill recent/suggested commands on open
 - Inline spinner for async, never freeze the whole palette
+- Matched letters highlighted in every result
+- A footer bar naming the primary action and its key, plus a secondary action list with shortcuts
 ## Avoid
 - Exact substring matching that returns nothing for a fair guess
+- Escape inside a nested level closing the whole palette
 ## Code: JS
 <pre><code><span class="cm">// subsequence fuzzy match: "stg" matches "Settings" (s-t-...-g)</span>
 <span class="kw">function</span> <span class="fn">fuzzyScore</span>(query, target) {

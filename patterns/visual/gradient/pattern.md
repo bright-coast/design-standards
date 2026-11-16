@@ -7,12 +7,15 @@ order: 10
 ## Rule
 <p>Neighbouring hues on the colour wheel blend cleanly into each other, while hues from opposite sides create a muddy grey dead zone in the middle of the transition. A blue-to-orange gradient always passes through a flat grey band, an indigo-to-blue gradient never does. Keep lightness moving in one direction only across the gradient; a value that dips and rises again creates a visible, unintentional banding seam. A subtle grain or noise overlay on top of a large gradient hides colour-banding artifacts on cheaper screens, and body text should never sit on a gradient&rsquo;s unpredictable mid-transition zone where contrast is impossible to guarantee.</p>
 <p><strong>Five rules for gradients that stay vivid and readable.</strong> Blue to yellow looks simple, but by default the browser mixes in RGB, so the middle drops to a muddy grey (#3b5bdb to #f5d90a passes through #989a72). <strong>1. Interpolate in OKLCH.</strong> One clause in your CSS, same two colours, and the middle stays bright (the same pair passes through a bright green, about #22b573). <strong>2. Add a middle stop.</strong> You pick the colour in between instead of letting the math pick it. <strong>3. Far apart needs a route.</strong> Opposite hues (168&deg; apart) go grey on a straight path, so use OKLCH and a middle stop; neighbours (55&deg; apart) blend fine. <strong>4. Add grain.</strong> On big dark gradients, a faint noise layer hides the banding. <strong>5. Calm behind text.</strong> Behind text, keep the stops close in lightness so every word stays readable: white text measures 1.2:1 on the pale end of a wide gradient and 8.2:1 on a calm, close-lightness one.</p>
+<p><strong>Angle, mesh and gradient text.</strong> On surfaces, prefer a diagonal of about 135 degrees (top left to bottom right) over a flat left-to-right gradient, which reads like a progress bar. For a hero background, a mesh of about three colour points (two or three layered radial gradients over a base colour) reads more natural than a two-stop linear gradient. A gradient fill on the text itself (<code class="tok">background-clip: text</code>) belongs on display headlines only; body text, labels and links stay a solid colour, and the headline&rsquo;s contrast is checked at its palest stop.</p>
 ## Do
 - Keep lightness moving one direction only
 - <code class="tok">linear-gradient(in oklch ...)</code> for any pair that is not neighbours
 - A hand-picked middle stop on far-apart hues
 - Stops close in lightness wherever text sits on top
+- A diagonal of about 135 degrees on surfaces; a three-point mesh for hero backgrounds
 ## Avoid
+- Gradient-filled body text, labels or links
 - Body text on a gradient&rsquo;s mid-transition
 - Default RGB mixing across opposite hues (the grey middle)
 ## Extra: variant-note
@@ -32,4 +35,7 @@ order: 10
 <span class="cm">/* far-apart hues: interpolate in OKLCH (rule 1) and pick the middle yourself (rule 2) */</span>
 .gradient-vivid { background: linear-gradient(in oklch 90deg, #3b5bdb, #22b573, #f5d90a); }
 <span class="cm">/* behind text: stops close in lightness (rule 5) */</span>
-.gradient-text-safe { background: linear-gradient(in oklch 135deg, #3b2fa0, #6a35b0); color: white; }</code></pre>
+.gradient-text-safe { background: linear-gradient(in oklch 135deg, #3b2fa0, #6a35b0); color: white; }
+
+.hero-mesh { background: radial-gradient(at 15% 20%, #6a35b0, transparent 55%), radial-gradient(at 85% 30%, #3b5bdb, transparent 50%), radial-gradient(at 50% 90%, #c2417a, transparent 55%), #1b1442; } <span class="cm">/* three-point mesh */</span>
+.display-headline { background: linear-gradient(135deg, #3b5bdb, #6a35b0); -webkit-background-clip: text; background-clip: text; color: transparent; }</code></pre>

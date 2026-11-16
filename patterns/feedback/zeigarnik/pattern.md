@@ -6,8 +6,10 @@ order: 9
 ---
 ## Rule
 <p>The mind keeps an unfinished task active in working memory and drops a finished one almost instantly. A visibly incomplete progress bar pulls attention back in a way a completed one never does. A profile-completeness meter with one deliberate box left unchecked (&ldquo;Add a photo&rdquo;) exploits exactly this to bring someone back to finish it. The open loop has to tie to an outcome the person actually wants, not a made-up metric; manufacturing progress nobody asked to track just reads as manipulative busywork.</p>
+<p><strong>The head start.</strong> An onboarding checklist can open with one genuine item already ticked (Account created, 1 of 3 done). A task that is already under way feels worth finishing, so people carry on instead of closing the app. The ticked item has to be something the person really did; pre-ticking an invented step is the manufactured progress this entry warns against. Applied to a first run in <a href="#lp-first-run-onboarding">First Run Without a Tour</a> (Content, entry 05).</p>
 ## Do
 - One deliberate box left unchecked in onboarding
+- A checklist that opens with one real step already ticked (1 of 3)
 ## Avoid
 - Manufacturing progress nobody asked to track
 ## Code: JS

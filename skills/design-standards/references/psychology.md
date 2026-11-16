@@ -38,15 +38,26 @@ How people perceive, choose and remember. Everything here is a research-backed h
 
           Content, 04Serial Position the first and last items are remembered best
 
-4 patterns. Use when: how people perceive, choose and remember.
+        Never do this to people
+
+          Psychology, 05Decoy Effect a near-identical weaker tier makes another look like value; every tier needs a real buyer
+
+          Psychology, 06Engagement Traps endless feeds, autoplay, variable rewards, streaks and obligation notifications
+
+          Psychology, 07Dark Patterns confirmshaming, hidden costs and the roach motel, with the honest alternative
+
+7 patterns. Use when: how people perceive, choose and remember.
 
 ## Fitts’s Heuristic
 
 Important buttons should be easy to reach, so a big Save button beats a small one. This is Fitts’s heuristic, often written up as “Fitts’s law”; it is a research-backed heuristic, not a law. Its practical side is already in Click Target Sizing (Interaction, entry 25): the 44 by 44 pixel touch zone and the 8 pixel gap between adjacent buttons.
 
+**Distance is the other half.** The heuristic is about size and distance together: a target is quicker to hit when it is bigger and when it is closer to where the pointer or thumb already is. So bring the action to the person and cut the travel toward zero: a menu that opens at the cursor (Context Menu, Interaction entry 07), editing in place instead of on a separate form (Inline Editing, Interaction entry 15), a floating action button that is always near the thumb. On a phone, put the primary action within thumb reach near the bottom of the screen, such as a full-width Save fixed above the home indicator, never only in the top corner where a one-handed user has to stretch or shift their grip.
+
 Do:
 - The important button (the Save) is big and easy to reach
 - Apply the size and gap numbers in Click Target Sizing
+- Cut travel distance: menus at the cursor, inline editing, the primary action near the thumb on mobile
 
 Avoid:
 - A small, hard-to-reach button for the action that matters most
@@ -130,4 +141,91 @@ Code (JS):
 // show and type in chunks: 415 555 0123, not 4155550123
 const chunk = (d, sizes = [3, 3, 4]) => { let i = 0; return sizes.map(n => d.slice(i, i += n)).filter(Boolean).join(' '); };
 chunk('4155550123'); // "415 555 0123": 3 chunks fit 4 slots
+```
+
+## Decoy Effect
+
+People judge a price by comparing it with whatever is easiest to compare it with. Add a third option that is clearly worse than a similar-priced one (Pro at $14 with far fewer features than Premium at $16) and Premium suddenly looks like a bargain, because Pro against Premium is an easy comparison ($2 more, much more included) while Basic, which has no close neighbour, drops out of the decision. This is the decoy effect, also called asymmetric dominance; it is a research-backed heuristic, not a law, and its strength varies a lot from one market to the next.
+
+**Never build a tier whose only job is to look bad.** A plan nobody should buy, priced to push people into a more expensive one, steers them into paying for what they do not need, and it is the kind of thing customers notice and resent. The honest use is the reverse check: every tier on the page is one a real customer could sensibly choose, the tier you highlight is the one that genuinely fits most of them, and the differences between tiers are stated plainly so people compare on substance. When reviewing a pricing page, ask of each tier: who is this actually for? If the answer is nobody, remove it (Pricing Table, Visual).
+
+Do:
+- Every tier on the page is a sensible choice for some real customer
+- Highlight the tier that genuinely fits most people, with the differences stated plainly
+- Ask of each tier who it is actually for, and remove any that is for nobody
+
+Avoid:
+- A near-identical, slightly cheaper, much weaker tier added only to make another look good
+- Hiding the real differences so the comparison only works one way
+
+Code (JS):
+
+```js
+// review check for a pricing page: every tier needs a real audience
+const tiers = [
+  { name: 'Basic', price: 8, forWhom: 'one person, light use' },
+  { name: 'Premium', price: 16, forWhom: 'most teams', highlight: true },
+];
+const decoys = tiers.filter(t => !t.forWhom); // a tier for nobody is a decoy: remove it
+```
+
+## Engagement Traps
+
+Some engagement patterns work by removing the moments where people decide to stop. Never design them in to keep people using a product longer than they meant to; give every one of them its honest alternative. **Endless feeds:** a feed with no end has no point where the person decides whether to carry on. Where wellbeing matters, give it one: a clear end or an All caught up marker once the new items run out, or pages, or a Load more button (Pagination, Navigation entry 03). **Autoplay:** playing the next item automatically removes the pause in which people choose to leave, so autoplay of the next item is off by default and the person opts in; a countdown with a clear Cancel is the least it needs when it is on.
+
+**Variable rewards:** never make a refresh or a reveal work like a slot machine, where an unpredictable payoff (sometimes something, often nothing) keeps people pulling. Pull to refresh loads real updates and says so when there are none (No new posts since 9:41). **Streaks:** a streak turns a habit into something people are afraid to lose, so if a product uses streaks it builds in forgiveness: a streak freeze or a missed day allowed each week, and no alarming warnings at midnight. Use them only where coming back genuinely helps the person, such as learning or health. **Social obligation:** limit notifications built on obligation (Someone liked your photo, a friend is waiting for your reply) and let people choose which ones they get, each type with its own switch in settings; never send them in timed drips to pull people back (Notification System, Feedback entry 04).
+
+Do:
+- A clear end or All caught up marker on a feed where wellbeing matters
+- Autoplay of the next item off by default, opt in, with a visible Cancel
+- Refresh that loads real updates and says plainly when there are none
+- Streaks with forgiveness built in, used only where coming back helps the person
+- A switch for every type of social notification
+
+Avoid:
+- A feed with no end, built so nobody reaches a point to stop
+- A refresh or reveal with deliberately unpredictable payoffs
+- A streak that is lost forever after one missed day, with warnings designed to cause anxiety
+- Social notifications drip-fed to pull people back
+
+Code (JS):
+
+```js
+function renderFeedEnd(newItems) {
+  if (newItems.length === 0) return showMarker('All caught up'); // a real stopping point
+}
+const settings = {
+  autoplayNext: false,                  // opt in, never on by default
+  streakFreezesPerWeek: 1,            // forgiveness built in
+  notify: { likes: false, replies: true }, // each social type has its own switch
+};
+```
+
+## Dark Patterns
+
+A dark pattern is a design choice that tricks people into a decision they would not make if they saw it clearly. These are never acceptable, however well they test, and several are now regulated in many markets. Three are common enough to name, each with its honest alternative. **Confirmshaming:** never write the decline option to make people feel foolish for saying no (No thanks, I prefer paying full price). Write it in neutral words that say what happens (No thanks, or Not now), styled as a real, readable option rather than faint small print.
+
+**Hidden costs:** never show one price and add shipping, service fees and taxes once someone is committed at checkout, so a $29 basket becomes $47 on the last step. Show the full price, fees included, from the first place the price appears, or state the fees beside it, so the figure on the pay button is never a surprise (Checkout That Feels Safe, Forms entry 16). **The roach motel:** never make leaving harder than joining. If signing up takes one click, cancelling takes about the same: a findable Cancel plan link, one short confirmation, done, with no maze of settings pages, guilt screens, waiting periods or required phone calls (Billing Page, Forms entry 19).
+
+Do:
+- Neutral decline wording, as readable as the accept option
+- The full price, fees included, from the first place a price appears
+- Cancelling as easy as signing up: one link, one short confirmation
+
+Avoid:
+- A decline option written to shame (No thanks, I like paying more)
+- Fees that appear only at the last step of checkout
+- A cancellation path through several screens, an email confirmation or a waiting period
+
+Code (HTML):
+
+```html
+<!-- decline in neutral words, as readable as accept -->
+<button>Get 20% off</button> <button class="secondary">No thanks</button>
+
+<!-- the price people see first already includes the fees -->
+<p class="price">$47.00 <small>includes $12 shipping and $6 in fees</small></p>
+
+<!-- one link out, one confirmation, the same effort as signing up -->
+<a href="/billing#cancel">Cancel plan</a>
 ```

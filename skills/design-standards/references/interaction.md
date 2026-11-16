@@ -5,7 +5,7 @@
 
 The mechanics of clicking, dragging, and typing through a screen, the largest category, and the one most directly reusable across products, from an existing app to a brand-new build.
 
-34 patterns. Use when: buttons, menus, tables, dialogs, drawers, drag and drop, keyboard and touch behaviour.
+39 patterns. Use when: buttons, menus, tables, dialogs, drawers, drag and drop, keyboard and touch behaviour.
 
 ## Accordion Disclosure
 
@@ -76,12 +76,17 @@ app.post('/orders', async (req, res) => {
 
 Phone screens keep getting taller while thumbs stay the same length, which turns the top of the display into a dead zone for one-handed use. A bottom sheet anchors actions where the thumb naturally rests instead of a top-right corner, and unlike a full modal it keeps the page visible behind it so context is never lost. Snap points let it rest half-open or expand to full height depending on how much content is actually needed, and drag-to-dismiss maps the closing gesture to the same direction the sheet opened from.
 
+**Dismissal, stacking and desktop.** Dismiss on a fast downward flick (faster than about 0.5px per millisecond) or a drag past halfway, whichever comes first; distance alone makes a quick flick bounce back and feel broken. Never stack a sheet on a sheet: replace the content inside the same sheet and add a back arrow at the top left. On desktop the same content becomes a side drawer between 320px and 40% of the screen width, since a bottom sheet stretched across a wide monitor puts content far from the eye.
+
 Do:
 - Snap points for half/full height
 - Dim + lock body scroll behind the sheet
+- Dismiss on a fast flick or a drag past halfway
+- On desktop, a side drawer between 320px and 40% of the screen width
 
 Avoid:
 - Leaving the background scrollable while it’s open
+- A sheet opened on top of another sheet
 
 Code (CSS + JS):
 
@@ -115,9 +120,13 @@ handle.addEventListener('pointerup', () => {
 
 The header checkbox needs three real states, not two: empty, an indeterminate dash for a partial selection, and fully checked. Clicking while indeterminate should always resolve to select-all, never to clearing. When select-all only grabs the rows visible on screen, the affordance needs to name the true scope (“Select all 247 matching”), and that count has to stay live as filters change. Selection itself belongs in application state keyed by row ID, not in the DOM, so it survives pagination instead of silently resetting on the next page.
 
+**Ranges and counts.** Shift-click selects every row between the last clicked row and this one, and Shift with the arrow keys extends a selection from the keyboard. A bulk destructive button carries the count in its label (Delete 12 invoices), so the scope is read at the moment of the click, and the undo window behind it rests on a reversible soft delete.
+
 Do:
 - Selection stored by ID, survives paging
 - Undo window instead of a confirm modal on bulk delete
+- Shift-click range selection, and Shift plus arrows from the keyboard
+- The count in the bulk button label (Delete 12 invoices)
 
 Avoid:
 - A vague “select all” that hides the real scope
@@ -148,9 +157,12 @@ headerCheckbox.addEventListener('click', (e) => {
 
 A colour picker is a decision that cascades through the rest of the UI, not a gradient with a slider. OKLCH alongside hex matters because hex is machine-friendly but not human-predictable. OKLCH’s lightness/chroma/hue lets someone change one number and get a predictable lighter or darker shade. A live contrast-ratio readout at pick time (not buried in a later review step) kills a failing colour pair before it ever ships, and alpha needs previewing over a checkerboard on both light and dark, since transparency lies against a plain white canvas.
 
+Let the picker generate a ten-step tonal scale (50 to 900) from the chosen hue, stepping lightness in OKLCH while holding the hue steady, so one pick becomes a usable set of tints and shades instead of a single swatch.
+
 Do:
 - Live WCAG contrast badge while picking
 - Recent swatches + saved palettes
+- A ten-step tint and shade scale generated from the chosen hue
 
 Avoid:
 - Previewing alpha only against white
@@ -180,12 +192,17 @@ badge.dataset.pass = ratio >= 4.5;
 
 Cmd+K only works if the matching is fuzzy: typing “stg” should still surface “Settings” and “Storage”, because exact substring matching returns nothing and feels broken. Group results into labeled sections (Recent, Actions, Pages) so a long flat list reads as structure, and drive the whole thing from the keyboard: arrows move the highlight, Enter runs the selection, Escape closes. Never open to a blank void; prefill recent or suggested commands so there’s a starting point before anyone types a character.
 
+**Matches, actions and levels.** Highlight the matched letters in each result, so it is plain why stg found Settings. A fixed footer bar names the primary action for the selected row with its key (Open, Enter), and a secondary action list for the same item (Cmd+K again) shows every other action with its shortcut right-aligned. Nested commands open a sub-level with a breadcrumb at the top, and Escape steps back one level at a time; only Escape at the top level closes the palette.
+
 Do:
 - Prefill recent/suggested commands on open
 - Inline spinner for async, never freeze the whole palette
+- Matched letters highlighted in every result
+- A footer bar naming the primary action and its key, plus a secondary action list with shortcuts
 
 Avoid:
 - Exact substring matching that returns nothing for a fair guess
+- Escape inside a nested level closing the whole palette
 
 Code (JS):
 
@@ -216,9 +233,13 @@ function searchCommands(query, commands) {
 
 A context menu measures its available space before it opens: no room below, it flips up; no room to the right, it mirrors left; it’s always anchored to the cursor and always kept inside the viewport. Group actions by intent with dividers rather than a flat list of twelve items, and isolate anything destructive at the bottom in red. Submenus need a “safe triangle” from the cursor to the submenu so moving diagonally toward it doesn’t close it the instant the cursor leaves the parent row.
 
+**Keyboard and touch.** Arrow keys move through the items, Right opens a submenu and Left closes it, typing a letter jumps to the next item starting with that letter, and Enter runs the item. Escape closes one submenu level at a time before it closes the menu. On touch, a long press (about 500ms) opens the same actions as a bottom sheet, in the same order and grouping.
+
 Do:
 - Group with dividers, isolate destructive in red at the bottom
 - Safe-triangle hover intent toward submenus
+- Arrows, first-letter type-ahead, and Escape stepping back one level at a time
+- A long press on touch opens the same actions in a bottom sheet
 
 Avoid:
 - Closing a submenu the instant the cursor drifts off the row
@@ -338,6 +359,8 @@ Name the action on the button itself: “Delete project” instead of a generic 
 
 **Quiet on the page, loud in the dialog.** On the page, a destructive control stays quiet: a ghost button, a text button or an item in the overflow menu, above all when it repeats on every row of a list. Solid red belongs only on the confirming button inside the dialog, the one moment the person has chosen to destroy something.
 
+**Quiet, never hidden.** Quiet styling is not concealment. A cancel subscription or close account path stays a plain, findable text link on the page where people expect it (billing or account settings), never buried three menus deep, removed, or routed through a phone call to stop people leaving.
+
 Do:
 - Hold-to-confirm as the actual safeguard, not a dialog
 - Cooldown/grace period for genuinely irreversible deletes
@@ -346,6 +369,7 @@ Do:
 Avoid:
 - Spending red on anything other than real destruction
 - A solid red Delete button repeated on every row
+- A cancel or close account path hidden or removed to stop people leaving
 
 Code (CSS + JS):
 
@@ -385,6 +409,8 @@ Avoid:
 
 Variant: **Disabled buttons, two variants.** Variant A: keep the button live and validate on click, moving focus to the first blocking field (this entry). Use when: the block is something the person can fix in the form in front of them. Variant B: a real disabled state, muted through the project tokens, with a not-allowed cursor and aria-disabled (which, unlike the disabled attribute, keeps the button focusable), always with the reason written beside it. Use when: the block is a known state the form cannot fix, such as a plan limit or a missing permission. The full state list is in Interactive State and Affordance (entry 24). Both are kept on purpose.
 
+Variant: **Single-field composers, a third variant.** Variant C: in a single-field message composer (a chat or prompt input), send stays inactive, muted but visible in place, until the field has content, and turns active on the first character. Use when: the only thing blocking send is an empty message, which explains itself, and validating an empty send on click would only produce an error for nothing. Variants A and B still hold for forms. All three are kept on purpose.
+
 Code (JS):
 
 ```js
@@ -404,9 +430,13 @@ submitBtn.addEventListener('click', () => {
 
 A grabbed item needs to feel like it left the surface: confirm the lift with a slight scale-up, a deeper shadow, and a small tilt together, all at once. Drop zones should speak first: reveal where the item will land before release, not after, using an insertion line to slot between items or a filled highlight to land inside a whole column. On structured surfaces (a kanban board), snap to the nearest valid slot rather than free positioning, and pair every drop with a short undo toast so a wrong move costs one click, not a redo.
 
+**Pickup and spring-loading.** The pickup also shows in the cursor (a grabbing hand) and at the origin, where a faded ghost of the item stays until the drop, so the person can see where it came from and where it returns if they cancel. When a drag hovers over a closed folder or a collapsed group, open it after about 600ms, so an item can be dropped deep into a tree in one trip.
+
 Do:
 - Reveal the exact drop target before release
 - Short undo toast after every drop
+- A grabbing cursor plus a faded ghost left at the origin
+- Closed folders open after about 600ms of hover mid-drag
 
 Avoid:
 - Making a wrong drop permanent with no way back
@@ -436,13 +466,14 @@ zone.addEventListener('drop', () => {
 
 ## Dropdown Design
 
-The trigger needs to be obviously clickable: a real touch target (~48px), a visible caret, and a genuine hover state, not a 30px box with a faint border. Flip the menu open direction when there isn’t room below so it never clips off-screen, wire up full keyboard support (arrows, Enter, Esc), and once a list passes roughly ten items add a search field instead of leaving people to scroll-hunt. Animate the open around 150ms, fast enough to feel instant, slow enough to read as deliberate rather than a hard cut.
+The trigger needs to be obviously clickable: a real touch target (~48px), a visible caret, and a genuine hover state, not a 30px box with a faint border. Flip the menu open direction when there isn’t room below so it never clips off-screen, wire up full keyboard support (arrows, Enter, Esc), and once a list passes roughly ten items add a search field instead of leaving people to scroll-hunt. Animate the open around 150ms, fast enough to feel instant, slow enough to read as deliberate rather than a hard cut. Past about a hundred items, virtualise the list: render only the rows in view plus a small buffer, so opening and typing stay instant.
 
 Six common dropdown mistakes, in full. **1. Type to filter.** Any list past about 10 rows needs a search field on top; in the demo a 195-country list takes 11.5 seconds of scrolling against 1.4 seconds with three letters typed. **2. Typed dates.** Use a text field that parses plus a month and year jump, because a calendar that opens on today makes a 1994 birthday cost about 390 presses of one arrow (see Date Pickers). **3. Stay open on pick.** A multi-select uses checkboxes, a live count and an explicit Done button, instead of closing and reopening after each pick. **4. Collision-aware.** Render the menu in a portal outside the clipping card, so `overflow: hidden` cannot cut it off, and flip it up when the space below runs out. **5. Reasons, not grey.** A disabled option should show the blocker inline and the one action that clears it. **6. No menu under five options.** Use a segmented control or radios: one tap, nothing hidden.
 
 Do:
 - Full keyboard support (arrows/Enter/Esc)
 - Search once the list passes ~10 items
+- Virtualise lists longer than about a hundred items
 - Multi-select stays open: checkboxes, a live count, an explicit Done
 - Fewer than ~5 options → segmented control or radios, not a dropdown at all
 - Menu rendered in a portal so a clipping parent cannot cut it off, and flipped up when there is no room below
@@ -484,9 +515,13 @@ document.body.appendChild(menu); // overflow: hidden on the card can no longer c
 
 Every chip needs three visually distinct states: idle, active (filled + check), disabled (dimmed), because if active looks like idle the filter reads as broken. The combination logic should be legible: OR within a group widens the net, AND across groups narrows it. Update the result count on the same frame as the tap, since a number that doesn’t move reads as “nothing happened” and gets tapped twice. Always ship one clear-all reset paired with a live count, and let overflowing chips scroll horizontally with an edge fade rather than wrapping into a wall.
 
+**Count on the button, filters in view.** In a filter panel or sheet, put the live count on the apply button itself (Show 312 results), so the number and the action are one target. At zero the button says so (0 results) and the panel names the filter that emptied the list, so someone loosens it before applying their way into an empty page. Once applied, the active filters stay pinned above the results as chips, each with its own remove control, never hidden inside a closed panel.
+
 Do:
 - Result count updates the same frame as the tap
 - Single clear-all reset with a live count
+- Live count on the apply button (Show 312 results), with zero named before applying
+- Applied filters pinned above the results, each removable on its own
 
 Avoid:
 - Active chips that look identical to idle ones
@@ -580,12 +615,18 @@ input.addEventListener('blur', commit); // pick ONE rule, keep it everywhere
 
 The server typically streams roughly 10 cursor positions a second while the screen redraws at 60fps; interpolating between ticks is what makes cursors glide instead of visibly teleporting between discrete points. Hash each user’s colour from their ID rather than assigning it randomly per session, so the same person keeps the same colour across visits and identity is trackable from the corner of an eye. When someone selects an element, lock it and outline it in their colour immediately: two people editing the same shape at once is a corrupted shape.
 
+**Presence, tags and follow.** Show who is here as a stack of about three avatars plus a count (+4), rendered the moment someone joins, before they move or type. A locked object carries a small tag in the editor’s colour (Maya is editing), not just an outline. Clicking a collaborator’s avatar enters follow mode: your viewport tracks their pans and zooms, a frame in their colour around the canvas shows you are following, and any pan of your own or Escape stops it.
+
 Do:
 - Interpolate between server ticks for smooth movement
 - Stable per-user colour hashed from ID
+- An avatar stack of about three plus +N, shown the moment someone joins
+- Follow mode from an avatar click, with an obvious way out
 
 Avoid:
 - Two users editing the same locked element at once
+
+Variant: **Editing locks, two variants.** Variant A: a hard lock with an outline and a name tag in the editor’s colour (this entry). Use when: discrete objects such as shapes or cards, where two edits at once corrupt the object. Variant B: a soft lock (the tag shows, editing stays possible) or live merging of changes. Use when: text and fields, where edits can be merged and a hard lock only blocks people. Both kept on purpose.
 
 Code (JS):
 
@@ -613,12 +654,17 @@ raf();
 
 The first question is always “does this block the user?” A modal takes over the screen with a full scrim and should be reserved for critical or destructive choices that genuinely must be answered before anything else. A bottom sheet is the mobile-first default for non-blocking flows. A drawer is edge-anchored and used for navigation, dimming only the area it covers. A popover anchors to its trigger, stays small (~200px), and is for lightweight menus, never a blocking flow. Reaching for a modal when a popover would do adds friction to something routine.
 
+**Motion.** A modal enters with a scale from about 0.96 to 1 plus a fade, ease-out, over about 200ms, with its transform origin set to the trigger or the centre. It exits faster, about 150ms, with the reverse. Its content follows the container with a short stagger of about 30 to 50ms, so the title lands before the actions (Animation Timing).
+
 Do:
 - Modals reserved for critical/destructive decisions only
 - Popovers anchored to their trigger, small and contextual
+- Enter at about 200ms (scale 0.96 to 1 plus fade), exit faster at about 150ms
 
 Avoid:
 - A full-screen modal for a routine, non-blocking action
+
+Variant: **Behind the overlay, two variants.** Variant A: dim the page with a scrim (this entry). Use when: the overlay must be answered first and the page behind is noise. Variant B: blur the page lightly (about 8 to 12px) with little or no dimming. Use when: a lightweight overlay such as a command palette or quick switcher, where the page behind should stay recognisable. Keep the blur functional and light enough to read the page through; frosted glass on panels that block nothing is decoration. Both kept on purpose.
 
 Code (JS):
 
@@ -659,12 +705,19 @@ const onboardingFlow = [
 
 Placeholder copy is the first onboarding moment: “Search” tells someone nothing, “Search by name, SKU, or brand” tells them everything they can look for. An empty field isn’t actually empty: load recent searches the moment the bar gets focus so one tap refills it. Rank autocomplete by clicks rather than alphabet and tag each suggestion with a category badge, keep the whole flow keyboard-driven, and treat a zero-results screen as a recovery moment (popular searches, category jumps) rather than a dead end.
 
+**Search first on lookup pages.** On a list page people open to find one record (a customer, an order, an invoice), search is the primary action: the widest, most prominent control at the top, ahead of filters and ahead of Create. Keep autocomplete to a few strong suggestions, about five, rather than ten; past that, people start reading instead of picking.
+
+**Search on a phone.** Tapping the search bar opens a full-screen sheet with the field focused, the keyboard up, recent searches and suggested options listed underneath, and a clear way back. An inline dropdown squeezed between the keyboard and the top of the screen leaves room for two suggestions at most. On the results screen, the main view switch (map and list, for example) floats as one pill near the bottom, inside thumb reach and above the safe area, never as tabs at the top.
+
 Do:
 - Recent searches surfaced the moment the bar gets focus
 - Zero-result screens offer a real recovery path
+- Search as the most prominent control on a page people open to find one record
+- On a phone, a full-screen focused search sheet with recent searches, and a floating view switch in the thumb zone
 
 Avoid:
 - A bare “No matches” dead end
+- Ten autocomplete suggestions where five strong ones would do
 
 Code (JS):
 
@@ -695,6 +748,7 @@ Stars should fill ahead of the cursor on hover so someone sees the value they’
 Do:
 - Fractional fill for real averages (4.4 → 5th star at 44%)
 - Preview snaps back to saved value on pointer-leave
+- Optionally, one continuous indicator (a ring filled to 4.4 of 5) beside the stars in a rating summary
 
 Avoid:
 - Rounding a 4.4 average up to a full 5 stars
@@ -721,9 +775,14 @@ star.addEventListener('pointerenter', (i) => previewFill(i));
 
 Swipe actions are invisible UI, and without a discovery hint, most people never find them at all. Destructive swipes need real friction: an instant full-swipe delete is a data-loss bug waiting to happen, so reveal the action button on a partial swipe and require a tap (or a full swipe plus an undo toast) to actually commit. Colour-code consistently by consequence across every list in the app, and never make swipe the only path; a long-press menu or a detail-view button needs to reach the same actions.
 
+**Feel, direction and discovery.** Past the reveal point, add rubber-band resistance so the row moves less than the finger, and when it crosses the commit line give a small pop (the action icon scales up) plus one haptic tick, so the person knows releasing now commits. Map direction to consequence the same way in every list: one direction for safe actions (right to archive or mark read), the other for destructive ones (left to delete). Teach the hidden gesture once: on the first visit, peek the first row open by about 60px and let it settle back, then never again.
+
 Do:
 - Reveal on partial swipe, require a tap or undo to commit
 - Always ship a non-swipe fallback path
+- Rubber-band resistance, then a pop plus one haptic tick at the commit line
+- One direction for safe actions and the other for destructive ones, in every list
+- A one-time peek of the first row to teach the gesture
 
 Avoid:
 - An instant full-swipe delete with no undo
@@ -752,14 +811,19 @@ A 300ms delay before a hover tooltip appears stops it firing on every accidental
 
 Show the same content on keyboard focus, not only on hover, so someone tabbing through the page gets it too. Make it add something the label does not already say: a tooltip reading Delete on a button labelled Delete is noise, while Deletes the file for everyone in the workspace earns its place.
 
+Where an action has a keyboard shortcut, repeat it in the tooltip, right-aligned in a muted key cap (Bold, Cmd+B), so every hover teaches the faster path (Keyboard Shortcuts).
+
 Do:
 - ~300ms delay before showing, arrow-anchored
 - Dismissible via mouse-leave, Esc, and outside tap
 - The same tooltip on keyboard focus as on hover
+- The action’s shortcut repeated in its tooltip
 
 Avoid:
 - Documentation-length copy crammed into one tooltip
 - A tooltip that repeats the control’s own label
+
+Variant: **Hover delay, two variants.** Variant A: about 300ms (this entry). Use when: icon-only controls, where the tooltip is the label people need. Variant B: about 500ms. Use when: labelled controls where the tooltip only adds a shortcut or a detail, so it stays out of the way of people who already know it. Both kept on purpose.
 
 Code (JS):
 
@@ -783,14 +847,21 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hide(toolt
 
 A chat thread reads as considered or as generated based on six small decisions, not one big one. **Grouping**: consecutive messages from the same sender share one avatar/name, with tight spacing inside the group (~4px) and a visibly looser gap between different senders (~16px), so the eye reads "who's talking" without re-parsing every line. **Timestamps**: a relative date divider by default ("Today", "2 min"), with the precise timestamp only on hover, not printed on every single bubble. **Optimistic send**: the bubble you just sent renders instantly, before the server confirms it, so sending never feels like it's waiting on the network. **Scroll anchoring**: a new incoming message never yanks someone who's scrolled up back to the bottom; show a "new messages" pill instead, and only auto-scroll if they were already at the bottom when it arrived. **Typing indicator**: lives inline in the message flow itself, in the sender's own row, not as a separate fixed status line disconnected from where the message will actually appear. **Composer**: the input grows with content up to a cap (around 5 lines), then switches to its own internal scroll rather than pushing the whole thread up indefinitely.
 
+**The composer under load.** Anchored at the bottom, the composer grows upward as lines are added, and its toolbar (attach, options, send) stays fixed in place, so the send button never moves under a thumb. Files dropped or pasted onto the composer upload inline as chips inside the input, each with its own progress and a remove control, never in a separate modal. While a response is generating, send becomes stop in exactly the same spot, and turns back into send when the response ends or is stopped.
+
+**Honest indicators.** Show a typing or working indicator only while work is really happening. No padded delay to seem thoughtful, no indicator that starts and stops over and over with nothing sent, and remove it promptly when nothing is coming.
+
 Do:
 - Group consecutive same-sender messages under one avatar
 - "New messages" pill instead of yanking scroll position
 - Composer grows to a capped height, then scrolls internally
+- Composer grows upward with a fixed toolbar; attachments upload as chips inside it
+- Send swaps to stop in the same spot while a response generates
 
 Avoid:
 - A typing indicator floating outside the message flow it refers to
 - A timestamp printed on every bubble instead of on hover
+- An artificial typing delay, or an indicator that keeps restarting with nothing sent
 
 Note: **Back end not included.** These six decisions cover front-end behaviour only. Presence, typing indicators and read receipts also need real back-end work (a live connection and presence tracking), and how typing and read receipts behave with several people in one thread is a separate decision.
 
@@ -814,6 +885,8 @@ else showNewMessagesPill(); // otherwise let them stay where they are
 Every interactive element earns its keep by answering two questions instantly: did my click register, and was this ever clickable in the first place. Feedback within 100 milliseconds is the real deadline; past it, someone starts wondering whether the click landed at all, so a control either changes state immediately or shows a loading indicator the moment it's pressed, never neither. Affordance has to be just as unambiguous: if someone has to wonder whether something is clickable, the design already failed, so clickable things look clickable and decorative things don't. One control needs all six states actually designed, not improvised. Default sits at rest. Hover adds a cursor change plus a visual lift. Focus gets a distinct 2px ring offset 2px from the element, visible against both light and dark backgrounds, never a removed outline with nothing put in its place. Active shows a brief scale down or colour darken on press. Disabled takes a muted look derived from the project tokens (a reduced-opacity or mixed colour token, never a one-off value) with a not-allowed cursor. Loading swaps in an inline spinner and switches the label to its verb form, such as “Saving…”. A button reads as a button through fill or border and padding, never colour alone, and its label names the action rather than saying “Click here”. A link stays underlined or holds a clearly distinct colour with a pointer cursor on hover; never style plain, non-clickable text the same way, and never make a whole row clickable while also nesting a real button inside it, since the two targets fight each other for the same click. The same states need to reach a screen reader, not just a sighted eye: `aria-pressed` for a toggle's own state, `aria-busy` while something loads, `aria-disabled` always paired with the visual treatment rather than standing in for it, `aria-live="polite"` on a status message that updates without a reload, and the real semantic element for the job: a button is an actual `<button>`, a link is an actual `<a>`.
 
 **Hover in the project’s own language.** A hover changes one visible property, and uses the separation language the project already chose: a colour shift in a flat design, a border change in a bordered one, a raised elevation in one built on shadows. On long-form content (articles, docs and help pages), visited links look different from unvisited ones, so readers can see where they have already been.
+
+**Ripple, optional.** A press can also be confirmed by a ripple that starts at the pointer position and spreads across the control in about 300 to 400ms. It is optional, it belongs to the active state rather than adding a second hover effect, and it stays clipped inside the control’s own shape.
 
 Do:
 - All six states (default, hover, focus, active, disabled, loading) actually designed, not improvised
@@ -1062,12 +1135,15 @@ A screen built straight from the data model comes out shaped like the database: 
 
 **Unknown data, honestly marked.** When the shape of an API is unknown, write the type you are assuming and say plainly that it is assumed. Never add mock routes or hardcoded sample rows to make a real screen look alive; a screen that looks finished but runs on fake data hides the work still to do.
 
+**A dashboard brief.** For a dashboard, the primary action becomes the two or three questions the person arrives with at the moment they open it: am I on track this month, what needs me today, what changed since yesterday. Give each panel exactly one of those questions to answer, place the panels in the order the questions get asked, and cut any panel that answers a question nobody brings.
+
 Do:
 - Five answers (who, primary, secondary, context, worst case) written down before any markup
 - The worst case sets the friction: irreversible means a confirmation plus undo
 - Realistic placeholder content in every mockup
 - The request and project read first; questions only when the request is open, two of who, primary action and worst case are unknown, and someone can answer
 - An assumed API type written down and labelled as assumed
+- On a dashboard, each panel answers one of the two or three questions the person opens it with, in that order
 
 Avoid:
 - A table of every database field because the data model has them
@@ -1189,4 +1265,183 @@ Code (JSX):
 // Do: the reason itself
 // Delete lives in the overflow menu: a visible button on every row gets hit by mistake
 <RowMenu items={[{ label: 'Delete invoice', onSelect: confirmDelete }]} />
+```
+
+## Permission Requests
+
+Never ask for device permissions at first launch. A wall of camera, location, contacts and notification prompts before the person has done anything gets refused out of reflex, and the system dialog is often one shot: once refused, the app cannot show it again and the only way back is the device Settings. Ask for one permission at a time, right after the person chooses the feature that needs it: the camera when they tap Scan receipt, location when they tap Find nearby, notifications after they book something worth a reminder.
+
+**Explain first, in the app.** Before the system dialog, show a short in-app card that says what the person gets, in their terms: “Scan receipts straight into your expenses”, not “This app needs camera access”. The card has two buttons, Continue (which opens the system dialog) and Not now. A Not now on the in-app card costs nothing, because the card can be shown again the next time they reach for the feature; a refusal in the system dialog may be permanent.
+
+**Denied is a state, not a dead end.** When permission is refused, keep the feature visible where it was. Say in one line why it is not working and link straight to the app’s page in system Settings (Turn on camera in Settings). Never hide the feature, and never let it fail silently with a blank camera view or an empty map.
+
+Do:
+- One permission at a time, asked right after the person picks the feature that needs it
+- An in-app card naming the concrete benefit before the system dialog
+- A refused feature stays visible, with one line of reason and a direct Settings link
+
+Avoid:
+- A run of permission prompts at first launch
+- Generic copy such as “This app needs access to your camera”
+- Hiding a feature, or letting it fail silently, after a refusal
+
+Code (JS):
+
+```js
+async function startScan() {
+  const state = await permissions.query({ name: 'camera' });
+  if (state === 'granted') return openScanner();
+  if (state === 'denied') return showDenied('Turn on camera in Settings to scan receipts');
+  // not asked yet: explain in the app first, the system dialog may be one shot
+  const ok = await showPrePermissionCard({
+    title: 'Scan receipts straight into your expenses',
+    confirm: 'Continue', cancel: 'Not now'
+  });
+  if (!ok) return; // Not now: free to ask again next time
+  if (await requestSystemCamera()) openScanner();
+  else showDenied('Turn on camera in Settings to scan receipts');
+}
+```
+
+## Tree View
+
+A file tree is read by its indentation, so the indent has to be exact. Indent every level by the same fixed step (16px is a good default) and never by the width of an icon or a label, and draw a thin vertical guide line down from each open folder to its last child, so in a deep tree the eye can follow which folder a row belongs to without counting steps.
+
+**Show expansion with the chevron alone.** The chevron to the left of the folder rotates 90 degrees when the folder opens (about 150ms), and the folder icon itself stays the same. Swapping a closed folder icon for an open one as well gives the eye two signals that change at once and a row that jumps width.
+
+**A full keyboard model.** The tree is one tab stop. Up and Down move between visible rows. Right opens a closed folder, and on an open folder moves to its first child. Left closes an open folder, and on a closed folder or a file moves to its parent. Home and End jump to the first and last visible row, Enter opens the selected item, and typing a letter jumps to the next row starting with it. Use the tree roles (`role="tree"`, `treeitem`, `aria-expanded`) so a screen reader announces the level and state. Dragging onto a closed folder opens it after a short hover (Drag and Drop).
+
+Do:
+- A fixed indent per level, with a guide line from each open folder
+- The chevron rotates; the folder icon stays the same
+- Arrow keys: Right opens, Left closes, Up and Down move between rows
+
+Avoid:
+- Indentation that drifts with icon or label widths
+- Swapping the folder icon and rotating the chevron at the same time
+- A tree that only works with a mouse
+
+Code (CSS):
+
+```css
+.tree-row { padding-left: calc(var(--level) * 16px); }
+.tree-group { position: relative; }
+.tree-group::before {           /* guide line from the open folder */
+  content: ''; position: absolute; top: 0; bottom: 0;
+  left: calc(var(--level) * 16px + 7px);
+  border-left: 1px solid var(--border);
+}
+.tree-chevron { transition: transform 150ms ease-out; }
+[aria-expanded="true"] > .tree-chevron { transform: rotate(90deg); }
+```
+
+## Keyboard Shortcuts
+
+A shortcut nobody sees never gets learned. Show each action’s shortcut right-aligned on its menu row, in a muted key cap, so every trip through a menu teaches it, and repeat the same shortcut in the action’s tooltip (Tooltip Design). The command palette lists them the same way (Command Palette).
+
+**Teach at the right moment, once.** After someone has done the same action by mouse several times (three is a fair default), show one short, dismissible tip with its shortcut: “Tip: Cmd+D duplicates the selected row”. Never on the first use, when they are still finding the feature, and never the same tip twice; a tip that keeps returning becomes noise people close without reading.
+
+**One action, one binding.** Give each action exactly one shortcut and keep it the same on every screen: if Cmd+D duplicates a row in one list, it duplicates in every list, and it never means delete somewhere else. Show the platform’s own modifier (Cmd on a Mac, Ctrl on Windows), and do not take over shortcuts the browser or system already owns.
+
+Do:
+- Shortcuts right-aligned on every menu row, and repeated in tooltips
+- One short tip after about three mouse uses of the same action, shown once
+- One binding per action, the same everywhere in the product
+
+Avoid:
+- A shortcut tip on the first use, or the same tip shown again
+- One key combination doing different things on different screens
+- Overriding browser or system shortcuts
+
+Code (JS):
+
+```js
+// count mouse uses; teach the shortcut once, on the third
+function trackMouseUse(action) {
+  const key = 'uses:' + action.id;
+  const uses = Number(store.get(key) || 0) + 1;
+  store.set(key, uses);
+  if (uses === 3 && !store.get('tipShown:' + action.id)) {
+    showTip('Tip: ' + action.shortcut + ' ' + action.verb);
+    store.set('tipShown:' + action.id, true);
+  }
+}
+```
+
+## Pull to Refresh
+
+A pull only refreshes once it passes a clear threshold, about 64 to 80px of content movement. Release before that and the list snaps back with no reload, so a slightly too long scroll to the top never triggers a network call by accident.
+
+**Resistance, not a wall.** While pulling, the content moves less than the finger (about half the distance, tapering further the longer the pull), so the pull feels like stretching something rather than dragging the page. On release it settles back with a slight overshoot and an ease-out, never a hard stop.
+
+**Signal the threshold before release.** The stretch indicator fills as the pull grows, and at the threshold it becomes the loading spinner, with one short haptic tick, so the person knows letting go now will refresh. One tick only: no buzz on every pixel of the pull.
+
+**Refresh without blocking.** The list stays scrollable and tappable while the refresh runs. New items are inserted in place at the top, and if the person has scrolled down in the meantime their position is held (a “3 new” pill can take them up), never a jump that throws away where they were reading.
+
+Do:
+- A threshold of about 64 to 80px; an earlier release snaps back with no reload
+- Content moving about half the finger distance, settling with a slight overshoot
+- The indicator turns into the spinner at the threshold, with one haptic tick
+- New items inserted in place while the list stays usable
+
+Avoid:
+- A refresh that fires on any small pull
+- Blocking the list with an overlay until the refresh finishes
+- Jumping the reader’s position when new items arrive
+
+Code (JS):
+
+```js
+const THRESHOLD = 72; // px of content movement
+let armed = false;
+function onPull(fingerDy) {
+  const dy = THRESHOLD * 1.6 * (1 - Math.exp(-fingerDy / (THRESHOLD * 3))); // rubber band
+  list.style.transform = `translateY(${dy}px)`;
+  indicator.style.setProperty('--fill', Math.min(dy / THRESHOLD, 1));
+  if (dy >= THRESHOLD && !armed) { armed = true; indicator.classList.add('spinning'); navigator.vibrate?.(10); }
+  if (dy < THRESHOLD && armed) { armed = false; indicator.classList.remove('spinning'); }
+}
+function onRelease() {
+  settleBack(); // ease-out with a slight overshoot
+  if (armed) refresh().then(items => insertAtTop(items, { keepScrollPosition: true }));
+}
+```
+
+## CSS Before JavaScript
+
+Several interactions that used to need a script are now one line of CSS, and the CSS version is faster, works before the script loads, and keeps the browser’s own accessibility behaviour. Reach for these four first.
+
+**Smooth scrolling.** `scroll-behavior: smooth` on the scrolling element makes anchor links and focus jumps glide without a scroll library. Turn it off under `prefers-reduced-motion: reduce`, where a long animated scroll is exactly what the person asked not to get.
+
+**Truncation.** Cut long text with `text-overflow: ellipsis` for a single line, or `line-clamp` for two or three lines, instead of trimming strings in code. The full text stays in the page, so search, copy and screen readers still get all of it, and the cut point follows the real width at every screen size. Keep the full text reachable: a tooltip, an expand control or the detail page.
+
+**Carousels and paged scrolling.** `scroll-snap-type` on the container and `scroll-snap-align` on each item give a carousel that settles cleanly on each card, with native touch momentum and keyboard scrolling, and no carousel script.
+
+**Native form controls.** `accent-color` themes checkboxes, radios, range sliders and progress bars in the project’s accent, so they match the design without being rebuilt from divs. A rebuilt control has to recreate focus, keyboard and screen reader behaviour by hand, and usually misses some of it.
+
+Do:
+- Smooth scrolling in CSS, switched off under reduced motion
+- Ellipsis or line clamp for long text, with the full text still reachable
+- Scroll snap for carousels and paged lists
+- `accent-color` on native checkboxes, radios and sliders
+
+Avoid:
+- A scroll library for smooth anchor scrolling
+- Cutting strings in code to fit a width
+- Rebuilding a checkbox from divs only to change its colour
+
+Code (CSS):
+
+```css
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+.one-line { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.three-lines { display: -webkit-box; -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; }
+
+.carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; }
+.carousel > * { flex: 0 0 80%; scroll-snap-align: start; }
+
+:root { accent-color: var(--accent); }
 ```

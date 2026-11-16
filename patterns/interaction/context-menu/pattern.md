@@ -6,9 +6,12 @@ order: 7
 ---
 ## Rule
 <p>A context menu measures its available space before it opens: no room below, it flips up; no room to the right, it mirrors left; it&rsquo;s always anchored to the cursor and always kept inside the viewport. Group actions by intent with dividers rather than a flat list of twelve items, and isolate anything destructive at the bottom in red. Submenus need a &ldquo;safe triangle&rdquo; from the cursor to the submenu so moving diagonally toward it doesn&rsquo;t close it the instant the cursor leaves the parent row.</p>
+<p><strong>Keyboard and touch.</strong> Arrow keys move through the items, Right opens a submenu and Left closes it, typing a letter jumps to the next item starting with that letter, and Enter runs the item. Escape closes one submenu level at a time before it closes the menu. On touch, a long press (about 500ms) opens the same actions as a bottom sheet, in the same order and grouping.</p>
 ## Do
 - Group with dividers, isolate destructive in red at the bottom
 - Safe-triangle hover intent toward submenus
+- Arrows, first-letter type-ahead, and Escape stepping back one level at a time
+- A long press on touch opens the same actions in a bottom sheet
 ## Avoid
 - Closing a submenu the instant the cursor drifts off the row
 ## Extra: variant-note

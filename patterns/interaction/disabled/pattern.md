@@ -13,6 +13,8 @@ order: 10
 - Leaving users to guess why submit won&rsquo;t fire
 ## Extra: variant-note
 <div class="variant-note"><b>Disabled buttons, two variants.</b> Variant A: keep the button live and validate on click, moving focus to the first blocking field (this entry). Use when: the block is something the person can fix in the form in front of them. Variant B: a real disabled state, muted through the project tokens, with a not-allowed cursor and aria-disabled (which, unlike the disabled attribute, keeps the button focusable), always with the reason written beside it. Use when: the block is a known state the form cannot fix, such as a plan limit or a missing permission. The full state list is in Interactive State and Affordance (entry 24). Both are kept on purpose.</div>
+## Extra: variant-note
+<div class="variant-note"><b>Single-field composers, a third variant.</b> Variant C: in a single-field message composer (a chat or prompt input), send stays inactive, muted but visible in place, until the field has content, and turns active on the first character. Use when: the only thing blocking send is an empty message, which explains itself, and validating an empty send on click would only produce an error for nothing. Variants A and B still hold for forms. All three are kept on purpose.</div>
 ## Code: JS
 <pre><code>submitBtn.addEventListener(<span class="str">'click'</span>, () => {
   <span class="kw">const</span> invalid = [...form.querySelectorAll(<span class="str">':invalid'</span>)];

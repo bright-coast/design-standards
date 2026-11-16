@@ -6,9 +6,11 @@ order: 5
 ---
 ## Rule
 <p>A colour picker is a decision that cascades through the rest of the UI, not a gradient with a slider. OKLCH alongside hex matters because hex is machine-friendly but not human-predictable. OKLCH&rsquo;s lightness/chroma/hue lets someone change one number and get a predictable lighter or darker shade. A live contrast-ratio readout at pick time (not buried in a later review step) kills a failing colour pair before it ever ships, and alpha needs previewing over a checkerboard on both light and dark, since transparency lies against a plain white canvas.</p>
+<p>Let the picker generate a ten-step tonal scale (50 to 900) from the chosen hue, stepping lightness in OKLCH while holding the hue steady, so one pick becomes a usable set of tints and shades instead of a single swatch.</p>
 ## Do
 - Live WCAG contrast badge while picking
 - Recent swatches + saved palettes
+- A ten-step tint and shade scale generated from the chosen hue
 ## Avoid
 - Previewing alpha only against white
 ## Code: JS

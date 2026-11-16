@@ -6,8 +6,11 @@ order: 3
 ---
 ## Rule
 <p>The shape of an easing curve is what the eye actually perceives, even holding distance and total duration constant. Linear motion at constant speed reads as robotic because almost nothing in the physical world moves that way. Ease-out (fast start, gentle stop) is the right default for anything entering the screen, since it mimics how a real object decelerates as it arrives. A small spring overshoot (slightly past the resting position before settling back) adds a satisfying, tactile confirmation feel to success states and toggles. Linear easing is really only appropriate for something that has no start or stop of its own, like a continuously looping spinner.</p>
+<p><strong>Exits ease in.</strong> Something leaving the screen uses ease-in (gentle start, fast finish), the mirror of an entrance: it accelerates away the way a real object does when it leaves, and it is out of sight before the eye settles on it. <strong>Anticipation, kept small.</strong> A tiny wind-up in the opposite direction before a move or a bounce makes motion feel physical, which suits illustration and marketing motion. In product UI keep it to a few pixels or a scale of about 0.97, and only on a deliberate, occasional action such as a launch or a send, never on every button press or menu.</p>
 ## Do
 - Ease-out as the default for anything entering
+- Ease-in for anything leaving
+- Anticipation only as a few pixels of wind-up, on rare deliberate actions
 ## Avoid
 - Linear easing on UI that starts and stops
 - A spring or bounce on a dropdown or menu (fun once, tiring by the tenth time)

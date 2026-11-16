@@ -24,6 +24,8 @@ Avoid:
 
 Variant: **Variants held here.** A: entrances land at 200 to 300ms with ease-out. Use when: an element is entering the screen. B: nothing in a dense productivity UI runs past about 150ms, and exits run around 150ms. Use when: the screen is a dense productivity UI, which is this entry’s own wording (Dropdown Design’s 150ms open is variant B). C: interface motion stays in a 150 to 250ms band with 250ms as the shared ceiling. Use when: you want one number for general interface motion. All three are kept on purpose.
 
+Variant: **Errors that must be noticed, an exception.** Default: no overshoot or bounce, and nothing past about 250ms in interface motion (this entry). Exception: an error or alert the person must not miss may use a short shake, three or four small horizontal moves of 4 to 6px over 300 to 400ms, played once when the error appears. Use when: a submit fails or a code is wrong and the eye is elsewhere on the screen. Never loop it, never go past about 400ms (a 500 to 800ms bounce reads as the interface breaking, not as a message), never use it on success or routine states, and under reduced motion drop it and rely on the colour, icon and message. Both are kept on purpose.
+
 Code (CSS):
 
 ```css
@@ -79,8 +81,12 @@ Code (CSS):
 
 The shape of an easing curve is what the eye actually perceives, even holding distance and total duration constant. Linear motion at constant speed reads as robotic because almost nothing in the physical world moves that way. Ease-out (fast start, gentle stop) is the right default for anything entering the screen, since it mimics how a real object decelerates as it arrives. A small spring overshoot (slightly past the resting position before settling back) adds a satisfying, tactile confirmation feel to success states and toggles. Linear easing is really only appropriate for something that has no start or stop of its own, like a continuously looping spinner.
 
+**Exits ease in.** Something leaving the screen uses ease-in (gentle start, fast finish), the mirror of an entrance: it accelerates away the way a real object does when it leaves, and it is out of sight before the eye settles on it. **Anticipation, kept small.** A tiny wind-up in the opposite direction before a move or a bounce makes motion feel physical, which suits illustration and marketing motion. In product UI keep it to a few pixels or a scale of about 0.97, and only on a deliberate, occasional action such as a launch or a send, never on every button press or menu.
+
 Do:
 - Ease-out as the default for anything entering
+- Ease-in for anything leaving
+- Anticipation only as a few pixels of wind-up, on rare deliberate actions
 
 Avoid:
 - Linear easing on UI that starts and stops

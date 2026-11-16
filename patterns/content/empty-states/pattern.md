@@ -6,11 +6,15 @@ order: 1
 ---
 ## Rule
 <p>A completely blank screen reads as broken to whoever lands on it. A small illustration or icon plus a short line of copy signals &ldquo;this is intentionally empty,&rdquo; not &ldquo;something failed to load.&rdquo; Give the screen exactly one clear primary CTA that names the actual next step (&ldquo;Create your first project&rdquo;), not a vague, generic action. Any empty state worth shipping answers three questions at once: why is this empty, what should the person do about it, and does the copy teach them something about the product rather than just stating a fact. Different causes need different copy, not one shared message. First-time use gets an onboarding CTA (&ldquo;Create your first project&rdquo;). A filtered or searched view that came back empty gets a clear-filter affordance (&ldquo;No invoices match &lsquo;overdue&rsquo;, clear filter&rdquo;). Missing permissions gets an explanation plus a real path forward (&ldquo;You don't have access, ask your admin to share this&rdquo;), not a dead end. Something genuinely empty by design gets a plain, calm confirmation (&ldquo;All caught up, no pending reviews&rdquo;) rather than treating an intentional zero like a problem. A bare &ldquo;Try refreshing&rdquo; as the only available action is rarely the real fix and reads as a shrug.</p>
+<p><strong>A blank document is an empty state too.</strong> When someone creates a new document, put the cursor in its first input (the title) so they can type straight away; do this only on create, never on every page load, where stealing focus would jump a keyboard or screen reader user. One short placeholder line can teach the main shortcut instead of a tutorial (Type / for commands). Starting templates can sit below it as a short list of options, and they disappear on the first keystroke, so they help the person who wants them and never stand in the way of the person who already knows what to write.</p>
 ## Do
 - One clear primary CTA, the actual next step
 - Copy answers why it's empty and what to do, distinct per cause (first-run, filtered, permissions, by design)
+- A new document opens with focus in its first field, on create only
+- One placeholder hint that teaches the main shortcut; templates that vanish on the first keystroke
 ## Avoid
 - A generic &ldquo;Try refreshing&rdquo; as the only action
+- A tutorial overlay on a blank editor where one hint line would do
 ## Extra: variant-note
 <div class="variant-note"><b>Illustration, two variants.</b> Variant A: a small illustration or icon plus a short line of copy (this entry). Use when: the design system has illustrations or icons ready for empty states. Variant B: text only, with the copy doing all the teaching. Use when: there is no illustration set yet, since a borrowed or generic picture is worse than none. Both are kept on purpose.</div>
 ## Code: JS

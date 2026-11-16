@@ -7,8 +7,10 @@ order: 16
 ## Rule
 <p>Five quiet decisions make a payment form feel safe. <strong>The total stays in view:</strong> the order summary is sticky beside the form (the form moves, the summary does not), and the amount on the pay button matches the order total exactly (Pay $148.00 under Total due $148.00), so nothing changes at the last step; short trust lines sit under it (card details are encrypted, free returns within 30 days). <strong>The card is recognised on digit one:</strong> the brand badge appears from the first digit (4 is Visa, 5 is Mastercard, 3 is Amex); recognised first, judged later.</p>
 <p><strong>Red waits until the field is left:</strong> nothing turns red while the number is being typed; the field is checked on blur (Your card number is incomplete.), and once flagged it stays flagged on every keystroke until it is fixed. This is Form Validation Timing (Forms, entry 05) applied to the card field. <strong>The fastest way to pay sits on top:</strong> Apple Pay and Google Pay above every card field, one tap and no typing against six fields, with an Or pay with card divider below. <strong>Eyes go straight down:</strong> one column with every label above its field, so the eye path is one line and the label stays visible while typing; a two-column grid with placeholder-only labels makes the eye jump seven times.</p>
+<p><strong>Moving money gets one review screen.</strong> Before a transfer or payment is confirmed, one screen repeats the four things that matter together: who receives it, the amount, the fee, and when it will arrive (To Acme Supplies, $2,400.00, fee $0.00, arrives tomorrow by 5pm). The confirm button repeats the amount. Nothing on that screen is new information; it is the last chance to catch a wrong recipient or a wrong figure.</p>
 ## Do
 - Pay button amount identical to the order total
+- A review screen with recipient, amount, fee and arrival time together before confirm
 - Card brand badge from the first digit
 - Wallets above every card field
 - One column, labels above fields

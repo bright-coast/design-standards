@@ -7,13 +7,17 @@ order: 22
 ## Rule
 <p>A 300ms delay before a hover tooltip appears stops it firing on every accidental cursor graze. Anchor it to its trigger with an arrow, since a floating label with no arrow above a row of icons leaves people guessing which element it describes. Flip to the opposite side near a viewport edge so it never clips off-screen, and make it dismissible from every direction: mouse-leave, Escape, blur, and an outside tap. Keep the copy tight: cap the width around 300px and hold it to one sentence.</p>
 <p>Show the same content on keyboard focus, not only on hover, so someone tabbing through the page gets it too. Make it add something the label does not already say: a tooltip reading Delete on a button labelled Delete is noise, while Deletes the file for everyone in the workspace earns its place.</p>
+<p>Where an action has a keyboard shortcut, repeat it in the tooltip, right-aligned in a muted key cap (Bold, Cmd+B), so every hover teaches the faster path (<a href="#lp-keyboard-shortcuts">Keyboard Shortcuts</a>).</p>
 ## Do
 - ~300ms delay before showing, arrow-anchored
 - Dismissible via mouse-leave, Esc, and outside tap
 - The same tooltip on keyboard focus as on hover
+- The action&rsquo;s shortcut repeated in its tooltip
 ## Avoid
 - Documentation-length copy crammed into one tooltip
 - A tooltip that repeats the control&rsquo;s own label
+## Extra: variant-note
+<div class="variant-note"><b>Hover delay, two variants.</b> Variant A: about 300ms (this entry). Use when: icon-only controls, where the tooltip is the label people need. Variant B: about 500ms. Use when: labelled controls where the tooltip only adds a shortcut or a detail, so it stays out of the way of people who already know it. Both kept on purpose.</div>
 ## Code: JS
 <pre><code><span class="kw">let</span> showTimer;
 trigger.addEventListener(<span class="str">'mouseenter'</span>, () => {

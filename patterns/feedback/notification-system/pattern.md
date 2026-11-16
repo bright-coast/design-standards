@@ -6,6 +6,7 @@ order: 4
 ---
 ## Rule
 <p>A notification system is really four distinct surfaces (toast, banner, modal, badge), and severity is what should pick which one fires, not habit or whichever component was easiest to reach for. Toasts auto-dismiss and carry undo for low-stakes, reversible events; modals are reserved for things that genuinely block progress. Low-priority toasts need to stack and breathe with a visible gap between them rather than overlapping, and routing everything to the loudest available surface trains people to ignore all of them equally.</p>
+<p><strong>Banners stay, modals never stack.</strong> A banner stays visible until the person dismisses it or the condition behind it is fixed (You are offline, Your card expires in 6 days); it never times out like a toast, because it describes something that is still true. Toasts may stack, up to three; modals never do. If a second blocking question comes up while a modal is open, finish or close the first one, or replace its content in place. A modal opened on top of another buries the first decision and confuses focus and Escape (<a href="#lp-modal-hierarchy">Modal Hierarchy</a>, Interaction entry 17).</p>
 <p><strong>Badges.</strong> A badge carries two different signals that need different treatment. A count is an action: it says how many, asks you to act now, and changes with each new item. A status dot is a condition: it says which state, asks for nothing, and reads green for online and red for act now. Never put both on one row, since a dot says something changed, a number says how much, and both together is noise. Cap the count so the width is bounded (one unread shows a single dot or number, 200 shows 99+, whereas an uncapped 661 grows the pill and reflows the nav), and pin the badge to the icon&rsquo;s top corner so the icon never moves whether it shows one digit or three.</p>
 <p>A badge clears the second the view is opened; one that lingers after you have looked trains people to ignore every badge. When the count climbs it ticks up and never resets to zero on screen, because that flash reads as a bug. And badge the decision, not everything: for example, badging Messages, Mentions, Product updates, Promotions and System makes the colour meaningless, while badging only Mentions keeps the signal.</p>
 ## Do
@@ -15,8 +16,10 @@ order: 4
 - One signal per row: a count or a status dot, never both
 - The badge clears the moment the view opens; the count ticks up and never blinks to zero
 - Only things that need a decision get a badge
+- A banner stays until it is dismissed or its condition is fixed
 ## Avoid
 - Routing everything to the loudest surface
+- A modal opened on top of another modal
 - Badging every category, until the colour means nothing
 - A badge that lingers after the user has looked
 ## Code: JS

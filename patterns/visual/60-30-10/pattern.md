@@ -16,6 +16,8 @@ order: 30
 - The light support grey used for body text
 ## Extra: variant-note
 <div class="variant-note"><b>Strict ratio versus a dark hero surface, two variants.</b> Variant A: strict 60-30-10, the accent only on actions and key elements. Use when: list, form and settings screens where the actions should be the only loud thing. Variant B: one dark hero surface well past 10% (for example a finance screen that puts the balance on a large black card, which strictly breaks the rule). Use when: one object is the subject of the screen, such as an account balance or a featured item, and everything else stays neutral. Both kept on purpose.</div>
+## Extra: variant-note
+<div class="variant-note"><b>What the 30% is, two variants.</b> Variant A: the 30% is a support grey for borders, icons and secondary shapes, and containers belong to the 60% neutral, as above. Use when: a neutral, mostly white product where the brand lives only in the accent. Variant B: the 30% is a lighter tone of the base hue, used as a surface layer on cards, navigation and containers (for example a pale blue-grey panel on a white page with a strong blue accent). Use when: the product should feel tinted by its brand throughout, and the tonal surface still keeps text on it at 4.5:1. Both kept on purpose.</div>
 ## Code: CSS
 <pre><code>:root {
   --base:    #F7F7F5; <span class="cm">/* 60%: backgrounds, surfaces, containers, large areas */</span>

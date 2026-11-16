@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.5.0 (16 Nov 2026)
+
+Fifteen new rules, about sixty existing rules made more specific, and skill files that split themselves when a category grows too large.
+
+- 15 new rules, bringing the library to 140.
+  - Visual: Avatar; CSS Layout Foundations; Optical Corrections; Glass Panels.
+  - Interaction: Permission Requests; Tree View; Keyboard Shortcuts; Pull to Refresh; CSS Before JavaScript.
+  - Forms: Billing Page. Content: First Run Without a Tour. Navigation: Breadcrumbs.
+  - Psychology: Decoy Effect; Engagement Traps; Dark Patterns. The last two are rules for what never to do to people, each with the honest alternative.
+- Enriched across every category, among them Charts That Lie, Icon Rules, Shadow Elevation, Color Accessibility, Dark Mode, Gradients, Pricing Table, Toast Notifications, Tabs System, Focus States, Loading States, Error States, Date Picker, Command Palette, Chat UI, Swipe Actions, Bottom Sheets, Live Cursors and Fitts.
+- New "use when" variants where two good approaches disagree: alpha or solid greys in dark mode, red or a domain colour for alerts, the 30 in 60-30-10, a 4px or 8px spacing unit, tooltip delay, a send button that waits for text, a native or custom date range picker, validating on blur or while typing, and a short shake for errors.
+- A category reference that grows past the size limit is now split into parts automatically, each listing which rules it holds.
+
 ## 1.4.0 (16 Nov 2026)
 
 Two new rules, sharper reviews and audits, and a skill that knows how to work on each kind of request.

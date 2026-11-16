@@ -11,7 +11,7 @@ order: 9
 ## Avoid
 - Applying it so rigidly it fights real content
 ## Extra: caveat-box
-<div class="caveat-box"><b>Pick one ratio.</b> Typography as a System steps its type sizes by 1.25 (the major third) rather than 1.618. From a 16px base, 1.25 gives roughly 16, 20 and 25px in two steps, while 1.618 gives roughly 16, 26 and 42px. Pick one ratio per product and stay on it.</div>
+<div class="caveat-box"><b>Pick one ratio.</b> Typography as a System steps its type sizes by 1.25 (the major third) rather than 1.618. From a 16px base, 1.25 gives roughly 16, 20 and 25px in two steps, while 1.618 gives roughly 16, 26 and 42px. Pick one ratio per product and stay on it. 1.618 is too steep for dense product UI: its steps run about 16, 26, 42 and 68px, which suits a marketing page with a few big headings but leaves no usable sizes between body and heading in a dashboard or form. For product UI, a ratio of 1.2 to 1.25 fits (see Typography as a System).</div>
 ## Code: JS
 <pre><code><span class="kw">const</span> PHI = <span class="num">1.618</span>;
 <span class="kw">function</span> <span class="fn">typeScale</span>(base) {

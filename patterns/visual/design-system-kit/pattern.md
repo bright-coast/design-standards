@@ -10,6 +10,8 @@ order: 6
 - Numbered colour scale + 4px spacing scale
 ## Avoid
 - Hardcoded hex and eyeballed gaps
+## Extra: variant-note
+<div class="variant-note"><b>8px unit versus 4px steps, two variants.</b> Variant A: a 4px scale (4, 8, 12, 16, 24), as above. Use when: dense product UI such as tables, forms and toolbars, where 12px and other in-between steps are needed. Variant B: one 8px unit and only its multiples (8, 16, 24, 32, 48). Use when: marketing pages and roomier layouts, where fewer, bigger steps keep the rhythm obvious. Either way, 4px is reserved for small adjustments inside a component, never between sections. Both kept on purpose.</div>
 ## Code: CSS
 <pre><code>:root {
   --blue-50: #EFF2FB; --blue-500: #3B5BDB; --blue-900: #0F1B3E; <span class="cm">/* numbered scale, not one-off hex */</span>

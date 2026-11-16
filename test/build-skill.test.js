@@ -51,3 +51,25 @@ test('output is deterministic and LF only', () => {
   assert.deepStrictEqual(a, buildSkill(root));
   for (const t of Object.values(a)) assert.ok(!t.includes('\r'));
 });
+test('a category over the size limit is split into parts that together hold every pattern', () => {
+  const root = makeFixture();
+  const dir = path.join(root, 'patterns/forms');
+  const src = path.join(dir, 'inline-validation');
+  const filler = '<p>' + 'word '.repeat(4000) + '</p>';
+  for (let i = 1; i <= 8; i++) {
+    const to = path.join(dir, `filler-${i}`);
+    fs.cpSync(src, to, { recursive: true });
+    const f = path.join(to, 'pattern.md');
+    let t = fs.readFileSync(f, 'utf8').replace(/^id: .*$/m, `id: filler-${i}`).replace(/^title: .*$/m, `title: Filler ${i}`).replace(/^order: .*$/m, `order: ${50 + i}`);
+    t = t.replace('## Rule\n', '## Rule\n' + filler + '\n');
+    fs.writeFileSync(f, t);
+  }
+  const files = buildSkill(root);
+  const parts = Object.keys(files).filter((k) => /references\/forms(-\d+)?\.md$/.test(k));
+  assert.ok(parts.length >= 2, `expected parts, got ${parts}`);
+  for (const k of parts) assert.ok(Buffer.byteLength(files[k], 'utf8') <= MAX_REFERENCE_BYTES, k);
+  const titles = parts.flatMap((k) => [...files[k].matchAll(/^## (.+)$/gm)].map((m) => m[1]));
+  for (let i = 1; i <= 8; i++) assert.ok(titles.includes(`Filler ${i}`));
+  assert.ok(files['skills/design-standards/references/forms.md'].includes('In `references/forms-2.md`: '));
+  assert.ok(files['skills/design-standards/SKILL.md'].includes('`references/forms.md`, `references/forms-2.md`'));
+});

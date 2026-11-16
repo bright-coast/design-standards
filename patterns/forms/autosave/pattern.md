@@ -6,8 +6,10 @@ order: 1
 ---
 ## Rule
 <p>Firing a save on every keystroke floods the network with redundant requests, so debounce writes to one clean save after roughly a second of pause. Status needs to be an honest state machine: idle, saving, saved, error, never a lie like a permanent &ldquo;Saved&rdquo; label that stopped being true the moment the network dropped. Queue edits made offline and replay them oldest-first on reconnect, and guard unsaved work with <code class="tok">beforeunload</code> so a stray tab-close doesn&rsquo;t silently lose a paragraph.</p>
+<p>The full set of states is six, each with its own honest label: <strong>idle</strong> (nothing to save), <strong>unsaved</strong> while the person is typing and the debounce has not fired yet (Editing&hellip; or Unsaved changes), <strong>saving</strong>, <strong>saved</strong> (Saved 2 min ago), <strong>offline</strong> (Offline, changes kept on this device, with the edits queued locally), and <strong>error</strong> (Not saved, Retry). Offline is not an error: nothing is lost, and the label says so.</p>
 ## Do
 - Queue edits offline, replay oldest-first on reconnect
+- Separate unsaved and offline states, so the label is never wrong
 ## Avoid
 - Silent last-write-wins across two open tabs
 ## Code: JS
