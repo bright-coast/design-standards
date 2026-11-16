@@ -5,7 +5,7 @@
 
 The layer people notice consciously least and judge most: colour, depth, spacing, and the perceptual rules underneath them.
 
-32 patterns. Use when: colour, type, spacing, depth, icons and layout.
+33 patterns. Use when: colour, type, spacing, depth, icons and layout.
 
 ## Border Radius
 
@@ -184,11 +184,16 @@ Code (CSS):
 
 Name tokens by their role in the interface (`color-primary`), never by their literal value (`color-blue-500`). The moment brand blue becomes brand purple, a value-named token is now lying about what colour it holds. Layer tokens three deep: primitive (the raw scale), semantic (the role, referencing a primitive), and component (referencing the semantic layer). One primitive edit then cascades everywhere it’s referenced, and swapping to dark mode becomes swapping which primitive a semantic token points to, not a rewrite of every component.
 
+**No token layer yet? Write the tokens first.** In a project with no tokens, write them before any markup, so the first screen already pulls from them. Hover, active and disabled states derive from existing tokens, through opacity or `color-mix()`, never from a new hex value and never from a fixed 50% opacity applied without reference to the tokens.
+
 Do:
 - One primitive edit cascades everywhere
+- Tokens written before markup when the project has none
+- Hover, active and disabled derived from tokens with opacity or `color-mix()`
 
 Avoid:
 - Baking literal values into token names
+- A new hex value, or a fixed 50% opacity, for a hover, active or disabled state
 
 Code (CSS):
 
@@ -301,10 +306,13 @@ A 12-column grid maps almost any layout because 12 divides cleanly into halves, 
 
 A layout also has to hold still when a scrollbar appears. When content grows past its container, a classic scrollbar takes a few pixels of width and the content nudges sideways. Put `scrollbar-gutter: stable` on the scrolling element and the scrollbar’s space is reserved from the start, so nothing shifts when it appears. For a centred layout use `scrollbar-gutter: stable both-edges`, which reserves the gutter on both sides so the content stays symmetrical. The caveat is that the gutter is a placeholder: with plain `stable` the left and right spacing can look unequal, which is what `both-edges` addresses. It matters mainly with classic, always-visible scrollbars (Windows and Linux); on macOS with overlay scrollbars there is nothing to reserve, and the reserved space is visible as an empty strip when there is no scrollbar. It is supported in current Chrome, Edge and Firefox, with Safari support arriving in recent versions, so check the current support table before relying on it in a Safari-first product.
 
+Write the one-column version first, then add columns at breakpoints. Starting from the single column keeps the narrow screen as the default, instead of a squeezed copy of the desktop.
+
 Do:
 - Collapse columns per breakpoint (12→6→4→1)
 - `scrollbar-gutter: stable` on any scrolling element, so nothing shifts when a scrollbar appears
 - `scrollbar-gutter: stable both-edges` when the layout is centred
+- The one-column version written first, with columns added at breakpoints
 
 Avoid:
 - Breaking the grid before establishing it
@@ -438,15 +446,19 @@ Code (CSS):
 
 Size, colour, contrast, whitespace, and font weight all stack together to create exactly one clear focal point on a given screen. Hierarchy is what tells someone’s eye where to land first without them having to think about it. Spend the single accent colour on the one truly key action per screen; a screen with five differently-coloured buttons has no hierarchy at all, just noise. Colour carries meaning, not rank; the ranking itself comes from size, weight, and position working together. Whitespace itself is an importance signal: the element with the most breathing room around it reads as the most important one on the page, independent of its own size. The numbers make the rule testable rather than a matter of taste. Adjacent heading levels need at least a 1.25× size jump between them, and a primary call-to-action needs to stand at least 1.5× the height of body text, or the size difference doesn't actually register. Weight carries its own tier: 600 to 700 for a primary heading, 500 to 600 for a secondary one, 400 for body copy, and 400 at 60 to 70% opacity for captions and meta text, never colour alone doing that job. Spacing scales with the hierarchy it separates: 48 to 64px between major sections, 24 to 32px between subsections, 8 to 16px within one group, and a heading always carries more space above it than below, which is what visually ties it to the content that follows rather than the content it just left. A genuine test for any screen: squint at it, or blur it, and check whether the one thing that matters most is still obviously the one thing that matters most.
 
+**Treat spacing as ratios.** The gap between sections is at least twice the gap between subsections, and the gap between subsections is at least twice the gap inside a group, with every value taken from the project’s own spacing scale; the pixel ranges above are one example of those ratios, not the rule itself. Text levels need a real difference too: two sizes only 1 or 2px apart read as the same level, so count them as one, and either merge them or pull them further apart.
+
 Do:
 - Spend one accent colour on the one key action
 - At least 1.25× between heading levels, 1.5× for a primary CTA over body text
 - More space above a heading than below it
+- Section gaps at least 2× subsection gaps, and subsection gaps at least 2× the gaps inside a group, all from the project scale
 
 Avoid:
 - Colouring every element differently
 - Three equal-weight primary buttons, or a sidebar with 15+ items at one visual level
 - All-caps or italic body text, or body text centred in anything wider than about 80 characters
+- Two text sizes 1 or 2px apart treated as two levels
 
 Code (CSS):
 
@@ -654,6 +666,8 @@ Typography is seven decisions made once, so every screen inherits them instead o
 
 **Ratio choice.** This entry steps by 1.25 (the classic major third). Golden Ratio (entry 09) steps by 1.618, the opposite choice. From a 16px base, 1.25 gives roughly 16, 20 and 25px in two steps, while 1.618 gives roughly 16, 26 and 42px. The two entries disagree, so pick one ratio per product and stay on it. The demo uses a billing card as its worked example.
 
+On a phone, body text and metadata (dates, captions, counts) stay at 14px or more. Smaller text saves a line and costs every reader a squint.
+
 Do:
 - One family; hierarchy from size, weight and colour
 - Five sizes at most, stepped by one ratio (1.25), never hand-picked pixels
@@ -662,10 +676,12 @@ Do:
 - Line height about 1.1 on headings and about 1.5 on body
 - Tracking about minus 2% above 24px, about plus 5% on small uppercase labels
 - Body measure of 45 to 75ch through `max-width`, and `tabular-nums` on prices, timers and table columns
+- Body and metadata text at 14px or more on a phone
 
 Avoid:
 - Ten hand-picked sizes for ten pieces of text
 - Bold on everything, or one line height everywhere
+- 12px metadata on a phone screen
 
 Note: **Defaults, not laws.** A 45 to 75 character measure, tabular figures, tighter tracking on large display type, looser tracking on small uppercase labels and a line height that falls as size rises are all standard typographic practice, and 1.25 is the classic major-third scale. “Five sizes max”, “two weights only” and “three text colours” are a tidy opinion: good defaults, but not laws, and some products legitimately use 500 as a third weight. The claim that one line height everywhere is an “AI tell” is plausible but unverified.
 
@@ -696,15 +712,19 @@ A grid or flex item defaults to `min-width: auto`, which means it will not shrin
 
 The fix has two halves that work together. Set `min-width: 0` on the grid or flex child, so it is allowed to shrink below its content, and keep `overflow-x: auto` on the `<pre>`, so the overflow scrolls inside the code block. For a grid you can also fix it at the track: `1fr` is shorthand for `minmax(auto, 1fr)`, so `minmax(0, 1fr)` removes the content-based minimum for that column. Treat it as a standing rule for any layout where a column can hold a code block, not a patch on the one instance that broke, because the same overflow returns on the next side-by-side pair. When the content is genuinely long, such as a full shell command, stacking the blocks top to bottom is safer than trusting side-by-side columns to shrink.
 
+**Start at one column, and protect every wide child.** A grid starts as a single column and adds tracks at breakpoints, so the narrowest screen is the default rather than an afterthought. The `min-width: 0` rule is not only for code blocks: any grid or flex child holding a wide table, a long URL, an email address or any other long string needs it, or that one child pushes the whole layout wider than the screen.
+
 Do:
 - `min-width: 0` on every grid or flex child that can hold a code block or long string
 - `overflow-x: auto` on the `<pre>`, so the overflow scrolls inside its own box
 - `minmax(0, 1fr)` in place of `1fr` when you control the grid tracks
 - Stack genuinely long commands top to bottom instead of side by side
+- Grids that start at one column and add tracks at breakpoints
 
 Avoid:
 - Trusting `1fr` columns to shrink around a long single-line command
 - Patching only the one column that broke, and leaving the same layout elsewhere
+- A wide table inside a grid or flex child left at the default `min-width: auto`
 
 Code (CSS):
 
@@ -836,17 +856,24 @@ A layout that fits the laptop breaks in five predictable spots on a 375px phone,
 
 **Touch targets:** thumbs miss 28px buttons, so touch screens get 44px targets, scoped to a coarse pointer so a mouse keeps the dense layout. **Bottom bar:** a fixed bottom bar slides under the home indicator and covers the last row, so pad it with the safe area inset and leave room under the content. Make it a habit to check every screen at 375px before calling a layout done.
 
+**Three more checks.** Any horizontal row of steps, chips, tabs or badges either wraps or scrolls inside its own region, and never pushes the page wider than the screen. Full-height layouts use `100dvh`, not `100vh` or `h-screen`, because a phone browser’s bar comes and goes and `100vh` leaves the bottom of the layout hidden behind it. A label and a value that do not fit on one line stack, with the label above the value, rather than squeezing both into a cramped row.
+
 Do:
 - Under 640px, table rows become cards
 - Big figures on one line, capped at about 30px
 - Inputs at 16px with the right keyboard
 - 44px targets on a coarse pointer only
 - Safe-area padding under a fixed bottom bar
+- Rows of steps, chips, tabs or badges that wrap or scroll in their own region
+- Full-height layouts at `100dvh`
+- A label above its value when the two do not fit on one line
 
 Avoid:
 - A six-column table squeezed into 375px
 - 14px inputs that make iOS zoom
 - A fixed bar covering the last row
+- `100vh` or `h-screen` on a full-height layout
+- A row of chips or tabs that makes the whole page scroll sideways
 
 Variant: **Table-to-card breakpoint, two values.** This entry uses a 640px media query; the phone-table rules under Data Table (Interaction, entry 08) use a container query at about 700px. Both are demo numbers. Use the media query when the table spans the page; use the container query when the same table appears in panels of different widths.
 
@@ -900,12 +927,16 @@ Every generator has a default look, and a screen left on it reads as machine-mad
 
 **Colour on text, and the danger rule.** Any text in a colour clears 4.5:1 on what sits behind it: a word or a count in the signature, and a status tag’s text on its own tint. A signature that only reaches 3:1 is a fill, a dot or a rule, never text. The signature must not read as danger: red and orange-red (hue under about 30 degrees) mark failures and destructive actions in a work tool, so a signature in that range fills no primary button, and any signature keeps its hue at least 40 degrees away from the danger colour. **The drift check.** Generators fall into two default looks. The first is the system sans stack, monospace for figures and small labels, a warm off-white page (around #f6f5f2), 4px radii and a 1px border around every group; three of those five on one screen means it was not decided. The second appears once fonts load: the same few safe families on every product (IBM Plex Sans with Plex Mono, condensed headings, a soft display serif on every title) and a burnt orange signature (around #c2410c) a few degrees from the danger red. They are good faces, but reached for every time they become the new default, so pick from the product’s world first and then check against this list. **Read the result back from the code, not from memory:** list the sizes and weights used, point at each font-loading line, count the monospace uses, count where the signature appears (more than the primary action plus one thing to find is decoration), list the distinct gap values, count the separation devices, and search for framework palette names and raw hex values, because each hit is a default that slipped through. On a phone, headings and large figures stay around 28 to 32px under 640px, so a figure and its sign stay on one line.
 
+**Name the default, then leave it.** Before building, write one line describing the screen any similar app would get (a white card grid, a blue primary button, a row of stat tiles across the top). Then change every part of the plan that matches that line. Compute every contrast ratio with a tool or the formula, never by eye, because a colour that looks readable often is not.
+
 Do:
 - One written decision per axis: type, colour, space, finish
 - Label text on the signature at 4.5:1, the signature itself at 3:1 against its surface
 - The screen still works with the accent stripped out
 - A loading line for every font family, with a fallback stack
 - Monospace only on codes, IDs and keys; figures in the text face with tabular-nums
+- One line describing the screen any similar app would get, and every matching part of the plan changed
+- Contrast ratios computed with a tool
 
 Avoid:
 - Borders, shadows and flat planes all separating surfaces on one screen
@@ -913,6 +944,7 @@ Avoid:
 - A style adopted because it was the default, with no stated reason
 - A red or orange-red signature filling the primary button
 - Three of the five default-look tells on one screen
+- Contrast judged by eye
 
 Code (TEXT):
 
@@ -934,17 +966,24 @@ Generated screens drift: screen one uses one blue and 24px card padding, screen 
 
 **A complete contract has seven sections with real values.** The product’s world in one line; typography, with how each family loads; colour tokens as hex values, with the accent and the destructive colour at least 40 degrees of hue apart; radii, with where each applies; spacing, its base unit and scale; states (hover, focus and disabled), each derived from the tokens; and status badges, each with its text colour, its tint and the contrast ratio written down (at least 4.5:1). No placeholder survives (no [choice], TODO or TBD), and “not measured” leaves a section incomplete. **Settle it before any screen, in one of three states.** Absent: write it, and the tokens in the code; when nobody can answer the questions (an unattended run, a handed-over task), decide from the product’s world and mark the header (assumed, confirm before shipping). Incomplete: add the missing sections and nothing else. Every value, family and colour already there stays exactly as written, because it is the brand, and a missing value is derived from an existing token (color-mix(in oklab, var(--danger) 12%, white)) rather than a new hex, with the contract line naming the token it comes from. Complete: follow it.
 
+**The design-system interview.** When the contract has to be written from scratch and someone can answer, ask at most five questions, all in one message: what the product is, who uses it and the mood it should carry, the character direction, the fixed constraints (brand colours, fonts, platform), and what someone should feel in the first three seconds. If an intent brief already exists, reuse its answers and never ask the same thing twice.
+
+**Make every later session read it.** After writing DESIGN.md, ask once whether to add a short pointer to it in the project’s CLAUDE.md or AGENTS.md, and with a yes, add it, so every later session reads the contract before building a screen.
+
 Do:
 - Existing tokens extracted into the contract before anything new is invented
 - A one-line reason beside every value
 - The contract updated in the same commit as the change it blesses
 - All seven sections filled, with each status contrast ratio written
+- At most five interview questions, in one message, reusing the intent brief
+- A short pointer to DESIGN.md in CLAUDE.md or AGENTS.md, after asking once
 
 Avoid:
 - A silently invented colour, size or radius outside the contract
 - A contract filled from a template with made-up values
 - A second screen built with no contract and no decision to skip one
 - Rewriting a value already in the contract while filling a gap
+- Re-asking a question the intent brief already answered
 
 Code (MARKDOWN):
 
@@ -962,4 +1001,30 @@ Character: warm and encouraging, progress never guilt
 - done: #166534 on #DCFCE7, 6.5:1
 - missed: #9A3412 on #FFEDD5, 6.4:1
 <!-- off-system: a red streak banner was requested; extension proposed: --warning #D97742 -->
+```
+
+## Stacked Priority Order
+
+When a layout collapses to one column, the order it stacks in is a decision, not whatever the source happens to say. The summary comes first, so the person knows where they stand. Whatever needs action comes right after it: the overdue invoice, the approval waiting, the form to finish. Supporting panels (history, tips, related items, charts) move below. On a desktop a side panel can sit beside the main content, but on a phone it never pushes the thing that needs doing below the fold.
+
+Write the DOM in priority order and let the wide layout place things with grid areas, rather than writing the DOM in desktop order and fixing the phone with the CSS `order` property. The keyboard and screen readers follow the DOM, not the visual order, so a CSS reorder leaves them reaching the supporting panel before the action (Focus States, Navigation entry 01).
+
+Do:
+- Summary first, then what needs action, then supporting panels
+- The DOM written in priority order, with grid areas placing it on wide screens
+
+Avoid:
+- A panel of tips stacked above the item that needs action
+- The CSS `order` property used to fix the phone stacking
+
+Code (CSS):
+
+```css
+/* DOM order is priority order: summary, action, support */
+.page { display: grid; gap: 16px; grid-template-areas: "summary" "action" "support"; }
+.summary { grid-area: summary; } .action { grid-area: action; } .support { grid-area: support; }
+@media (min-width: 900px) {
+  .page { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+          grid-template-areas: "summary support" "action support"; } /* support beside, never above */
+}
 ```

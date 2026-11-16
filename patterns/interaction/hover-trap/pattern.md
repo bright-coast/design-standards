@@ -6,11 +6,13 @@ order: 14
 ---
 ## Rule
 <p>Touch has no hover, so mobile browsers fake one: the first tap gets spent &ldquo;becoming&rdquo; a sticky hover state instead of firing the actual action. Never bury a primary action behind hover; it should only ever reveal secondary extras. Gate hover styles with the <code class="tok">hover: hover</code> media feature rather than sniffing the user agent, since that correctly handles a hybrid touch+mouse laptop where user-agent sniffing gets it wrong. Pad the tappable hit area to 44px even when the visible glyph stays smaller.</p>
+<p>Hover never sets off heavy behaviour: no autoplaying video, no sound, no large download and no layout that jumps, just because a cursor passed over something on its way somewhere else.</p>
 ## Do
 - Primary actions stay reachable without hover
 - Pad tap targets to 44px, glyph can stay small
 ## Avoid
 - Hiding a primary action behind a hover-only reveal
+- A video that autoplays when the cursor passes over a card
 ## Code: CSS
 <pre><code><span class="cm">/* the spec-correct way to detect real hover support */</span>
 <span class="kw">@media</span> (hover: hover) {

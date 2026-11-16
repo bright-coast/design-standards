@@ -240,11 +240,15 @@ boxes.forEach((box, i) => box.addEventListener('keydown', (e) => {
 
 Real strength is entropy: length matters far more than a symbol checkbox, which just pushes everyone toward “Password1!”-shaped passwords. Show the actual requirements checklist live as someone types, with each line ticking green the moment it’s satisfied, rather than surfacing the whole list only after a failed submit. Always pair a visibility toggle with a one-tap generate-a-strong-password option, and never block paste; a blocked paste breaks every password manager and pushes people toward weaker, memorable passwords instead.
 
+A strength meter belongs on account creation only, never on the login form, where it judges a password that already exists and helps nobody. Set `autocomplete="current-password"` on login and `autocomplete="new-password"` where a new password is chosen, so password managers fill the right one and offer to generate a new one.
+
 Do:
 - Visibility toggle + a one-tap generated password
+- `autocomplete="current-password"` on login, `autocomplete="new-password"` on account creation
 
 Avoid:
 - Hiding requirements until after a failed submit
+- A strength meter on the login form
 
 Code (JS):
 
@@ -325,11 +329,17 @@ function onChange(setting, value) {
 
 Chunk a long form by meaning (Personal, Shipping, Payment, Review), not by an arbitrary field count that splits a logically single group across two steps. Validate inside each step and block the Next button until it’s valid, so a step-one mistake never surfaces for the first time at step four after everything else has already been filled in. Persist state across Back navigation and even a page refresh; losing a half-completed multi-step form to an accidental reload is one of the more infuriating things software still does.
 
+**Five more decisions.** Label every step and keep the total visible (Step 2 of 4, Shipping), so people know how far they have to go. Show a full summary of everything entered before the final submit, with a way to edit each part. Give each step one primary action. Never auto-advance when the last field is filled; people move on when they choose to. Make save and continue later easy to find, so a long form never has to be finished in one sitting.
+
 Do:
 - Validate inside each step, block Next until valid
+- Labelled steps with the total count visible
+- A full summary before the final submit
+- One primary action per step, and an easy save and continue later
 
 Avoid:
 - Surfacing a step-one error only at step four
+- Auto-advancing to the next step when the last field is filled
 
 Code (JS):
 

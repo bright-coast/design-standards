@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.4.0 (16 Nov 2026)
+
+Two new rules, sharper reviews and audits, and a skill that knows how to work on each kind of request.
+
+- 2 new rules, bringing the library to 125.
+  - Visual: Stacked Priority Order (on one column, the summary first, then what needs action, then supporting panels, with the DOM in that order).
+  - Interaction: Design Rationale Comments (a code comment gives a reason the code cannot show, never a pointer to the brief or the conversation).
+- UX Audit gains a mechanical pass over the code, a severity floor for accessibility failures, report or fix depending on what was asked, and a variant with no minimum number of findings.
+- Six Data States gains a variant that builds only the states that can happen and marks the rest n/a with a reason. Error States gives system errors a three part message and a specific fallback.
+- Enriched: Destructive Actions, Destructive Action Risk Tiers, Tooltip Design, Visual Hierarchy, Min-Width Zero, Data Table, Stepper Wizard, Password Field UX, Project Design Contract, The Intent Brief, Visual Character, Design Tokens, Success States, Loading States System, Grid System, Phone Check at 375px, Interactive State and Affordance, Disabled, Hover Trap, Focus States and Typography as a System.
+- The skill's instructions now match effort to the change, and say how to review a screen, review a change before it merges, build new UI, design without code, restyle, and handle a request that goes against a rule.
+
 ## 1.3.0 (16 Nov 2026)
 
 Sharper rules for choosing a look that is your own, for a complete design contract, and for tables that keep their columns lined up.

@@ -6,14 +6,17 @@ order: 16
 ---
 ## Rule
 <p>Size, colour, contrast, whitespace, and font weight all stack together to create exactly one clear focal point on a given screen. Hierarchy is what tells someone&rsquo;s eye where to land first without them having to think about it. Spend the single accent colour on the one truly key action per screen; a screen with five differently-coloured buttons has no hierarchy at all, just noise. Colour carries meaning, not rank; the ranking itself comes from size, weight, and position working together. Whitespace itself is an importance signal: the element with the most breathing room around it reads as the most important one on the page, independent of its own size. The numbers make the rule testable rather than a matter of taste. Adjacent heading levels need at least a 1.25&times; size jump between them, and a primary call-to-action needs to stand at least 1.5&times; the height of body text, or the size difference doesn't actually register. Weight carries its own tier: 600 to 700 for a primary heading, 500 to 600 for a secondary one, 400 for body copy, and 400 at 60 to 70% opacity for captions and meta text, never colour alone doing that job. Spacing scales with the hierarchy it separates: 48 to 64px between major sections, 24 to 32px between subsections, 8 to 16px within one group, and a heading always carries more space above it than below, which is what visually ties it to the content that follows rather than the content it just left. A genuine test for any screen: squint at it, or blur it, and check whether the one thing that matters most is still obviously the one thing that matters most.</p>
+<p><strong>Treat spacing as ratios.</strong> The gap between sections is at least twice the gap between subsections, and the gap between subsections is at least twice the gap inside a group, with every value taken from the project&rsquo;s own spacing scale; the pixel ranges above are one example of those ratios, not the rule itself. Text levels need a real difference too: two sizes only 1 or 2px apart read as the same level, so count them as one, and either merge them or pull them further apart.</p>
 ## Do
 - Spend one accent colour on the one key action
 - At least 1.25&times; between heading levels, 1.5&times; for a primary CTA over body text
 - More space above a heading than below it
+- Section gaps at least 2&times; subsection gaps, and subsection gaps at least 2&times; the gaps inside a group, all from the project scale
 ## Avoid
 - Colouring every element differently
 - Three equal-weight primary buttons, or a sidebar with 15+ items at one visual level
 - All-caps or italic body text, or body text centred in anything wider than about 80 characters
+- Two text sizes 1 or 2px apart treated as two levels
 ## Code: CSS
 <pre><code><span class="cm">/* one accent, spent deliberately on the single primary action */</span>
 .btn-primary   { background: var(--accent); color: white; font-weight: 600; }

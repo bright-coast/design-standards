@@ -9,14 +9,14 @@
       "id": "design-standards",
       "name": "Design Standards",
       "status": "ready",
-      "version": "1.3.0",
-      "sha256": "c4e1c4ea4075894cfb1a3931bfbaefcb448453a47cf0b4d4a4570025182f0a92",
+      "version": "1.4.0",
+      "sha256": "4596a8c07b6272e110b53f37b4ae130d24675f9631456e83fc5dc91949387d0c",
       "category": "Building",
       "summary": "Gives Claude a library of design rules for building clear, easy-to-use interfaces, loaded one category at a time, plus a checklist of the tells that make a screen look machine-made. It applies whenever you ask Claude to build, design, review or restyle a page, form, table or dashboard.",
       "needs": [],
       "offer_if": "builds or designs web pages, apps or dashboards",
       "path": "skills/design-standards/SKILL.md",
-      "changes": "Sharper rules for choosing a look that is your own, for a complete design contract, and for tables that keep their columns lined up.",
+      "changes": "Two new rules, sharper reviews and audits, and a skill that knows how to work on each kind of request.",
       "files": [
         {
           "path": "skills/design-standards/references/ai-slop.md",
@@ -28,15 +28,15 @@
         },
         {
           "path": "skills/design-standards/references/feedback.md",
-          "sha256": "d4628c36c9fc1044350034082c8afa8938bcf16e852252c80459e46b0e25b44a"
+          "sha256": "142ba826637d86458c337d8fea4982d79d6f69b9ca8e438dca7998e6e0dda198"
         },
         {
           "path": "skills/design-standards/references/forms.md",
-          "sha256": "889dfa08d42b97923d080c2e3d76b59f22c19fbd37a1ba2b2f7118d802805514"
+          "sha256": "415e74a96979b0245dbc9e19f83c7b38e18dee4cae9d2595e5498cf69854799e"
         },
         {
           "path": "skills/design-standards/references/interaction.md",
-          "sha256": "a332ec43e347f63e7393eb433abfcd248b7ea936fa1c2c1112aaecd77129af34"
+          "sha256": "e30dbbad91a61d68054aaf6447c61bafb149a1740f23a9454a473f7f75eefe29"
         },
         {
           "path": "skills/design-standards/references/motion.md",
@@ -44,7 +44,7 @@
         },
         {
           "path": "skills/design-standards/references/navigation.md",
-          "sha256": "921e72e15f482b7ddf655630d81f8ab4d79b9ae40cc6504ac07abee441173e2f"
+          "sha256": "3f8cf07d8d455eeff722aeaef16bf103b17c90d747b4afccc317ab086af7170a"
         },
         {
           "path": "skills/design-standards/references/psychology.md",
@@ -52,7 +52,7 @@
         },
         {
           "path": "skills/design-standards/references/visual.md",
-          "sha256": "47b62b9987c7332fb818ed373604360d40fe8f8981a0c9bda83c6cebed56d9e7"
+          "sha256": "494203536d0021ec90dea3e1e7c1b153fe6fb292f1bd28633759e3528d3fceb4"
         }
       ]
     }

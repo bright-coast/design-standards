@@ -7,15 +7,18 @@ order: 12
 ## Rule
 <p>A done screen is not a dead end, and five decisions keep the person moving. <strong>Say what happened:</strong> what, who and when, with the specifics (Invoice sent to Northwind Labs, INV-2051, EUR 2,400, due 12 Oct, sent just now) instead of Success! Your action was completed; specifics are the proof it worked, and a vague success feels like a maybe. <strong>Offer the next action:</strong> one primary next step and one way back (View invoice, Send another, Back to invoices); a check mark with no button is a dead end, and the person closes the tab right there.</p>
 <p><strong>Dismissal follows stakes:</strong> a reversible, low-stakes change (notification settings) gets a toast with Undo that leaves after about 4 seconds; money gets a page that stays, with the plan, amount, card, date, a downloadable receipt and a copy by email, because nobody screenshots a toast. <strong>Leave one open loop:</strong> one thread to pull, such as tracking the payment (sent, opened, paid, notify me when paid), sharing the report, or inviting teammates; a finished task with a thread to pull brings people back (Zeigarnik Effect, Feedback entry 09). <strong>Celebrate the rare win:</strong> confetti is for milestones such as the first invoice paid, never every save; rare joy lands, constant joy is noise (Peak-End Rule, Interaction entry 18).</p>
+<p>A success message leaves once it has been read. It never stays pinned on the page, where it goes stale and starts to look like part of the layout. A receipt page for a payment is a page in its own right, not a message left on another screen.</p>
 ## Do
 - What, who and when, with real specifics
 - One primary next action and one way back
 - Reversible = toast with Undo; money = a page with a receipt
 - Confetti for milestones only
+- A success message that leaves once it has been read
 ## Avoid
 - Success! with an OK button and nothing else
 - A payment confirmed only by a toast
 - Confetti on every save
+- A success banner that stays on the page for good
 ## Code: JS
 <pre><code><span class="cm">// success = what + who + when, one primary next step, one way back</span>
 <span class="kw">function</span> <span class="fn">onDone</span>(r) {

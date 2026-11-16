@@ -7,14 +7,17 @@ order: 25
 ## Rule
 <p>A grid or flex item defaults to <code class="tok">min-width: auto</code>, which means it will not shrink below the intrinsic width of its content. Put a code block or any long unbroken string inside a column (a single-line shell command, a URL, a hash) and that content sets the column&rsquo;s minimum width. The column grows to fit it, the grid ends up wider than its container, and the page overflows or the column is cut off at the edge, instead of the text scrolling inside its own box. The code block&rsquo;s own <code class="tok">overflow-x: auto</code> never gets a chance to work, because the box it was meant to scroll inside has already grown to fit the content.</p>
 <p>The fix has two halves that work together. Set <code class="tok">min-width: 0</code> on the grid or flex child, so it is allowed to shrink below its content, and keep <code class="tok">overflow-x: auto</code> on the <code class="tok">&lt;pre&gt;</code>, so the overflow scrolls inside the code block. For a grid you can also fix it at the track: <code class="tok">1fr</code> is shorthand for <code class="tok">minmax(auto, 1fr)</code>, so <code class="tok">minmax(0, 1fr)</code> removes the content-based minimum for that column. Treat it as a standing rule for any layout where a column can hold a code block, not a patch on the one instance that broke, because the same overflow returns on the next side-by-side pair. When the content is genuinely long, such as a full shell command, stacking the blocks top to bottom is safer than trusting side-by-side columns to shrink.</p>
+<p><strong>Start at one column, and protect every wide child.</strong> A grid starts as a single column and adds tracks at breakpoints, so the narrowest screen is the default rather than an afterthought. The <code class="tok">min-width: 0</code> rule is not only for code blocks: any grid or flex child holding a wide table, a long URL, an email address or any other long string needs it, or that one child pushes the whole layout wider than the screen.</p>
 ## Do
 - <span><code class="tok">min-width: 0</code> on every grid or flex child that can hold a code block or long string</span>
 - <span><code class="tok">overflow-x: auto</code> on the <code class="tok">&lt;pre&gt;</code>, so the overflow scrolls inside its own box</span>
 - <span><code class="tok">minmax(0, 1fr)</code> in place of <code class="tok">1fr</code> when you control the grid tracks</span>
 - Stack genuinely long commands top to bottom instead of side by side
+- Grids that start at one column and add tracks at breakpoints
 ## Avoid
 - <span>Trusting <code class="tok">1fr</code> columns to shrink around a long single-line command</span>
 - Patching only the one column that broke, and leaving the same layout elsewhere
+- <span>A wide table inside a grid or flex child left at the default <code class="tok">min-width: auto</code></span>
 ## Code: CSS
 <pre><code>.two-col {
   display: grid;

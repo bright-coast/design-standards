@@ -6,11 +6,14 @@ order: 10
 ---
 ## Rule
 <p>Not every destructive action deserves the same friction, and matching friction to actual consequence is what makes the friction mean something instead of training people to click through it. Four tiers, escalating with what&rsquo;s actually at stake. <strong>Low</strong> risk, with a clear undo path (delete a draft, remove a filter), gets a single click plus a toast with undo, no modal at all (see Undo UX above). <strong>Medium</strong> risk, with some recovery path (delete a project, remove a teammate), gets a confirmation modal with the destructive button styled red and labelled with the verb (see Destructive Actions in Interaction above for the hold-to-confirm mechanic that pairs with this tier). <strong>High</strong> risk, with real consequences (delete a client&rsquo;s account, wipe a dataset), escalates to a modal that requires typing the resource&rsquo;s name or the word DELETE before the button activates at all. <strong>Critical</strong> risk that genuinely can&rsquo;t be recovered (close an account, revoke every API key) adds a password or 2FA re-entry on top of the typed confirmation. Whatever the tier, focus defaults to Cancel, never to the destructive button itself.</p>
+<p><strong>Write the dialog so it reads in one glance.</strong> The title names the action and the object (Delete invoice #1247?), never a bare Are you sure? The body states the consequences in plain words: what disappears, who loses access, and whether it can be undone. Cancel is styled as the secondary button, so the destructive verb is the only strong action in the dialog.</p>
 ## Do
 - Friction escalates with actual consequence, not with how severe the action feels
 - Confirmation dialog focus defaults to Cancel, never the destructive button
+- A dialog title that names the action and the object, with the consequences in the body
 ## Avoid
 - One &ldquo;are you sure?&rdquo; modal used identically for a draft delete and an account close
+- An Are you sure? title that names no object
 ## Code: JS
 <pre><code><span class="cm">// tier -> UI treatment</span>
 <span class="kw">const</span> DESTRUCTIVE_TIERS = {

@@ -11,11 +11,14 @@ How someone moves through a product without losing their place.
 
 Removing `outline: none` without putting a real replacement in its place is a genuine accessibility failure, not a legitimate style choice. It leaves keyboard users with no visible indication of where they are on the page at all. `:focus-visible` is the correct modern fix: it shows a focus ring only for keyboard navigation, keeping a mouse click free of the ring while Tab still gets one. Inside a modal, trap focus so Tab can’t escape to the page behind it, and explicitly return focus to the triggering element when the modal closes. Visual tab order needs to match DOM order; a CSS-only reorder that doesn’t match creates a genuinely confusing keyboard-navigation path.
 
+Elements that appear on scroll, such as a sticky call to action or a banner that slides in, never take keyboard focus when they show up. Pulling focus mid-scroll drops a keyboard or screen reader user somewhere they did not choose.
+
 Do:
 - `:focus-visible` so clicks stay clean, Tab gets a ring
 
 Avoid:
 - Visual order drifting from DOM order
+- A sticky banner or call to action that takes focus when it appears on scroll
 
 Code (CSS + JS):
 

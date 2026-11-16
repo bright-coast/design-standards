@@ -5,7 +5,7 @@
 
 The mechanics of clicking, dragging, and typing through a screen, the largest category, and the one most directly reusable across products, from an existing app to a brand-new build.
 
-33 patterns. Use when: buttons, menus, tables, dialogs, drawers, drag and drop, keyboard and touch behaviour.
+34 patterns. Use when: buttons, menus, tables, dialogs, drawers, drag and drop, keyboard and touch behaviour.
 
 ## Accordion Disclosure
 
@@ -256,6 +256,10 @@ Sort is a three-state cycle, ascending, descending, back to the original order, 
 
 **Cells, rows and row actions.** Right-align numbers with tabular figures and left-align text: centred amounts are wrong because digits never line up, and a column of right-aligned tabular amounts reads like a receipt (it aligns the digits and makes them easy to compare, especially with decimals). Separate rows with one hairline and a hover highlight rather than zebra stripes (an opinion, see the note below). Treat row height as a decision, not padding: for example three settings, compact 40px, default 48px and comfortable 56px, which are demo values. Pin the identity columns and the header so context never leaves the screen when scrolling. An empty cell is a question (missing, zero or still loading?), so show a dash; truncate long text to one line with a tooltip on hover, and never truncate numbers. An action column on every row is noise (50 rows, 50 pencils): reveal row actions on hover or focus, give touch devices a kebab menu, and show a sort arrow only on the column that is actively sorted.
 
+**Between 640 and 1024px.** On a tablet or a narrow laptop window, the table hides its secondary columns, and if it still does not fit it scrolls sideways inside its own region. The page itself never scrolls sideways.
+
+**Dates people can read.** Show relative time (3 months ago) with the full date and time on hover, never raw ISO stamps such as 2026-08-14T09:32:00Z.
+
 Do:
 - Sticky header + frozen first column
 - Whole row as the click target
@@ -266,6 +270,8 @@ Do:
 - Row actions revealed on hover or focus, a kebab menu on touch devices
 - A sort arrow on the active column only
 - One hairline between rows plus a hover highlight
+- From 640 to 1024px, secondary columns hidden and any overflow scrolling inside the table’s own region
+- Relative time in the cell, with the full date on hover
 
 Avoid:
 - A binary sort that loses the original order permanently
@@ -273,6 +279,8 @@ Avoid:
 - Centred amounts, where digits never line up
 - A pencil or button repeated on all 50 rows
 - A blank cell that could mean missing, zero or still loading
+- A page that scrolls sideways because of a wide table
+- Raw ISO timestamps in a cell
 
 Note: **Responsive collapse is a separate concern from desktop sort/density.** When the table has to fit a phone, shrinking the font isn’t the fix; six moves restructure it instead: **Rank** (decide which columns actually matter), **Stack** (vertical card per row), **Slot** (secondary data into an expandable area), **Label** (inline labels once headers disappear), **Reveal** (progressive disclosure for the rest), **Breakpoint** (a defined point the transform triggers at). All six match established responsive-table practice.
             **Phone-table detail.** Six columns need about 700px, so let the table own the breakpoint with one container query (`@container (max-width: 700px)`), not a screen-width media query; the same table then also collapses inside a narrow desktop side panel (it turns into cards there). The six moves in full: **Rank**, decide by use, not by position, which columns survive (identity, value, state); the ID column goes first, because nobody reads it on a phone. **Stack**, two lines per row with the name left and the amount right and status and due date underneath, so each row reads as one thumb-sized unit; do not scroll sideways, and avoid full cards because they kill comparison. **Slot**, keep the amount in one right-aligned slot so it is still a column of numbers (tabular digits). **Label**, label only the ambiguous (“Due Mar 4” needs a label, a dollar amount does not), and move sorting into a control. **Reveal**, hidden is not deleted: tap a row to expand two more fields in place (invoice ID, notes, actions), and open the full record in a bottom sheet, never a new page for a quick look. **Breakpoint**, the container query above. Where this wording of Stack and Slot differs from the shorthand in the paragraph above, this is the fuller version. The 700px figure is a demo number tied to six columns, not a rule. Prioritising columns, two-line stacked rows, bottom sheets and container queries are all standard responsive-table practice.
@@ -328,12 +336,16 @@ th:not([aria-sort="ascending"]):not([aria-sort="descending"]) .sort-arrow { visi
 
 Name the action on the button itself: “Delete project” instead of a generic “Yes”, because the verb is the actual warning and nobody reads “are you sure?” Hold-to-confirm turns the gesture itself into the safeguard: a ring fills over roughly 300ms of a held press, and releasing early cancels outright. Never place a destructive button where a confirm button usually lives, since muscle memory clicks the familiar spot without reading it, and spend red only on real destruction; a red logout button cries wolf and makes the real delete look routine.
 
+**Quiet on the page, loud in the dialog.** On the page, a destructive control stays quiet: a ghost button, a text button or an item in the overflow menu, above all when it repeats on every row of a list. Solid red belongs only on the confirming button inside the dialog, the one moment the person has chosen to destroy something.
+
 Do:
 - Hold-to-confirm as the actual safeguard, not a dialog
 - Cooldown/grace period for genuinely irreversible deletes
+- A ghost, text or overflow-menu Delete on the page, with solid red only on the confirming button in the dialog
 
 Avoid:
 - Spending red on anything other than real destruction
+- A solid red Delete button repeated on every row
 
 Code (CSS + JS):
 
@@ -371,7 +383,7 @@ Do:
 Avoid:
 - Leaving users to guess why submit won’t fire
 
-Variant: **Disabled buttons, two variants.** Variant A: keep the button live and validate on click, moving focus to the first blocking field (this entry). Use when: the block is something the person can fix in the form in front of them. Variant B: a real disabled state at 50% opacity with a not-allowed cursor and aria-disabled (which, unlike the disabled attribute, keeps the button focusable), always with the reason written beside it. Use when: the block is a known state the form cannot fix, such as a plan limit or a missing permission. The full state list is in Interactive State and Affordance (entry 24). Both are kept on purpose.
+Variant: **Disabled buttons, two variants.** Variant A: keep the button live and validate on click, moving focus to the first blocking field (this entry). Use when: the block is something the person can fix in the form in front of them. Variant B: a real disabled state, muted through the project tokens, with a not-allowed cursor and aria-disabled (which, unlike the disabled attribute, keeps the button focusable), always with the reason written beside it. Use when: the block is a known state the form cannot fix, such as a plan limit or a missing permission. The full state list is in Interactive State and Affordance (entry 24). Both are kept on purpose.
 
 Code (JS):
 
@@ -505,12 +517,15 @@ clearAllBtn.addEventListener('click', () => {
 
 Touch has no hover, so mobile browsers fake one: the first tap gets spent “becoming” a sticky hover state instead of firing the actual action. Never bury a primary action behind hover; it should only ever reveal secondary extras. Gate hover styles with the `hover: hover` media feature rather than sniffing the user agent, since that correctly handles a hybrid touch+mouse laptop where user-agent sniffing gets it wrong. Pad the tappable hit area to 44px even when the visible glyph stays smaller.
 
+Hover never sets off heavy behaviour: no autoplaying video, no sound, no large download and no layout that jumps, just because a cursor passed over something on its way somewhere else.
+
 Do:
 - Primary actions stay reachable without hover
 - Pad tap targets to 44px, glyph can stay small
 
 Avoid:
 - Hiding a primary action behind a hover-only reveal
+- A video that autoplays when the cursor passes over a card
 
 Code (CSS):
 
@@ -735,12 +750,16 @@ row.addEventListener('touchend', (e) => {
 
 A 300ms delay before a hover tooltip appears stops it firing on every accidental cursor graze. Anchor it to its trigger with an arrow, since a floating label with no arrow above a row of icons leaves people guessing which element it describes. Flip to the opposite side near a viewport edge so it never clips off-screen, and make it dismissible from every direction: mouse-leave, Escape, blur, and an outside tap. Keep the copy tight: cap the width around 300px and hold it to one sentence.
 
+Show the same content on keyboard focus, not only on hover, so someone tabbing through the page gets it too. Make it add something the label does not already say: a tooltip reading Delete on a button labelled Delete is noise, while Deletes the file for everyone in the workspace earns its place.
+
 Do:
 - ~300ms delay before showing, arrow-anchored
 - Dismissible via mouse-leave, Esc, and outside tap
+- The same tooltip on keyboard focus as on hover
 
 Avoid:
 - Documentation-length copy crammed into one tooltip
+- A tooltip that repeats the control’s own label
 
 Code (JS):
 
@@ -792,15 +811,20 @@ else showNewMessagesPill(); // otherwise let them stay where they are
 
 ## Interactive State & Affordance
 
-Every interactive element earns its keep by answering two questions instantly: did my click register, and was this ever clickable in the first place. Feedback within 100 milliseconds is the real deadline; past it, someone starts wondering whether the click landed at all, so a control either changes state immediately or shows a loading indicator the moment it's pressed, never neither. Affordance has to be just as unambiguous: if someone has to wonder whether something is clickable, the design already failed, so clickable things look clickable and decorative things don't. One control needs all six states actually designed, not improvised. Default sits at rest. Hover adds a cursor change plus a visual lift. Focus gets a distinct 2px ring offset 2px from the element, visible against both light and dark backgrounds, never a removed outline with nothing put in its place. Active shows a brief scale down or colour darken on press. Disabled drops to 50% opacity with a not-allowed cursor. Loading swaps in an inline spinner and switches the label to its verb form, such as “Saving…”. A button reads as a button through fill or border and padding, never colour alone, and its label names the action rather than saying “Click here”. A link stays underlined or holds a clearly distinct colour with a pointer cursor on hover; never style plain, non-clickable text the same way, and never make a whole row clickable while also nesting a real button inside it, since the two targets fight each other for the same click. The same states need to reach a screen reader, not just a sighted eye: `aria-pressed` for a toggle's own state, `aria-busy` while something loads, `aria-disabled` always paired with the visual treatment rather than standing in for it, `aria-live="polite"` on a status message that updates without a reload, and the real semantic element for the job: a button is an actual `<button>`, a link is an actual `<a>`.
+Every interactive element earns its keep by answering two questions instantly: did my click register, and was this ever clickable in the first place. Feedback within 100 milliseconds is the real deadline; past it, someone starts wondering whether the click landed at all, so a control either changes state immediately or shows a loading indicator the moment it's pressed, never neither. Affordance has to be just as unambiguous: if someone has to wonder whether something is clickable, the design already failed, so clickable things look clickable and decorative things don't. One control needs all six states actually designed, not improvised. Default sits at rest. Hover adds a cursor change plus a visual lift. Focus gets a distinct 2px ring offset 2px from the element, visible against both light and dark backgrounds, never a removed outline with nothing put in its place. Active shows a brief scale down or colour darken on press. Disabled takes a muted look derived from the project tokens (a reduced-opacity or mixed colour token, never a one-off value) with a not-allowed cursor. Loading swaps in an inline spinner and switches the label to its verb form, such as “Saving…”. A button reads as a button through fill or border and padding, never colour alone, and its label names the action rather than saying “Click here”. A link stays underlined or holds a clearly distinct colour with a pointer cursor on hover; never style plain, non-clickable text the same way, and never make a whole row clickable while also nesting a real button inside it, since the two targets fight each other for the same click. The same states need to reach a screen reader, not just a sighted eye: `aria-pressed` for a toggle's own state, `aria-busy` while something loads, `aria-disabled` always paired with the visual treatment rather than standing in for it, `aria-live="polite"` on a status message that updates without a reload, and the real semantic element for the job: a button is an actual `<button>`, a link is an actual `<a>`.
+
+**Hover in the project’s own language.** A hover changes one visible property, and uses the separation language the project already chose: a colour shift in a flat design, a border change in a bordered one, a raised elevation in one built on shadows. On long-form content (articles, docs and help pages), visited links look different from unvisited ones, so readers can see where they have already been.
 
 Do:
 - All six states (default, hover, focus, active, disabled, loading) actually designed, not improvised
 - Focus ring visible on both light and dark backgrounds, never a removed outline with nothing replacing it
 - `aria-pressed`/`aria-busy`/`aria-disabled` paired with the matching visual treatment
+- Hover changes one visible property, in the project’s own colour, border or elevation language
+- Visited links styled differently on long-form content
 
 Avoid:
 - Plain non-clickable text styled like a link, or a clickable row with a real button nested inside it
+- A hover that changes colour, border, shadow and size all at once
 
 Code (CSS + JS):
 
@@ -1034,15 +1058,22 @@ A screen built straight from the data model comes out shaped like the database: 
 
 **Shapes the brief rules out.** A table of every field when the primary action needs three. A destructive action sitting next to the primary one. Every available filter shown by default. A modal for the screen’s primary action, where inline editing or a dedicated page belongs (Modal Hierarchy, entry 17). Tabs for sections that are not mutually exclusive. Mockups and demos use realistic placeholder content (a plausible name, a real-looking invoice number), never Lorem Ipsum and never a real customer’s details. When the owner says just build it, write the brief from stated assumptions, mark it as assumed, and keep moving; if the owner overrides a rule after a one-line warning, build it their way.
 
+**When to ask and when to build.** Read the request and the project first; most answers are already there. Ask only when all three hold: the request is open, two or more of who, the primary action and the worst case are still unknown, and someone is actually there to answer. Otherwise write down your assumptions, mark them as assumed, and build.
+
+**Unknown data, honestly marked.** When the shape of an API is unknown, write the type you are assuming and say plainly that it is assumed. Never add mock routes or hardcoded sample rows to make a real screen look alive; a screen that looks finished but runs on fake data hides the work still to do.
+
 Do:
 - Five answers (who, primary, secondary, context, worst case) written down before any markup
 - The worst case sets the friction: irreversible means a confirmation plus undo
 - Realistic placeholder content in every mockup
+- The request and project read first; questions only when the request is open, two of who, primary action and worst case are unknown, and someone can answer
+- An assumed API type written down and labelled as assumed
 
 Avoid:
 - A table of every database field because the data model has them
 - A modal or a menu item for the action people take 80% of the time
 - Lorem Ipsum, or a real customer’s details, in a demo
+- Mock routes or hardcoded sample rows wired into a real screen
 
 Code (TEXT):
 
@@ -1066,15 +1097,28 @@ An audit is useful when every line names one element and one concrete fix. Start
 
 **Report shape.** A table sorted P0 first with five columns: number, severity, issue, why it matters to a real person, and the fix. Then the three fixes worth the most, written out in full with code. Then what is working, so a good decision survives the rewrite. A review of a diff before merge uses the same scale grouped as must fix (P0 and P1), should fix (P2) and nice to fix (P3), each pointing at a file and line. A restyle pass is visual only: tokens, type, spacing, finish and interactive states change, while logic, structure and the meaning of the copy stay put, and any structural problem spotted on the way gets one flag line for the audit instead of a silent fix. If the owner disagrees with a finding, record the call once and move on.
 
+**Run a mechanical pass over the code before writing findings.** Search the code for each of these, because each one is a fact rather than an opinion: an outline removed with no focus style put in its place, an input with no label, an icon-only button with no accessible name, a click handler on something that is not a button or a link, a click target nested inside another click target, colour as the only way a meaning is shown, text contrast below AA (computed, not judged by eye), touch targets under 44px, a failure the person cannot recover from, a destructive call with no confirmation or undo, and the tells of overflow on a phone (fixed widths, rows that never wrap, 100vw, a wide table with no scroll region of its own). Every hit is its own finding in the table, never folded into one general line.
+
+**Severity has a floor.** A failure against WCAG level A or AA is at least P1, and so is any failure the person cannot recover from. A removed focus ring is P1, because a keyboard user is lost on the page; a focus ring that is only inconsistent is P3.
+
+**Match the output to the word used.** When someone asks for an audit or a review, give the full report. When they ask to fix or improve a screen, give the fixed code, with only two things above it: the inferred intent, and the three to five P0 or P1 findings the fix deals with.
+
 Do:
 - Inferred intent written first, with every finding tied to it
 - Every row names a specific element and an actionable fix
 - Five to twelve findings sorted P0 first, then the top three in full, then what is working
+- A mechanical code pass first, with every hit logged as its own finding
+- WCAG A or AA failures, and failures with no recovery, ranked P1 or higher
+- Fix or improve answered with fixed code, below the intent and the three to five P0 or P1 findings
 
 Avoid:
 - Vague advice such as “consider improving the hierarchy”
 - More than twelve findings, or an audit with no what is working section
 - A restyle that quietly changes logic or structure
+- Padding the table with nitpicks to reach a target count
+- A removed focus ring ranked as polish
+
+Variant: **How many findings, two variants.** Variant A: five to twelve findings, where more than twelve is a list of nitpicks and fewer than five is being too kind (the rule above). Use when: auditing a whole screen or flow that has never been reviewed. Variant B: no minimum count. A two-row table, or one line saying there is no P0 or P1, is a valid audit, and real findings past twelve go in a one-line Also found list under the table. Use when: the screen is small, has been reviewed before, or genuinely has few problems. Never invent findings to reach a number.
 
 Code (TEXT):
 
@@ -1120,4 +1164,29 @@ Code (HTML):
     <button class="tool" aria-haspopup="menu">More</button> <!-- rotate, flip, stickers -->
   </div>
 </div>
+```
+
+## Design Rationale Comments
+
+A code comment earns its place when it explains a reason a future reader cannot see in the code itself: why the Delete button sits in the overflow menu, why a table hides two columns under 1024px, why a toast stays for 6 seconds and not 3. The code already says what it does; the comment says why it has to be that way, so the next person does not undo a decision they could not see.
+
+A comment never points at the brief, the ticket thread or the conversation that produced it (as requested, per the brief, as discussed). The next reader has none of that, and the pointer means nothing once the conversation is forgotten. Write the reason itself, in one line, next to the code it explains.
+
+Do:
+- A one-line reason the code cannot show on its own
+- The comment placed next to the code it explains
+
+Avoid:
+- Comments such as as requested, per the brief or as discussed
+- A comment that only repeats what the code already says
+
+Code (JSX):
+
+```jsx
+// Avoid: points at a conversation the next reader never saw
+// moved Delete into the menu, as requested in the brief
+
+// Do: the reason itself
+// Delete lives in the overflow menu: a visible button on every row gets hit by mistake
+<RowMenu items={[{ label: 'Delete invoice', onSelect: confirmDelete }]} />
 ```

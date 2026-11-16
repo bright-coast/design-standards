@@ -38,13 +38,17 @@ async function likePost(id) {
 
 Match the error’s surface to its actual severity: an inline message under the specific field it belongs to, a toast for something transient that will resolve itself, a page-level replacement only for a genuinely catastrophic failure, and a modal reserved for a true blocker that needs an immediate decision. A toast is the wrong surface the moment the error demands action rather than just information; it disappears on its own timer, taking the one chance to fix the problem with it. Every error needs a real way out (a retry button, a link to fix the input, a support contact), not a dead-end “OK” that just closes the dialog and leaves the underlying problem exactly where it was. Whatever someone had already typed stays exactly where it was; a validation failure or a failed save is never an excuse to clear a field and make them start over. Write the message in plain language; a raw error code or stack trace means nothing to someone who isn’t the engineer who wrote the code.
 
+**A system error message has three parts.** Say what happened, say why if you know, and say what the person can do now: Your invoice was not saved because the connection dropped. Your changes are still here, so select Retry. The default fallback, the message for an error nobody planned for, still names the thing that failed and the next step (We could not load your invoices. Refresh the page, or try again in a minute). It never says Something went wrong, which tells the person nothing and leaves them stuck.
+
 Do:
 - Every error needs a real way out
 - Whatever was already typed stays in the field after a failure
+- What happened, why if known, and what to do now
 
 Avoid:
 - A dead-end “OK” with no path forward
 - A toast for an error that needs the user to actually do something about it
+- A Something went wrong fallback that names neither the thing nor the next step
 
 Code (JS):
 
@@ -56,20 +60,24 @@ function handleError(err) {
 }
 
 const MESSAGES = { 'ERR_402': 'Payment failed, check your card details and try again.' }; // never raw codes
-function plainLanguage(code) { return MESSAGES[code] ?? 'Something went wrong. Try again or contact support.'; }
+function plainLanguage(code, thing = 'your changes') { return MESSAGES[code] ?? `We could not save ${thing}. Check your connection, then try again.`; } // the fallback still names the thing and the next step
 ```
 
 ## Loading States System
 
 Pick the loading pattern from what’s actually known about the wait: a known content shape gets a skeleton, a known percentage gets a real progress bar, and a short wait of unknown length gets a plain spinner. A button doing its own async work is its own special case: the spinner sits inside the button, the label switches to its verb form, the button holds its own width via a minimum width so nothing shifts around it, and it disables itself for the duration so a second click can't fire the same request twice. Show nothing at all for the first ~300ms; a skeleton that flashes for a tenth of a second before real content arrives reads as a flicker, not helpful feedback. Past 2 seconds, swap a bare “Loading…” for real context, “Loading 1,247 records…” tells someone the wait has a reason. Past 10 seconds, offer a way to cancel rather than leaving them stuck watching a spinner with no exit. For anything genuinely long (past 3 seconds and climbing), show real progress wherever it's measurable, give an ETA once one is knowable, and let the operation keep running in the background with a notification when it finishes, instead of holding someone hostage on the screen that started it. For anything reversible, optimistic UI (see Feedback ’Optimistic UI’) beats a loading state entirely by skipping the wait perception altogether.
 
+**Open first, load inside.** A dialog opens the instant it is asked for, with a skeleton inside while its content loads, never after a pause while the data arrives. A route change renders the new page at once, with skeletons only in the parts that wait on async data, so the frame, the heading and the navigation appear straight away.
+
 Do:
 - Nothing at all under ~300ms
 - Real context past 2s, a cancel option past 10s
 - A button-internal spinner keeps its width and disables itself, so a second click can't double-submit
+- Dialogs and new routes that render at once, with skeletons only where data is still coming
 
 Avoid:
 - A skeleton for every fetch regardless of duration
+- A dialog or page that waits for its data before it appears
 
 Variant: **The first moment of a wait, two variants.** Variant A: show nothing for the first ~300ms of a content load, so a fast response never flickers a skeleton (this entry). Use when: data is loading into a screen or a panel. Variant B: acknowledge within 100ms, with the pressed state and a spinner inside the button from the moment of the press (Interactive State and Affordance, Interaction entry 24). Use when: the person just clicked or tapped something. Both are kept on purpose; one action often needs both, B on the button and A on the panel it fills.
 
@@ -273,12 +281,16 @@ const pct = Math.round((profileSteps.filter(s => s.done).length / profileSteps.l
 
 Not every destructive action deserves the same friction, and matching friction to actual consequence is what makes the friction mean something instead of training people to click through it. Four tiers, escalating with what’s actually at stake. **Low** risk, with a clear undo path (delete a draft, remove a filter), gets a single click plus a toast with undo, no modal at all (see Undo UX above). **Medium** risk, with some recovery path (delete a project, remove a teammate), gets a confirmation modal with the destructive button styled red and labelled with the verb (see Destructive Actions in Interaction above for the hold-to-confirm mechanic that pairs with this tier). **High** risk, with real consequences (delete a client’s account, wipe a dataset), escalates to a modal that requires typing the resource’s name or the word DELETE before the button activates at all. **Critical** risk that genuinely can’t be recovered (close an account, revoke every API key) adds a password or 2FA re-entry on top of the typed confirmation. Whatever the tier, focus defaults to Cancel, never to the destructive button itself.
 
+**Write the dialog so it reads in one glance.** The title names the action and the object (Delete invoice #1247?), never a bare Are you sure? The body states the consequences in plain words: what disappears, who loses access, and whether it can be undone. Cancel is styled as the secondary button, so the destructive verb is the only strong action in the dialog.
+
 Do:
 - Friction escalates with actual consequence, not with how severe the action feels
 - Confirmation dialog focus defaults to Cancel, never the destructive button
+- A dialog title that names the action and the object, with the consequences in the body
 
 Avoid:
 - One “are you sure?” modal used identically for a draft delete and an account close
+- An Are you sure? title that names no object
 
 Code (JS):
 
@@ -349,16 +361,20 @@ A done screen is not a dead end, and five decisions keep the person moving. **Sa
 
 **Dismissal follows stakes:** a reversible, low-stakes change (notification settings) gets a toast with Undo that leaves after about 4 seconds; money gets a page that stays, with the plan, amount, card, date, a downloadable receipt and a copy by email, because nobody screenshots a toast. **Leave one open loop:** one thread to pull, such as tracking the payment (sent, opened, paid, notify me when paid), sharing the report, or inviting teammates; a finished task with a thread to pull brings people back (Zeigarnik Effect, Feedback entry 09). **Celebrate the rare win:** confetti is for milestones such as the first invoice paid, never every save; rare joy lands, constant joy is noise (Peak-End Rule, Interaction entry 18).
 
+A success message leaves once it has been read. It never stays pinned on the page, where it goes stale and starts to look like part of the layout. A receipt page for a payment is a page in its own right, not a message left on another screen.
+
 Do:
 - What, who and when, with real specifics
 - One primary next action and one way back
 - Reversible = toast with Undo; money = a page with a receipt
 - Confetti for milestones only
+- A success message that leaves once it has been read
 
 Avoid:
 - Success! with an OK button and nothing else
 - A payment confirmed only by a toast
 - Confetti on every save
+- A success banner that stays on the page for good
 
 Code (JS):
 
@@ -379,15 +395,20 @@ Anything that fetches data, accepts input or does async work has six states, and
 
 **Offline, at minimum.** Detect it (navigator.onLine plus failed requests). Say so in a persistent banner (Offline, your changes are saved on this device). Queue changes and replay them on reconnect where possible (Autosave, Forms entry 01). Disable the actions that strictly need the network, and raise no errors for failures that being offline already explains. If the product genuinely cannot work offline, say so the first time it happens rather than failing silently. Before calling a data component done, tick all six states; any unticked one is a gap to fix or to name out loud.
 
+**Not every component has all six.** Partial only applies when the data arrives in pieces: paginated, streamed, or pulled from more than one source. Offline only applies to a product that is meant to keep working without a connection. When a state cannot happen, mark it n/a with a one-line reason (n/a, one request returns the whole record) instead of building a screen nobody will ever see.
+
 Do:
 - All six states handled: loading, empty, partial, error, success, offline
 - A partial failure marks one spot and keeps everything else on screen
 - A persistent offline banner, with changes queued for reconnect
+- A state that cannot happen marked n/a with its reason, not built
 
 Avoid:
 - A component that only renders the happy path
 - Blanking the screen when one request out of five fails
 - A wall of network errors for something being offline already explains
+
+Variant: **Which states to build, two variants.** Variant A: all six states are mandatory, and every one is designed and ticked (the rule above). Use when: the data is paginated, streamed or pulled from several sources, and the product is meant to work offline. Variant B: build only the states that can actually happen, and mark the rest n/a with a reason; partial is only for paginated, streamed or multi-source data, and offline only for products meant to work offline. Use when: one request returns the whole result, or the product cannot work offline at all. Either way, every state is designed or named n/a out loud, never silently skipped.
 
 Code (JSX):
 
