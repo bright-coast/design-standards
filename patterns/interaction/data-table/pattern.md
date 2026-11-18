@@ -18,7 +18,7 @@ order: 8
 - A dash for an empty cell; text truncated to one line with a tooltip on hover; numbers never truncated
 - Row actions revealed on hover or focus, a kebab menu on touch devices
 - A sort arrow on the active column only
-- One hairline between rows plus a hover highlight
+- One hairline between rows plus a light hover highlight: the page background colour on the card (a warm off-white on a white card), a step lighter than a button&rsquo;s hover grey
 - From 640 to 1024px, secondary columns hidden and any overflow scrolling inside the table&rsquo;s own region
 - Relative time in the cell, with the full date on hover
 ## Avoid
@@ -29,6 +29,7 @@ order: 8
 - A blank cell that could mean missing, zero or still loading
 - A page that scrolls sideways because of a wide table
 - Raw ISO timestamps in a cell
+- A row hover as dark as a button or chip hover: every row the pointer crosses flashes, and a hovered row looks selected
 ## Extra: caveat-box
 <div class="caveat-box"><b>Responsive collapse is a separate concern from desktop sort/density.</b> When the table has to fit a phone, shrinking the font isn&rsquo;t the fix; six moves restructure it instead: <strong>Rank</strong> (decide which columns actually matter), <strong>Stack</strong> (vertical card per row), <strong>Slot</strong> (secondary data into an expandable area), <strong>Label</strong> (inline labels once headers disappear), <strong>Reveal</strong> (progressive disclosure for the rest), <strong>Breakpoint</strong> (a defined point the transform triggers at). All six match established responsive-table practice.
             <div style="margin-top:10px;"><b>Phone-table detail.</b> Six columns need about 700px, so let the table own the breakpoint with one container query (<code class="tok">@container (max-width: 700px)</code>), not a screen-width media query; the same table then also collapses inside a narrow desktop side panel (it turns into cards there). The six moves in full: <strong>Rank</strong>, decide by use, not by position, which columns survive (identity, value, state); the ID column goes first, because nobody reads it on a phone. <strong>Stack</strong>, two lines per row with the name left and the amount right and status and due date underneath, so each row reads as one thumb-sized unit; do not scroll sideways, and avoid full cards because they kill comparison. <strong>Slot</strong>, keep the amount in one right-aligned slot so it is still a column of numbers (tabular digits). <strong>Label</strong>, label only the ambiguous (&ldquo;Due Mar 4&rdquo; needs a label, a dollar amount does not), and move sorting into a control. <strong>Reveal</strong>, hidden is not deleted: tap a row to expand two more fields in place (invoice ID, notes, actions), and open the full record in a bottom sheet, never a new page for a quick look. <strong>Breakpoint</strong>, the container query above. Where this wording of Stack and Slot differs from the shorthand in the paragraph above, this is the fuller version. The 700px figure is a demo number tied to six columns, not a rule. Prioritising columns, two-line stacked rows, bottom sheets and container queries are all standard responsive-table practice.</div></div>
@@ -55,7 +56,7 @@ td:empty::before { content: '\2013'; color: var(--text-muted); } <span class="cm
 
 <span class="cm">/* rows: one hairline plus a hover highlight, no zebra (an opinion, see the note above) */</span>
 tbody tr { border-bottom: 1px solid var(--border); }
-tbody tr:hover { background: var(--surface-hover); }
+tbody tr:hover { background: var(--surface-hover); } <span class="cm">/* light: the page background on the card, never a button's hover grey; a selected row gets its own tint */</span>
 .row-compact { --row: 40px; } .row-default { --row: 48px; } .row-comfortable { --row: 56px; } <span class="cm">/* demo values */</span>
 
 <span class="cm">/* actions: revealed on hover or focus, a kebab on touch; sort arrow on the active column only */</span>

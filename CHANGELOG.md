@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.2 (18 Nov 2026)
+
+Data Table now says how light a row hover should be.
+
+- Data Table: a row hover is the page background colour on the card, a step lighter than a button's hover grey.
+- Data Table: avoid a row hover as dark as a button or chip hover, which makes every row the pointer crosses flash and look selected.
+
 ## 1.5.1 (16 Nov 2026)
 
 Eight rules made more specific from a second pass over the same posts: their comments and the remaining carousel slides.
