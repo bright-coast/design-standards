@@ -1,7 +1,7 @@
 ---
 name: design-standards
 description: Use when someone asks you to build, design, review or restyle any user interface (a page, form, table, dashboard, navigation, settings screen, landing page, empty state or animation), says "apply the design standards to <screen>", or asks why a page looks generic or machine-made. It gives you 140 design rules, loaded one category at a time, and a checklist of the tells that make an interface look machine-made.
-version: 1.5.2
+version: 1.5.3
 ---
 
 > A Bright Coast AI skill, made by Rob Lee. github.com/bright-coast/design-standards

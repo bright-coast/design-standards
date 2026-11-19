@@ -1,9 +1,9 @@
 {
-  "version": "1.5.2",
+  "version": "1.5.3",
   "files": [
     {
       "path": "skills/design-standards/SKILL.md",
-      "sha256": "c77cb9c24a8ba0c9b4cee765a6781e8dc3dac86727e3680ed707fa431e0606a8"
+      "sha256": "a47d5694b6fdffe8c970ac278077c590f8e0b54b9f6f9ee1050dae26bd7144a1"
     },
     {
       "path": "skills/design-standards/references/ai-slop.md",
@@ -23,7 +23,7 @@
     },
     {
       "path": "skills/design-standards/references/interaction.md",
-      "sha256": "86a4a53f193ff590c9438c75078a2e45a4e74f692e24d9fad0f24be7eedb9858"
+      "sha256": "b5149ba006ebc90d81abb80593ee1e07d546cf767ae2c5f5d9ee865f212731cd"
     },
     {
       "path": "skills/design-standards/references/motion.md",

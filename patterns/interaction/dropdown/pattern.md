@@ -15,10 +15,12 @@ order: 12
 - Fewer than ~5 options &rarr; segmented control or radios, not a dropdown at all
 - Menu rendered in a portal so a clipping parent cannot cut it off, and flipped up when there is no room below
 - A disabled option shows the blocker inline and the one action that clears it
+- The caret sits 12px in from the trigger&rsquo;s right edge (never the browser default of about 3px), with right padding of about 34px so the selected text never runs under it; set it once for every select in the app
 ## Avoid
 - An open animation dragging past ~150ms
 - A long list with no type-to-filter (195 countries: 11.5 seconds of scrolling against 1.4 seconds of typing)
 - A greyed-out option with no reason given
+- A caret jammed against the right edge, or text running under it
 ## Extra: variant-note
 <div class="variant-note"><b>Variants held here.</b> Search: add a search field once a list passes about 10 items. Use when: people would otherwise scroll-hunt a long list (the demo&rsquo;s 195-country list). Field Control Thresholds holds the other variant, a searchable combobox from 16 options. Open animation: about 150ms. Use when: the dropdown sits in a dense productivity UI (Animation Timing, variant B). Both are kept on purpose.</div>
 ## Code: JS

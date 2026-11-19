@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.3 (19 Nov 2026)
+
+Dropdown Design now says where the caret sits.
+
+- Dropdown Design: the caret sits 12px in from the right edge with about 34px of right padding, set once for every select.
+- Dropdown Design: avoid a caret jammed against the edge or text running under it.
+
 ## 1.5.2 (18 Nov 2026)
 
 Data Table now says how light a row hover should be.
