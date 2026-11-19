@@ -15,7 +15,7 @@ order: 12
 - Fewer than ~5 options &rarr; segmented control or radios, not a dropdown at all
 - Menu rendered in a portal so a clipping parent cannot cut it off, and flipped up when there is no room below
 - A disabled option shows the blocker inline and the one action that clears it
-- The caret sits 12px in from the trigger&rsquo;s right edge (never the browser default of about 3px), with right padding of about 34px so the selected text never runs under it; set it once for every select in the app
+- The caret sits 5 to 10px in from the trigger&rsquo;s right edge (6px is the default; never the browser default of about 3px, and never 12px or more, which looks detached), with about 24px of right padding so the selected text never runs under it; set it once for every select in the app
 ## Avoid
 - An open animation dragging past ~150ms
 - A long list with no type-to-filter (195 countries: 11.5 seconds of scrolling against 1.4 seconds of typing)

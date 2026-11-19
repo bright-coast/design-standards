@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.1 (19 Nov 2026)
+
+Dropdown Design: the caret moves closer to the edge.
+
+- Dropdown Design: the caret sits 5 to 10px in from the right edge, 6px by default, with about 24px of right padding. 12px looked detached from the edge.
+
 ## 1.6.0 (19 Nov 2026)
 
 Two new rules, Invoice Screen and Less Noise on a Busy Screen, and five rules made more specific: input fields, card shadows, premium motion, stagger spacing and the 60-30-10 accent.

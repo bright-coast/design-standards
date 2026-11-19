@@ -9,14 +9,14 @@
       "id": "design-standards",
       "name": "Design Standards",
       "status": "ready",
-      "version": "1.6.0",
-      "sha256": "150148605c7e45a9dfb479142cb87589aeb49ae8b2cf11b66fbfe419f38f25cc",
+      "version": "1.6.1",
+      "sha256": "75f6685d33a1394529c7c481e6dcbff01fee0f63f797bc2bc35fb205acf1d68d",
       "category": "Building",
       "summary": "Gives Claude a library of design rules for building clear, easy-to-use interfaces, loaded one category at a time, plus a checklist of the tells that make a screen look machine-made. It applies whenever you ask Claude to build, design, review or restyle a page, form, table or dashboard.",
       "needs": [],
       "offer_if": "builds or designs web pages, apps or dashboards",
       "path": "skills/design-standards/SKILL.md",
-      "changes": "Two new rules, Invoice Screen and Less Noise on a Busy Screen, and five rules made more specific: input fields, card shadows, premium motion, stagger spacing and the 60-30-10 accent.",
+      "changes": "Dropdown Design: the caret moves closer to the edge.",
       "files": [
         {
           "path": "skills/design-standards/references/ai-slop.md",
@@ -36,7 +36,7 @@
         },
         {
           "path": "skills/design-standards/references/interaction.md",
-          "sha256": "b5149ba006ebc90d81abb80593ee1e07d546cf767ae2c5f5d9ee865f212731cd"
+          "sha256": "760303c2f13d294f515d11d5ef5f8e56e9d0ebac8ba3c4bf66619c5a1f2bcde9"
         },
         {
           "path": "skills/design-standards/references/motion.md",
