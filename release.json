@@ -1,9 +1,9 @@
 {
-  "version": "1.5.3",
+  "version": "1.6.0",
   "files": [
     {
       "path": "skills/design-standards/SKILL.md",
-      "sha256": "a47d5694b6fdffe8c970ac278077c590f8e0b54b9f6f9ee1050dae26bd7144a1"
+      "sha256": "150148605c7e45a9dfb479142cb87589aeb49ae8b2cf11b66fbfe419f38f25cc"
     },
     {
       "path": "skills/design-standards/references/ai-slop.md",
@@ -19,7 +19,7 @@
     },
     {
       "path": "skills/design-standards/references/forms.md",
-      "sha256": "2b904719b8589586c0fef0e095607161f1c4a6fa747ffc4be4325003a7d06839"
+      "sha256": "898d86bfc89d2c6fe0020334727e0509f0658b0c6b9e2fddc314772178b6291e"
     },
     {
       "path": "skills/design-standards/references/interaction.md",
@@ -27,7 +27,7 @@
     },
     {
       "path": "skills/design-standards/references/motion.md",
-      "sha256": "7958cd981117182ee12c86cad25f0972aa5a3b546673715853af4dcbdd273386"
+      "sha256": "2111a641126aea53254c8da8b419a7caa7ade0effa901f28e81a490b0917b1e0"
     },
     {
       "path": "skills/design-standards/references/navigation.md",
@@ -39,11 +39,11 @@
     },
     {
       "path": "skills/design-standards/references/visual-2.md",
-      "sha256": "97d563ff64379cce9ca953c1f00e8ddcbc65b3011fa2424fbf8580fd17974bd2"
+      "sha256": "9b38b267c63633e80da10619e8721fc87701393a64752c4995578745d35fbf19"
     },
     {
       "path": "skills/design-standards/references/visual.md",
-      "sha256": "b7f45fa79f2bc8a740039598415a41039bf3469dcc5314576c4ea82c730f0d2e"
+      "sha256": "000ee62ea940a033120f094709858849153888994cffb14992fe46485b613ea0"
     }
   ]
 }

@@ -5,9 +5,9 @@
 
 The layer people notice consciously least and judge most: colour, depth, spacing, and the perceptual rules underneath them.
 
-File 2 of 2: 16 of the 37 Visual patterns. Use when: colour, type, spacing, depth, icons and layout.
+File 2 of 2: 17 of the 38 Visual patterns. Use when: colour, type, spacing, depth, icons and layout.
 
-In this part: AI Landing Page Tells; Scanning Patterns; Typography as a System; Min-Width Zero for Grid and Flex Children; Equal-Height Cards in a Row; Pricing Table; Card Treatment System; Phone Check at 375px; 60-30-10 Colour Balance; Visual Character: One Decision per Axis; Project Design Contract; Stacked Priority Order; Avatar; CSS Layout Foundations; Optical Corrections; Glass Panels.
+In this part: AI Landing Page Tells; Scanning Patterns; Typography as a System; Min-Width Zero for Grid and Flex Children; Equal-Height Cards in a Row; Pricing Table; Card Treatment System; Phone Check at 375px; 60-30-10 Colour Balance; Visual Character: One Decision per Axis; Project Design Contract; Stacked Priority Order; Avatar; CSS Layout Foundations; Optical Corrections; Glass Panels; Less Noise on a Busy Screen.
 
 In `references/visual.md`: Border Radius; Charts That Lie; Color Accessibility; Dark Mode; Depth Layers; Design System Kit; Design Tokens; Gestalt Laws; Golden Ratio; Gradient Design; Grid System; Icon Design Rules; Perfect Card; Proximity Rule; Shadow Elevation; Visual Hierarchy; Von Restorff Effect; Z-Index Mastery; Tabular Numbers; Color System, Not Random Hex; AI Dashboard Tells.
 
@@ -310,10 +310,13 @@ A simple starting ratio for colour balance. **60% neutral (base):** backgrounds,
 
 Two cautions. The ratio comes from interior design and is a heuristic, not a measurement anyone checks. And the 30% support grey is for borders, icons and large secondary shapes, not body text: #A3A3A3 on #F7F7F5 is only about 2.4:1, under the 4.5:1 text minimum (Color Accessibility, Visual entry 03).
 
+**The 10% is what you click.** Spend the accent on the main button, one word in the headline and the light on the hero, and nowhere else. An example palette that holds the ratio: warm ivory #F3ECE9 for the 60, deep navy #23344E for the 30, coral orange #EC6745 for the 10.
+
 Do:
 - Large areas neutral, accent kept for actions
 - One accent colour, used sparingly
 - Support grey for borders and icons
+- The accent on what you click: the main button, one headline word, the light on the hero
 
 Avoid:
 - Accent colour spread across large surfaces with no reason
@@ -331,6 +334,8 @@ Code (CSS):
   --support: #A3A3A3; /* 30%: UI elements, icons, borders, secondary shapes (not body text, about 2.4:1) */
   --accent:  #0F0F0F; /* 10%: calls to action, important actions, links, key elements */
 }
+/* an example palette that holds the ratio; the 10% is what you click */
+.warm { --base: #F3ECE9; /* 60: warm ivory */ --support: #23344E; /* 30: deep navy */ --accent: #EC6745; /* 10: coral orange, main button, one headline word, hero light */ }
 ```
 
 ## Visual Character: One Decision per Axis
@@ -553,4 +558,37 @@ Code (CSS):
   box-shadow: 0 8px 32px rgb(0 0 0 / .18);
 }
 @media (prefers-reduced-transparency: reduce) { .glass { background: rgb(30 30 40 / .92); backdrop-filter: none; } }
+```
+
+## Less Noise on a Busy Screen
+
+A busy screen gets calmer by taking things away, not by adding more styling. Four cuts. **1. The background decides how much chrome you need:** on grey, every block needs a card and a shadow to stand out; on white, space does that job, so only the main block (the balance, for example) keeps a light card and everything else sits on the page. **2. No box inside a box:** a frame inside a card adds one more edge and no new meaning; remove it and let the text sit under the main figure. **3. Lines separate rows, nothing else:** a section title does not need a line under it, and a row divider starts at the text, not under the icons, so the icons stay in one clean column. **4. No carousel dots when the next card peeks:** a card already showing its edge at the side says “swipe”, so dots under it say it twice.
+
+This works with Card Treatment System (entry 28), which picks a card’s border or shadow from its background and never nests cards.
+
+Do:
+- A white page where space does the grouping
+- One light card, on the main block only
+- Supporting text straight under the main figure, no inner frame
+- Row dividers that start at the text column
+- The next card peeking out instead of dots
+
+Avoid:
+- A grey page with a card and a shadow on every block
+- A framed box inside a card
+- A line under a section title
+- Full-width dividers that run under the icons
+- Carousel dots under a card that already peeks
+
+Code (CSS):
+
+```css
+.screen { background: var(--surface); } /* white: space groups the blocks, not cards */
+.balance { background: var(--surface-2); border-radius: 16px; padding: 20px; } /* the one light card */
+.balance .sub { margin-top: 4px; color: var(--ink-muted); } /* no inner frame: the text sits under the figure */
+.section-title { border: 0; margin: 24px 0 8px; } /* a title needs no line */
+.row { display: grid; grid-template-columns: 40px 1fr; }
+.row + .row .row-text { border-top: 1px solid var(--border); } /* the divider starts at the text; icons stay one column */
+.carousel { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; }
+.carousel > * { flex: 0 0 85%; scroll-snap-align: start; } /* the next card peeks, so no dots */
 ```

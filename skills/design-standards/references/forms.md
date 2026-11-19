@@ -5,7 +5,7 @@
 
 Data entry is where trust is won or lost fastest, a form that fights back gets abandoned.
 
-19 patterns. Use when: any input, validation, multi-step flow or settings screen.
+20 patterns. Use when: any input, validation, multi-step flow or settings screen.
 
 ## Autosave
 
@@ -602,18 +602,26 @@ The small attributes on a field decide whether it is quick or a fight, especiall
 
 **Habits to refuse.** A Reset or Clear button beside Submit, where one wrong click loses everything. A CAPTCHA before anyone has tried to submit; add it only when it is needed. A sign-up that confirms the email before showing the password field, which forces an extra step for no reason. Separate first and last name fields where one full name field works. A date field that demands one fixed day and month order with no awareness of locale. A phone field with no country code. Confirm email and confirm password fields, when a show toggle does that job. A money field with no currency symbol in view. Clearing any filled field after a validation error, ever.
 
+**Six checks on every field.** **1. The label sits outside the field and stays visible:** a real `<label for="email">`; a placeholder disappears the moment someone types, so it is never the label (Form Field States, entry 04). **2. 44px tall, 16px text:** below a 16px font size, iOS Safari zooms the whole page when the field takes focus. **3. A real focus ring:** a border that only changes shade is easy to miss, so draw `outline: 2px solid var(--accent); outline-offset: 2px;` (Focus States, Navigation entry 01). **4. The resting border meets 3:1** against the background (WCAG 1.4.11, non-text contrast): on a #09090B dark background, a #3F3F46 border is 1.9:1 and fails, while #71717A is 4.1:1 and passes. **5. Errors after blur, not while typing:** validate `onBlur`, then the border turns red and a message appears, wired to the field with `aria-describedby="email-error"` (Form Validation Timing, entry 05). **6. The right type brings the right keyboard:** `type="email" autocomplete="email"` gives the @ keyboard and autofill; the same idea for a one-time code is `autocomplete="one-time-code"`.
+
 Do:
 - Field width matched to the expected answer
 - inputmode and autocomplete on every text field
 - Server errors mapped to the specific field
 - `inputmode="numeric"` on a text field for codes, postcodes and card numbers
 - Autofilled fields styled to match the design
+- A visible `<label for>` outside every field
+- Fields 44px tall with 16px text
+- Resting border at 3:1 against its background, focus drawn with a 2px outline at a 2px offset
 
 Avoid:
 - `type="number"` for anything with a leading zero or no arithmetic meaning
 - A Reset or Clear button next to Submit
 - Confirm email or confirm password fields
 - A phone field without a country code, or a money field without its currency symbol
+- Field text under 16px (iOS zooms the page on focus)
+- A focus state that only changes the border shade
+- An error shown while the person is still typing
 
 Code (HTML):
 
@@ -628,6 +636,15 @@ Code (HTML):
 
 input:autofill { box-shadow: inset 0 0 0 40px var(--field-bg); -webkit-text-fill-color: var(--ink); } /* no browser wash */
 input:-webkit-autofill { box-shadow: inset 0 0 0 40px var(--field-bg); -webkit-text-fill-color: var(--ink); }
+
+<!-- six checks: label outside, 44px and 16px, real ring, 3:1 border, errors after blur, right type -->
+<label for="email">Email</label>
+<input id="email" name="email" type="email" autocomplete="email" aria-describedby="email-error">
+<p id="email-error" class="field-error"></p>  <!-- filled on blur, never while typing -->
+
+input { height: 44px; font-size: 16px; border: 1px solid #71717A; } /* 16px stops the iOS zoom; #71717A is 4.1:1 on #09090B */
+input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; } /* not just a border shade change */
+input[aria-invalid="true"] { border-color: var(--danger); } /* set in the blur handler */
 ```
 
 ## Billing Page
@@ -664,4 +681,41 @@ Code (HTML):
 <p class="due">$63.33 due today, then $360.00 a month</p>
 <button>Confirm plan change</button> <!-- the amount sits right above it -->
 <a class="cancel" href="#cancel">Cancel plan</a> <!-- plain, findable, never red -->
+```
+
+## Invoice Screen
+
+An invoice screen answers one question first: how much is owed, and by when. **Lead with the amount due and a status pill:** the amount large at the top with its status beside it (Due, Overdue, Paid), and the due date and next steps right under it, on a plain white page. A quiet **viewed by client** line under the status pill (Viewed by client, 12 Nov) tells the sender whether to chase or wait. **One client row, not two address blocks:** fold the from and to address blocks into a single client row. **Flat rows, not a table:** cut the line-item table down to flat rows of name, quantity and price, with the total in bold at the bottom.
+
+**One solid button:** the main action (Send invoice, or Pay now on the client’s side) is the only filled button; secondary actions such as Download and Edit sit beside it as quiet outlines. It is the same one-number-first idea as Billing Page (entry 19), and the amounts line up with Tabular Numbers (Visual, entry 19).
+
+Do:
+- Amount due and status pill first, due date and next steps right under them
+- A viewed by client line under the status pill
+- One client row instead of two address blocks
+- Flat rows of name, quantity and price, the total in bold
+- One solid primary button, Download and Edit as quiet outlines
+
+Avoid:
+- An invoice that opens on two address blocks with the amount at the bottom
+- A gridded line-item table with tax and rate columns nobody reads on screen
+- Three filled buttons of equal weight
+
+Code (HTML):
+
+```html
+<!-- plain white page; the amount owed leads -->
+<header class="due">
+  <h1>$1,240.00</h1> <span class="pill pill-due">Due</span>
+  <p class="viewed">Viewed by client, 12 Nov</p>
+  <p>Due 30 Nov. Pay by card or bank transfer.</p> <!-- due date and next steps right under -->
+</header>
+<p class="client">Example Co · you@example.com · 2 High St</p> <!-- one row, not two address blocks -->
+<ul class="lines"> <!-- flat rows: name, quantity, price -->
+  <li>Design work <span>&times; 1</span> <span>$900.00</span></li>
+  <li>Hosting <span>&times; 2</span> <span>$340.00</span></li>
+  <li class="total"><b>Total</b> <b>$1,240.00</b></li>
+</ul>
+<button class="btn-primary">Send invoice</button>
+<button class="btn-outline">Download</button> <button class="btn-outline">Edit</button> <!-- quiet secondaries -->
 ```

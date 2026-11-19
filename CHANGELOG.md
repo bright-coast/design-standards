@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.6.0 (19 Nov 2026)
+
+Two new rules, Invoice Screen and Less Noise on a Busy Screen, and five rules made more specific: input fields, card shadows, premium motion, stagger spacing and the 60-30-10 accent.
+
+- Invoice Screen (new, Forms): the amount due and a status pill first, with a viewed by client line, the due date and next steps under them; one client row instead of two address blocks; flat line rows with the total in bold; one solid button with quiet outline secondaries.
+- Less Noise on a Busy Screen (new, Visual): on white, space groups the blocks and only the main block keeps a light card; no box inside a box; dividers start at the text, never under a section title; no carousel dots when the next card peeks.
+- Input Field Details: six checks on every field, a visible label outside the field, 44px tall with 16px text (iOS zooms below 16px), a 2px outline focus ring at a 2px offset, a resting border at 3:1, errors after blur wired with aria-describedby, and the right type and autocomplete.
+- Shadow Elevation: five fixes, two layers (contact plus lift), a tint from the background hue at about 8% instead of black at 25%, light from above, a three-step scale with one level per component, and a lighter surface with a one-pixel border in dark mode. New variant note on neutral versus accent-tinted shadows.
+- Easing Curves: three details that make motion feel premium, a spring (stiffness 170, damping 21), a stagger of i times 70ms, and about 5% overshoot with a touch of motion blur and an optional landing sound. New variant note on a premium flourish versus a snappy tool.
+- Animation Timing: new variant note on stagger spacing, 30 to 50ms for a cascade, about 70ms for a few hero elements, and past 80ms on a long list it feels like waiting.
+- 60-30-10 Colour Balance: the 10% is what you click (the main button, one headline word, the light on the hero), with an example palette of warm ivory, deep navy and coral.
+
 ## 1.5.3 (19 Nov 2026)
 
 Dropdown Design now says where the caret sits.

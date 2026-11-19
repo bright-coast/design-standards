@@ -995,14 +995,14 @@
 <div class="container">
 
   <section class="hero">
-    <div class="eyebrow">Reference &middot; v1.5.3</div>
+    <div class="eyebrow">Reference &middot; v1.6.0</div>
     <h1>Design Standards</h1>
-    <p class="hero-sub">A working library of 140 design rules for building clear, easy-to-use interfaces. Every rule has a live demo, a short explanation, what to do and what to avoid, and a code sketch. Neutral by design: the rules never choose your colours, fonts or brand.</p>
+    <p class="hero-sub">A working library of 142 design rules for building clear, easy-to-use interfaces. Every rule has a live demo, a short explanation, what to do and what to avoid, and a code sketch. Neutral by design: the rules never choose your colours, fonts or brand.</p>
     <div class="hero-invoke">
       <span class="invoke-pill">&quot;apply the design standards to &lt;screen&gt;&quot;</span>
     </div>
     <div class="hero-meta">
-      <div class="hero-meta-item"><span class="num">140</span><span class="lbl">Patterns, each with a live demo</span></div>
+      <div class="hero-meta-item"><span class="num">142</span><span class="lbl">Patterns, each with a live demo</span></div>
       <div class="hero-meta-item"><span class="num">9</span><span class="lbl">Categories</span></div>
     </div>
   </section>
@@ -1010,7 +1010,7 @@
   <section class="part" id="full-library">
 <div class="part-head">
       <h2>Pattern library</h2>
-      <span class="part-status">140 patterns &middot; 9 categories</span>
+      <span class="part-status">142 patterns &middot; 9 categories</span>
     </div>
     <p class="part-dek">Every pattern has a live demo, a short rule, what to do and what to avoid, and a code sketch. Where sources disagree, each variant is kept and labelled with when to use it.</p>
 
@@ -2207,7 +2207,7 @@ Primary user: ...   Primary action: ...   Worst case: ...
     </div>
 
     <div class="lib-cat" id="lib-forms">
-      <div class="lib-cat-head"><h3>Forms</h3><span class="lib-cat-count">19 patterns</span></div>
+      <div class="lib-cat-head"><h3>Forms</h3><span class="lib-cat-count">20 patterns</span></div>
 <p class="lib-cat-dek">Data entry is where trust is won or lost fastest, a form that fights back gets abandoned.</p>
 <div class="lib-pattern" id="lp-autosave">
 <div class="demo"><div class="demo-toolbar"><span class="demo-label">Type: debounced save cycle</span></div><div class="demo-stage" data-demo-theme="light"><div class="a-frame"><div class="as-field-wrap">
@@ -2715,8 +2715,9 @@ cc.addEventListener(<span class="str">'blur'</span>, () =&gt; validate(cc)); <sp
 <p>The small attributes on a field decide whether it is quick or a fight, especially on a phone. <strong>Width hints the answer:</strong> a postcode field is narrow and an address field is wide, so the box tells people how much to type. <strong>Every text field sets inputmode and autocomplete</strong> (email, tel, postal-code, one-time-code, name), which brings up the right keyboard and lets the browser fill in what it already knows. <strong>A maximum length exists only for a real business limit,</strong> and then a visible counter appears as the limit gets close, never a field that silently stops accepting characters. <strong>An availability check</strong> (is this username free?) runs on blur or after a 500ms pause in typing, never on every keystroke. <strong>A server error lands on its field:</strong> map every error the server returns to the field it belongs to; a generic Form invalid banner is not acceptable.</p>
 <p><strong>Codes are text, not numbers.</strong> Postcodes, verification codes, card numbers and account numbers use <code class="tok">type="text"</code> with <code class="tok">inputmode="numeric"</code>, never <code class="tok">type="number"</code>, which drops leading zeros (0800 becomes 800), adds spinner arrows, and changes the value when someone scrolls over the field. <strong>Autofill keeps the design:</strong> style <code class="tok">:autofill</code> so a field the browser fills keeps the design&rsquo;s background and text colours instead of the browser&rsquo;s yellow or blue wash, which looks like an error state in some themes.</p>
 <p><strong>Habits to refuse.</strong> A Reset or Clear button beside Submit, where one wrong click loses everything. A CAPTCHA before anyone has tried to submit; add it only when it is needed. A sign-up that confirms the email before showing the password field, which forces an extra step for no reason. Separate first and last name fields where one full name field works. A date field that demands one fixed day and month order with no awareness of locale. A phone field with no country code. Confirm email and confirm password fields, when a show toggle does that job. A money field with no currency symbol in view. Clearing any filled field after a validation error, ever.</p>
+<p><strong>Six checks on every field.</strong> <strong>1. The label sits outside the field and stays visible:</strong> a real <code class="tok">&lt;label for="email"&gt;</code>; a placeholder disappears the moment someone types, so it is never the label (<a href="#lp-field-states">Form Field States</a>, entry 04). <strong>2. 44px tall, 16px text:</strong> below a 16px font size, iOS Safari zooms the whole page when the field takes focus. <strong>3. A real focus ring:</strong> a border that only changes shade is easy to miss, so draw <code class="tok">outline: 2px solid var(--accent); outline-offset: 2px;</code> (<a href="#lp-focus-states">Focus States</a>, Navigation entry 01). <strong>4. The resting border meets 3:1</strong> against the background (WCAG 1.4.11, non-text contrast): on a #09090B dark background, a #3F3F46 border is 1.9:1 and fails, while #71717A is 4.1:1 and passes. <strong>5. Errors after blur, not while typing:</strong> validate <code class="tok">onBlur</code>, then the border turns red and a message appears, wired to the field with <code class="tok">aria-describedby="email-error"</code> (<a href="#lp-validation-timing">Form Validation Timing</a>, entry 05). <strong>6. The right type brings the right keyboard:</strong> <code class="tok">type="email" autocomplete="email"</code> gives the @ keyboard and autofill; the same idea for a one-time code is <code class="tok">autocomplete="one-time-code"</code>.</p>
 </div>
-<ul class="lib-dodont"><li><span class="mk">&check;</span>Field width matched to the expected answer</li><li><span class="mk">&check;</span>inputmode and autocomplete on every text field</li><li><span class="mk">&check;</span>Server errors mapped to the specific field</li><li><span class="mk">&check;</span><code class="tok">inputmode="numeric"</code> on a text field for codes, postcodes and card numbers</li><li><span class="mk">&check;</span>Autofilled fields styled to match the design</li><li class="avoid"><span class="mk">&times;</span><code class="tok">type="number"</code> for anything with a leading zero or no arithmetic meaning</li><li class="avoid"><span class="mk">&times;</span>A Reset or Clear button next to Submit</li><li class="avoid"><span class="mk">&times;</span>Confirm email or confirm password fields</li><li class="avoid"><span class="mk">&times;</span>A phone field without a country code, or a money field without its currency symbol</li></ul>
+<ul class="lib-dodont"><li><span class="mk">&check;</span>Field width matched to the expected answer</li><li><span class="mk">&check;</span>inputmode and autocomplete on every text field</li><li><span class="mk">&check;</span>Server errors mapped to the specific field</li><li><span class="mk">&check;</span><code class="tok">inputmode="numeric"</code> on a text field for codes, postcodes and card numbers</li><li><span class="mk">&check;</span>Autofilled fields styled to match the design</li><li><span class="mk">&check;</span>A visible <code class="tok">&lt;label for&gt;</code> outside every field</li><li><span class="mk">&check;</span>Fields 44px tall with 16px text</li><li><span class="mk">&check;</span>Resting border at 3:1 against its background, focus drawn with a 2px outline at a 2px offset</li><li class="avoid"><span class="mk">&times;</span><code class="tok">type="number"</code> for anything with a leading zero or no arithmetic meaning</li><li class="avoid"><span class="mk">&times;</span>A Reset or Clear button next to Submit</li><li class="avoid"><span class="mk">&times;</span>Confirm email or confirm password fields</li><li class="avoid"><span class="mk">&times;</span>A phone field without a country code, or a money field without its currency symbol</li><li class="avoid"><span class="mk">&times;</span>Field text under 16px (iOS zooms the page on focus)</li><li class="avoid"><span class="mk">&times;</span>A focus state that only changes the border shade</li><li class="avoid"><span class="mk">&times;</span>An error shown while the person is still typing</li></ul>
 </div>
 <div class="code-panel"><div class="code-panel-bar"><span class="code-panel-lang">HTML</span><button class="code-toggle" type="button"><span class="txt">Show code</span><span class="chev">▾</span></button></div><pre><code><span class="cm">&lt;!-- width hints the answer; the right keyboard and autofill on every field --&gt;</span>
 &lt;input name="postcode" inputmode="numeric" autocomplete="postal-code" style="width:8ch"&gt;
@@ -2727,7 +2728,16 @@ cc.addEventListener(<span class="str">'blur'</span>, () =&gt; validate(cc)); <sp
 &lt;input name="code" type="text" inputmode="numeric" autocomplete="one-time-code"&gt;  <span class="cm">&lt;!-- never type="number": 0800 stays 0800 --&gt;</span>
 
 input:autofill { box-shadow: inset 0 0 0 40px var(--field-bg); -webkit-text-fill-color: var(--ink); } <span class="cm">/* no browser wash */</span>
-input:-webkit-autofill { box-shadow: inset 0 0 0 40px var(--field-bg); -webkit-text-fill-color: var(--ink); }</code></pre></div>
+input:-webkit-autofill { box-shadow: inset 0 0 0 40px var(--field-bg); -webkit-text-fill-color: var(--ink); }
+
+<span class="cm">&lt;!-- six checks: label outside, 44px and 16px, real ring, 3:1 border, errors after blur, right type --&gt;</span>
+&lt;label for="email"&gt;Email&lt;/label&gt;
+&lt;input id="email" name="email" type="email" autocomplete="email" aria-describedby="email-error"&gt;
+&lt;p id="email-error" class="field-error"&gt;&lt;/p&gt;  <span class="cm">&lt;!-- filled on blur, never while typing --&gt;</span>
+
+input { height: 44px; font-size: 16px; border: 1px solid #71717A; } <span class="cm">/* 16px stops the iOS zoom; #71717A is 4.1:1 on #09090B */</span>
+input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; } <span class="cm">/* not just a border shade change */</span>
+input[aria-invalid="true"] { border-color: var(--danger); } <span class="cm">/* set in the blur handler */</span></code></pre></div>
 </div>
 
 <div class="lib-pattern" id="lp-billing-page">
@@ -2752,6 +2762,32 @@ input:-webkit-autofill { box-shadow: inset 0 0 0 40px var(--field-bg); -webkit-t
 &lt;p class="due"&gt;$63.33 due today, then $360.00 a month&lt;/p&gt;
 &lt;button&gt;Confirm plan change&lt;/button&gt; <span class="cm">&lt;!-- the amount sits right above it --&gt;</span>
 &lt;a class="cancel" href="#cancel"&gt;Cancel plan&lt;/a&gt; <span class="cm">&lt;!-- plain, findable, never red --&gt;</span></code></pre></div>
+</div>
+
+<div class="lib-pattern" id="lp-invoice-screen">
+<div class="demo"><div class="demo-toolbar"><span class="demo-label">The amount owed first, then everything else</span></div><div class="demo-stage" data-demo-theme="light"><div class="a-frame"><div class="vd-row" style="gap:12px;flex-wrap:wrap;align-items:flex-start;"><div class="vd-col"><div style="width:130px;padding:8px;border-radius:8px;background:var(--a-bg);border:1px solid var(--a-border);font-size:8px;color:var(--a-ink2);"><div style="display:flex;gap:4px;"><div style="flex:1;padding:3px;border:1px solid var(--a-border);border-radius:4px;">From<br>Acme Studio<br>1 Main St</div><div style="flex:1;padding:3px;border:1px solid var(--a-border);border-radius:4px;">To<br>Example Co<br>2 High St</div></div><div style="margin-top:4px;border:1px solid var(--a-border);border-radius:4px;"><div style="padding:2px 3px;border-bottom:1px solid var(--a-border);">Item | Qty | Rate | Tax</div><div style="padding:2px 3px;border-bottom:1px solid var(--a-border);">Design | 1 | 900 | 90</div><div style="padding:2px 3px;">Total $1,240.00</div></div><div style="margin-top:4px;display:flex;gap:3px;"><span style="flex:1;height:13px;border-radius:4px;background:var(--a-ink);"></span><span style="flex:1;height:13px;border-radius:4px;background:var(--a-ink2);"></span><span style="flex:1;height:13px;border-radius:4px;background:var(--a-ink2);"></span></div></div><span class="vd-caption">amount buried, three loud buttons</span></div><div class="vd-col"><div style="width:140px;padding:8px;border-radius:8px;background:var(--a-card);border:1px solid var(--a-border);font-size:9px;color:var(--a-ink);"><div style="display:flex;align-items:center;gap:5px;"><b style="font-size:14px;">$1,240.00</b><span style="font-size:7.5px;padding:1px 5px;border-radius:999px;border:1px solid var(--a-warn);color:var(--a-warn);">Due</span></div><div style="font-size:7.5px;color:var(--a-ink2);">Viewed by client, 12 Nov</div><div style="font-size:8px;color:var(--a-ink2);margin-top:2px;">Due 30 Nov. Pay by card or bank transfer.</div><div style="margin-top:5px;font-size:8px;">Example Co &middot; you@example.com</div><div style="margin-top:4px;font-size:8px;display:flex;justify-content:space-between;"><span>Design work &times; 1</span><span>$900.00</span></div><div style="font-size:8px;display:flex;justify-content:space-between;"><span>Hosting &times; 2</span><span>$340.00</span></div><div style="font-size:8.5px;display:flex;justify-content:space-between;margin-top:2px;"><b>Total</b><b>$1,240.00</b></div><div style="margin-top:5px;display:flex;gap:3px;"><span style="flex:2;height:14px;border-radius:4px;background:var(--a-ink);color:var(--a-card);font-size:7.5px;text-align:center;line-height:14px;">Send invoice</span><span style="flex:1;height:14px;border-radius:4px;border:1px solid var(--a-border);font-size:7.5px;text-align:center;line-height:12px;">Download</span><span style="flex:1;height:14px;border-radius:4px;border:1px solid var(--a-border);font-size:7.5px;text-align:center;line-height:12px;">Edit</span></div></div><span class="vd-caption">amount, status, next step</span></div></div></div></div></div>
+<div>
+<div class="lib-pattern-head"><span class="lib-pattern-num">20</span><h4>Invoice Screen</h4></div>
+<div class="lib-pattern-body">
+<p>An invoice screen answers one question first: how much is owed, and by when. <strong>Lead with the amount due and a status pill:</strong> the amount large at the top with its status beside it (Due, Overdue, Paid), and the due date and next steps right under it, on a plain white page. A quiet <strong>viewed by client</strong> line under the status pill (Viewed by client, 12 Nov) tells the sender whether to chase or wait. <strong>One client row, not two address blocks:</strong> fold the from and to address blocks into a single client row. <strong>Flat rows, not a table:</strong> cut the line-item table down to flat rows of name, quantity and price, with the total in bold at the bottom.</p>
+<p><strong>One solid button:</strong> the main action (Send invoice, or Pay now on the client&rsquo;s side) is the only filled button; secondary actions such as Download and Edit sit beside it as quiet outlines. It is the same one-number-first idea as <a href="#lp-billing-page">Billing Page</a> (entry 19), and the amounts line up with <a href="#lp-tabular-numbers">Tabular Numbers</a> (Visual, entry 19).</p>
+</div>
+<ul class="lib-dodont"><li><span class="mk">&check;</span>Amount due and status pill first, due date and next steps right under them</li><li><span class="mk">&check;</span>A viewed by client line under the status pill</li><li><span class="mk">&check;</span>One client row instead of two address blocks</li><li><span class="mk">&check;</span>Flat rows of name, quantity and price, the total in bold</li><li><span class="mk">&check;</span>One solid primary button, Download and Edit as quiet outlines</li><li class="avoid"><span class="mk">&times;</span>An invoice that opens on two address blocks with the amount at the bottom</li><li class="avoid"><span class="mk">&times;</span>A gridded line-item table with tax and rate columns nobody reads on screen</li><li class="avoid"><span class="mk">&times;</span>Three filled buttons of equal weight</li></ul>
+</div>
+<div class="code-panel"><div class="code-panel-bar"><span class="code-panel-lang">HTML</span><button class="code-toggle" type="button"><span class="txt">Show code</span><span class="chev">▾</span></button></div><pre><code><span class="cm">&lt;!-- plain white page; the amount owed leads --&gt;</span>
+&lt;header class="due"&gt;
+  &lt;h1&gt;$1,240.00&lt;/h1&gt; &lt;span class="pill pill-due"&gt;Due&lt;/span&gt;
+  &lt;p class="viewed"&gt;Viewed by client, 12 Nov&lt;/p&gt;
+  &lt;p&gt;Due 30 Nov. Pay by card or bank transfer.&lt;/p&gt; <span class="cm">&lt;!-- due date and next steps right under --&gt;</span>
+&lt;/header&gt;
+&lt;p class="client"&gt;Example Co &middot; you@example.com &middot; 2 High St&lt;/p&gt; <span class="cm">&lt;!-- one row, not two address blocks --&gt;</span>
+&lt;ul class="lines"&gt; <span class="cm">&lt;!-- flat rows: name, quantity, price --&gt;</span>
+  &lt;li&gt;Design work &lt;span&gt;&amp;times; 1&lt;/span&gt; &lt;span&gt;$900.00&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;Hosting &lt;span&gt;&amp;times; 2&lt;/span&gt; &lt;span&gt;$340.00&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="total"&gt;&lt;b&gt;Total&lt;/b&gt; &lt;b&gt;$1,240.00&lt;/b&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;button class="btn-primary"&gt;Send invoice&lt;/button&gt;
+&lt;button class="btn-outline"&gt;Download&lt;/button&gt; &lt;button class="btn-outline"&gt;Edit&lt;/button&gt; <span class="cm">&lt;!-- quiet secondaries --&gt;</span></code></pre></div>
 </div>
     </div>
 
@@ -3140,7 +3176,7 @@ return (&lt;&gt;
     </div>
 
     <div class="lib-cat" id="lib-visual">
-      <div class="lib-cat-head"><h3>Visual</h3><span class="lib-cat-count">37 patterns</span></div>
+      <div class="lib-cat-head"><h3>Visual</h3><span class="lib-cat-count">38 patterns</span></div>
 <p class="lib-cat-dek">The layer people notice consciously least and judge most: colour, depth, spacing, and the perceptual rules underneath them.</p>
 <div class="lib-pattern" id="lp-border-radius">
 <div class="demo"><div class="demo-toolbar"><span class="demo-label">Radius scales with element size</span></div><div class="demo-stage" data-demo-theme="light"><div class="a-frame"><div class="vd-row radius-demo">
@@ -3539,8 +3575,10 @@ img, video { filter: brightness(0.9); } <span class="cm">/* dim photos to about 
 <div class="lib-pattern-body">
 <p>Real depth comes from stacking multiple shadow layers, not one blur value scaled up for &ldquo;more elevation&rdquo;. A genuinely floating element has a tight, dark contact shadow close to its edge, a softer mid-range shadow, and a very soft, wide ambient shadow, all three layered together. Tinting the shadow&rsquo;s colour toward the brand accent instead of pure black adds a subtle glow that feels considered rather than generic. Reserve the strongest elevation tier for what actually matters most on screen (an open modal, a dragged card) rather than applying it uniformly and flattening the whole hierarchy.</p>
 <p><strong>One light source.</strong> Every shadow in the interface assumes the same light direction, usually from straight above, so every shadow offsets the same way (down, never left on one card and right on another). <strong>How tiers scale:</strong> going up a tier, the offset and blur grow (y 1 and blur 2 at rest, y 20 and blur 32 on a modal) while the opacity of each layer stays roughly the same, about 4 to 8%; a higher element casts a longer, softer shadow, not a darker one. <strong>Trim the halo:</strong> give the wide ambient layer a negative spread (for example 0 20px 32px -8px) so the shadow sits under the element instead of glowing out past its sides. <strong>On dark surfaces</strong> black shadows barely read and Dark Mode raises surfaces with lightness instead; the one exception is a low-opacity glow tinted to the accent (about 15 to 25%), which can stand in for the black ambient layer on a floating element.</p>
+<p><strong>Five fixes for card shadows.</strong> <strong>1. Two layers, never one:</strong> stop using a single shadow such as <code class="tok">0 4px 20px rgba(0,0,0,.25)</code>. Stack a tight contact shadow, <code class="tok">0 1px 2px rgba(24,24,27,.08)</code> (one pixel down, two of blur), with a wide lift shadow, <code class="tok">0 8px 24px rgba(24,24,27,.08)</code> (eight down, 24 of blur). <strong>2. Tint, don&rsquo;t blacken:</strong> take the shadow colour from the background&rsquo;s hue (zinc-900, rgb 24, 24, 27) at about 8%, never black at 25%. <strong>3. Light from above:</strong> x offset 0 and a positive y on every shadow in the UI, so nothing looks lit by two suns. <strong>4. Elevation is a scale, not a guess:</strong> shadow-1 for a card, shadow-2 for a dropdown, shadow-3 for a modal. Each component gets one level, and no component gets a custom shadow. <strong>5. Dark mode:</strong> shadows vanish on a dark page, so raise elevation with a lighter surface (for example #18181B) and a one-pixel border instead (<a href="#lp-dark-mode">Dark Mode</a>, entry 04).</p>
 </div>
-<ul class="lib-dodont"><li><span class="mk">&check;</span>Tint the glow to brand accent</li><li><span class="mk">&check;</span>Every shadow offset in the same direction</li><li><span class="mk">&check;</span>Offset and blur grow with elevation; opacity stays about the same</li><li class="avoid"><span class="mk">&times;</span>One flat drop shadow used everywhere</li><li class="avoid"><span class="mk">&times;</span>A black ambient shadow on a dark surface</li></ul>
+<ul class="lib-dodont"><li><span class="mk">&check;</span>Tint the glow to brand accent</li><li><span class="mk">&check;</span>Every shadow offset in the same direction</li><li><span class="mk">&check;</span>Offset and blur grow with elevation; opacity stays about the same</li><li><span class="mk">&check;</span>Two layers on every card: a contact shadow plus a lift shadow</li><li><span class="mk">&check;</span>Shadow colour from the background&rsquo;s hue at about 8%</li><li><span class="mk">&check;</span>One level per component from a three-step scale (card, dropdown, modal)</li><li><span class="mk">&check;</span>Dark mode: a lighter surface and a one-pixel border instead of a shadow</li><li class="avoid"><span class="mk">&times;</span>One flat drop shadow used everywhere</li><li class="avoid"><span class="mk">&times;</span>A black ambient shadow on a dark surface</li><li class="avoid"><span class="mk">&times;</span>One heavy black shadow such as <code class="tok">0 4px 20px rgba(0,0,0,.25)</code></li><li class="avoid"><span class="mk">&times;</span>A custom shadow made up for a single component</li><li class="avoid"><span class="mk">&times;</span>A shadow with a sideways x offset</li></ul>
+<div class="variant-note"><b>Shadow tint, two variants.</b> Variant A: a neutral tint from the background&rsquo;s own hue (zinc-900 at about 8%). Use when: resting cards, dropdowns and modals, which is every ordinary shadow. Variant B: a glow tinted to the brand accent. Use when: one highlighted or dragged element that should stand out from the rest, layered on top of its neutral shadow. Both kept on purpose.</div>
 </div>
 <div class="code-panel"><div class="code-panel-bar"><span class="code-panel-lang">CSS</span><button class="code-toggle" type="button"><span class="txt">Show code</span><span class="chev">▾</span></button></div><pre><code>:root {
   --elevation-1: 0 1px 2px rgb(0 0 0 / .08);
@@ -3551,7 +3589,18 @@ img, video { filter: brightness(0.9); } <span class="cm">/* dim photos to about 
 }
 .card { box-shadow: var(--elevation-1); } <span class="cm">/* resting */</span>
 .modal { box-shadow: var(--elevation-3); } <span class="cm">/* strongest tier reserved for what matters most */</span>
-.card.dragging { box-shadow: var(--elevation-3), var(--elevation-glow); }</code></pre></div>
+.card.dragging { box-shadow: var(--elevation-3), var(--elevation-glow); }
+
+<span class="cm">/* five fixes: two layers, zinc tint at 8%, x 0 and y positive, one level per component */</span>
+:root {
+  --shadow-1: 0 1px 2px rgb(24 24 27 / .08), 0 8px 24px rgb(24 24 27 / .08);  <span class="cm">/* card: contact + lift */</span>
+  --shadow-2: 0 2px 4px rgb(24 24 27 / .08), 0 12px 32px rgb(24 24 27 / .08); <span class="cm">/* dropdown */</span>
+  --shadow-3: 0 4px 8px rgb(24 24 27 / .08), 0 24px 48px -8px rgb(24 24 27 / .08); <span class="cm">/* modal */</span>
+}
+<span class="cm">/* not this: box-shadow: 0 4px 20px rgba(0,0,0,.25); one layer, black at 25% */</span>
+@media (prefers-color-scheme: dark) {
+  .card { box-shadow: none; background: #18181B; border: 1px solid rgb(255 255 255 / .08); } <span class="cm">/* lighter surface + 1px border */</span>
+}</code></pre></div>
 </div>
 
 <div class="lib-pattern" id="lp-visual-hierarchy">
@@ -3978,14 +4027,15 @@ main { padding-bottom: calc(64px + env(safe-area-inset-bottom)); } <span class="
 </div>
 
 <div class="lib-pattern" id="lp-60-30-10">
-<div class="demo"><div class="demo-toolbar"><span class="demo-label">60 / 30 / 10</span></div><div class="demo-stage" data-demo-theme="light"><div class="a-frame"><div style="width:220px;"><div style="display:flex;height:22px;border-radius:6px;overflow:hidden;border:1px solid var(--a-border);"><i style="display:block;width:60%;background:#F7F7F5;"></i><i style="display:block;width:30%;background:#A3A3A3;"></i><i style="display:block;width:10%;background:#0F0F0F;"></i></div><span class="vd-caption">60% neutral base, 30% secondary support, 10% accent</span></div></div></div></div>
+<div class="demo"><div class="demo-toolbar"><span class="demo-label">60 / 30 / 10</span></div><div class="demo-stage" data-demo-theme="light"><div class="a-frame"><div style="width:220px;"><div style="display:flex;height:22px;border-radius:6px;overflow:hidden;border:1px solid var(--a-border);"><i style="display:block;width:60%;background:#F7F7F5;"></i><i style="display:block;width:30%;background:#A3A3A3;"></i><i style="display:block;width:10%;background:#0F0F0F;"></i></div><span class="vd-caption">60% neutral base, 30% secondary support, 10% accent</span><div style="display:flex;height:22px;border-radius:6px;overflow:hidden;border:1px solid var(--a-border);margin-top:8px;"><i style="display:block;width:60%;background:#F3ECE9;"></i><i style="display:block;width:30%;background:#23344E;"></i><i style="display:block;width:10%;background:#EC6745;"></i></div><span class="vd-caption">ivory 60, deep navy 30, coral 10: the coral is what you click</span></div></div></div></div>
 <div>
 <div class="lib-pattern-head"><span class="lib-pattern-num">30</span><h4>60-30-10 Colour Balance</h4></div>
 <div class="lib-pattern-body">
 <p>A simple starting ratio for colour balance. <strong>60% neutral (base):</strong> backgrounds, surfaces, containers and large areas, such as white, light grey or off-white (for example #F7F7F5). <strong>30% secondary (support):</strong> UI elements, icons, borders and secondary content, in grey, muted tones or soft colours (#A3A3A3). <strong>10% accent (highlight):</strong> calls to action, important actions, links and key elements, in the brand colour (a near-black such as #0F0F0F also works, where the accent is contrast rather than hue). Kept to that balance, an interface reads clean, professional and easy to navigate without being boring.</p>
 <p>Two cautions. The ratio comes from interior design and is a heuristic, not a measurement anyone checks. And the 30% support grey is for borders, icons and large secondary shapes, not body text: #A3A3A3 on #F7F7F5 is only about 2.4:1, under the 4.5:1 text minimum (Color Accessibility, Visual entry 03).</p>
+<p><strong>The 10% is what you click.</strong> Spend the accent on the main button, one word in the headline and the light on the hero, and nowhere else. An example palette that holds the ratio: warm ivory #F3ECE9 for the 60, deep navy #23344E for the 30, coral orange #EC6745 for the 10.</p>
 </div>
-<ul class="lib-dodont"><li><span class="mk">&check;</span>Large areas neutral, accent kept for actions</li><li><span class="mk">&check;</span>One accent colour, used sparingly</li><li><span class="mk">&check;</span>Support grey for borders and icons</li><li class="avoid"><span class="mk">&times;</span>Accent colour spread across large surfaces with no reason</li><li class="avoid"><span class="mk">&times;</span>The light support grey used for body text</li></ul>
+<ul class="lib-dodont"><li><span class="mk">&check;</span>Large areas neutral, accent kept for actions</li><li><span class="mk">&check;</span>One accent colour, used sparingly</li><li><span class="mk">&check;</span>Support grey for borders and icons</li><li><span class="mk">&check;</span>The accent on what you click: the main button, one headline word, the light on the hero</li><li class="avoid"><span class="mk">&times;</span>Accent colour spread across large surfaces with no reason</li><li class="avoid"><span class="mk">&times;</span>The light support grey used for body text</li></ul>
 <div class="variant-note"><b>Strict ratio versus a dark hero surface, two variants.</b> Variant A: strict 60-30-10, the accent only on actions and key elements. Use when: list, form and settings screens where the actions should be the only loud thing. Variant B: one dark hero surface well past 10% (for example a finance screen that puts the balance on a large black card, which strictly breaks the rule). Use when: one object is the subject of the screen, such as an account balance or a featured item, and everything else stays neutral. Both kept on purpose.</div>
 <div class="variant-note"><b>What the 30% is, two variants.</b> Variant A: the 30% is a support grey for borders, icons and secondary shapes, and containers belong to the 60% neutral, as above. Use when: a neutral, mostly white product where the brand lives only in the accent. Variant B: the 30% is a lighter tone of the base hue, used as a surface layer on cards, navigation and containers (for example a pale blue-grey panel on a white page with a strong blue accent). Use when: the product should feel tinted by its brand throughout, and the tonal surface still keeps text on it at 4.5:1. Both kept on purpose.</div>
 </div>
@@ -3993,7 +4043,9 @@ main { padding-bottom: calc(64px + env(safe-area-inset-bottom)); } <span class="
   --base:    #F7F7F5; <span class="cm">/* 60%: backgrounds, surfaces, containers, large areas */</span>
   --support: #A3A3A3; <span class="cm">/* 30%: UI elements, icons, borders, secondary shapes (not body text, about 2.4:1) */</span>
   --accent:  #0F0F0F; <span class="cm">/* 10%: calls to action, important actions, links, key elements */</span>
-}</code></pre></div>
+}
+<span class="cm">/* an example palette that holds the ratio; the 10% is what you click */</span>
+.warm { --base: #F3ECE9; <span class="cm">/* 60: warm ivory */</span> --support: #23344E; <span class="cm">/* 30: deep navy */</span> --accent: #EC6745; <span class="cm">/* 10: coral orange, main button, one headline word, hero light */</span> }</code></pre></div>
 </div>
 
 <div class="lib-pattern" id="lp-visual-character">
@@ -4164,6 +4216,26 @@ Character: warm and encouraging, progress never guilt
 }
 @media (prefers-reduced-transparency: reduce) { .glass { background: rgb(30 30 40 / .92); backdrop-filter: none; } }</code></pre></div>
 </div>
+
+<div class="lib-pattern" id="lp-less-noise">
+<div class="demo"><div class="demo-toolbar"><span class="demo-label">Same screen, four things taken away</span></div><div class="demo-stage" data-demo-theme="light"><div class="a-frame"><div class="vd-row" style="gap:12px;flex-wrap:wrap;align-items:flex-start;"><div class="vd-col"><div style="width:128px;padding:7px;border-radius:10px;background:var(--a-bg);font-size:8px;color:var(--a-ink);display:flex;flex-direction:column;gap:5px;"><div style="padding:6px;border-radius:7px;background:var(--a-card);box-shadow:0 1px 3px rgba(0,0,0,.12);"><span style="color:var(--a-ink2);">Balance</span><br><b style="font-size:12px;">$4,280.15</b><div style="margin-top:3px;padding:2px 4px;border:1px solid var(--a-border);border-radius:4px;color:var(--a-ink2);">+$120 this week</div></div><div style="padding:4px 6px;border-radius:7px;background:var(--a-card);box-shadow:0 1px 3px rgba(0,0,0,.12);border-bottom:2px solid var(--a-border);"><b>Recent</b></div><div style="padding:5px 6px;border-radius:7px;background:var(--a-card);box-shadow:0 1px 3px rgba(0,0,0,.12);"><div style="border-bottom:1px solid var(--a-border);padding-bottom:3px;">&#9679; Coffee</div><div style="padding-top:3px;">&#9679; Rent</div></div><div style="text-align:center;letter-spacing:2px;color:var(--a-ink2);">&#9679;&#9675;&#9675;</div></div><span class="vd-caption">grey page, a card on everything</span></div><div class="vd-col"><div style="width:128px;padding:7px;border-radius:10px;background:var(--a-card);border:1px solid var(--a-border);font-size:8px;color:var(--a-ink);display:flex;flex-direction:column;gap:6px;"><div style="padding:6px;border-radius:7px;background:var(--a-bg);"><span style="color:var(--a-ink2);">Balance</span><br><b style="font-size:12px;">$4,280.15</b><br><span style="color:var(--a-ink2);">+$120 this week</span></div><b style="padding-left:2px;">Recent</b><div><div style="display:flex;gap:5px;"><span style="width:10px;">&#9679;</span><span style="flex:1;padding-bottom:3px;">Coffee</span></div><div style="display:flex;gap:5px;"><span style="width:10px;">&#9679;</span><span style="flex:1;padding-top:3px;border-top:1px solid var(--a-border);">Rent</span></div></div><div style="display:flex;gap:4px;overflow:hidden;"><span style="flex:0 0 82%;height:16px;border-radius:5px;background:var(--a-bg);"></span><span style="flex:0 0 30%;height:16px;border-radius:5px;background:var(--a-bg);"></span></div></div><span class="vd-caption">white page, one light card, the next card peeks</span></div></div></div></div></div>
+<div>
+<div class="lib-pattern-head"><span class="lib-pattern-num">38</span><h4>Less Noise on a Busy Screen</h4></div>
+<div class="lib-pattern-body">
+<p>A busy screen gets calmer by taking things away, not by adding more styling. Four cuts. <strong>1. The background decides how much chrome you need:</strong> on grey, every block needs a card and a shadow to stand out; on white, space does that job, so only the main block (the balance, for example) keeps a light card and everything else sits on the page. <strong>2. No box inside a box:</strong> a frame inside a card adds one more edge and no new meaning; remove it and let the text sit under the main figure. <strong>3. Lines separate rows, nothing else:</strong> a section title does not need a line under it, and a row divider starts at the text, not under the icons, so the icons stay in one clean column. <strong>4. No carousel dots when the next card peeks:</strong> a card already showing its edge at the side says &ldquo;swipe&rdquo;, so dots under it say it twice.</p>
+<p>This works with <a href="#lp-card-treatment">Card Treatment System</a> (entry 28), which picks a card&rsquo;s border or shadow from its background and never nests cards.</p>
+</div>
+<ul class="lib-dodont"><li><span class="mk">&check;</span>A white page where space does the grouping</li><li><span class="mk">&check;</span>One light card, on the main block only</li><li><span class="mk">&check;</span>Supporting text straight under the main figure, no inner frame</li><li><span class="mk">&check;</span>Row dividers that start at the text column</li><li><span class="mk">&check;</span>The next card peeking out instead of dots</li><li class="avoid"><span class="mk">&times;</span>A grey page with a card and a shadow on every block</li><li class="avoid"><span class="mk">&times;</span>A framed box inside a card</li><li class="avoid"><span class="mk">&times;</span>A line under a section title</li><li class="avoid"><span class="mk">&times;</span>Full-width dividers that run under the icons</li><li class="avoid"><span class="mk">&times;</span>Carousel dots under a card that already peeks</li></ul>
+</div>
+<div class="code-panel"><div class="code-panel-bar"><span class="code-panel-lang">CSS</span><button class="code-toggle" type="button"><span class="txt">Show code</span><span class="chev">▾</span></button></div><pre><code>.screen { background: var(--surface); } <span class="cm">/* white: space groups the blocks, not cards */</span>
+.balance { background: var(--surface-2); border-radius: 16px; padding: 20px; } <span class="cm">/* the one light card */</span>
+.balance .sub { margin-top: 4px; color: var(--ink-muted); } <span class="cm">/* no inner frame: the text sits under the figure */</span>
+.section-title { border: 0; margin: 24px 0 8px; } <span class="cm">/* a title needs no line */</span>
+.row { display: grid; grid-template-columns: 40px 1fr; }
+.row + .row .row-text { border-top: 1px solid var(--border); } <span class="cm">/* the divider starts at the text; icons stay one column */</span>
+.carousel { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; }
+.carousel > * { flex: 0 0 85%; scroll-snap-align: start; } <span class="cm">/* the next card peeks, so no dots */</span></code></pre></div>
+</div>
     </div>
 
     <div class="lib-cat" id="lib-motion">
@@ -4183,6 +4255,7 @@ Character: warm and encouraging, progress never guilt
 <ul class="lib-dodont"><li><span class="mk">&check;</span>Tap feedback under 100ms, always</li><li><span class="mk">&check;</span>~60ms hover response, no overshoot/bounce easing in dense UI</li><li><span class="mk">&check;</span>Stagger with <code class="tok">sibling-index()</code> where supported, the <code class="tok">--i</code> variable as the fallback</li><li class="avoid"><span class="mk">&times;</span>Symmetric in/out timing that drags</li><li class="avoid"><span class="mk">&times;</span>A 600ms interface animation: it reads as broken past the 150 to 250ms band</li></ul>
 <div class="variant-note"><b>Variants held here.</b> A: entrances land at 200 to 300ms with ease-out. Use when: an element is entering the screen. B: nothing in a dense productivity UI runs past about 150ms, and exits run around 150ms. Use when: the screen is a dense productivity UI, which is this entry&rsquo;s own wording (Dropdown Design&rsquo;s 150ms open is variant B). C: interface motion stays in a 150 to 250ms band with 250ms as the shared ceiling. Use when: you want one number for general interface motion. All three are kept on purpose.</div>
 <div class="variant-note"><b>Errors that must be noticed, an exception.</b> Default: no overshoot or bounce, and nothing past about 250ms in interface motion (this entry). Exception: an error or alert the person must not miss may use a short shake, three or four small horizontal moves of 4 to 6px over 300 to 400ms, played once when the error appears. Use when: a submit fails or a code is wrong and the eye is elsewhere on the screen. Never loop it, never go past about 400ms (a 500 to 800ms bounce reads as the interface breaking, not as a message), never use it on success or routine states, and under reduced motion drop it and rely on the colour, icon and message. Both are kept on purpose.</div>
+<div class="variant-note"><b>Stagger spacing, two variants.</b> Variant A: 30 to 50ms between items, which reads as one cascade. Use when: a list or grid of more than a handful of items, and any working screen; past 80ms on a long list a stagger feels like waiting. Variant B: about 70ms between items (<code class="tok">delay: i &times; 70ms</code>), so each element arrives on its own beat. Use when: a short set of hero elements, three to five cards or a headline group, where each arrival is meant to be seen (<a href="#lp-easing">Easing Curves</a>, entry 03). Both kept on purpose.</div>
 </div>
 <div class="code-panel"><div class="code-panel-bar"><span class="code-panel-lang">CSS</span><button class="code-toggle" type="button"><span class="txt">Show code</span><span class="chev">▾</span></button></div><pre><code>:root {
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -4243,8 +4316,10 @@ Character: warm and encouraging, progress never guilt
 <div class="lib-pattern-body">
 <p>The shape of an easing curve is what the eye actually perceives, even holding distance and total duration constant. Linear motion at constant speed reads as robotic because almost nothing in the physical world moves that way. Ease-out (fast start, gentle stop) is the right default for anything entering the screen, since it mimics how a real object decelerates as it arrives. A small spring overshoot (slightly past the resting position before settling back) adds a satisfying, tactile confirmation feel to success states and toggles. Linear easing is really only appropriate for something that has no start or stop of its own, like a continuously looping spinner.</p>
 <p><strong>Exits ease in.</strong> Something leaving the screen uses ease-in (gentle start, fast finish), the mirror of an entrance: it accelerates away the way a real object does when it leaves, and it is out of sight before the eye settles on it. <strong>Anticipation, kept small.</strong> A tiny wind-up in the opposite direction before a move or a bounce makes motion feel physical, which suits illustration and marketing motion. In product UI keep it to a few pixels or a scale of about 0.97, and only on a deliberate, occasional action such as a launch or a send, never on every button press or menu.</p>
+<p><strong>Three details that make motion feel premium.</strong> <strong>1. Swap linear for a spring:</strong> for example <code class="tok">spring(k 170, c 21)</code>, a stiffness of 170 and a damping of 21, which settles the way a real object does; in plain CSS, <code class="tok">--ease-spring</code> below stands in. <strong>2. Stagger:</strong> let each element arrive on its own beat, <code class="tok">delay: i &times; 70ms</code>, rather than moving everything at once (the spacing variants are in <a href="#lp-animation-timing">Animation Timing</a>, entry 01). <strong>3. The tiny stuff:</strong> about 5% overshoot before settling, a touch of motion blur on fast moves, and, optionally, a sound effect that lands with the movement.</p>
 </div>
-<ul class="lib-dodont"><li><span class="mk">&check;</span>Ease-out as the default for anything entering</li><li><span class="mk">&check;</span>Ease-in for anything leaving</li><li><span class="mk">&check;</span>Anticipation only as a few pixels of wind-up, on rare deliberate actions</li><li class="avoid"><span class="mk">&times;</span>Linear easing on UI that starts and stops</li><li class="avoid"><span class="mk">&times;</span>A spring or bounce on a dropdown or menu (fun once, tiring by the tenth time)</li></ul>
+<ul class="lib-dodont"><li><span class="mk">&check;</span>Ease-out as the default for anything entering</li><li><span class="mk">&check;</span>Ease-in for anything leaving</li><li><span class="mk">&check;</span>Anticipation only as a few pixels of wind-up, on rare deliberate actions</li><li><span class="mk">&check;</span>A spring (stiffness 170, damping 21) in place of linear where the motion should feel physical</li><li><span class="mk">&check;</span>About 5% overshoot, a touch of blur on fast moves, an optional landing sound, on hero and confirmation moments</li><li class="avoid"><span class="mk">&times;</span>Linear easing on UI that starts and stops</li><li class="avoid"><span class="mk">&times;</span>A spring or bounce on a dropdown or menu (fun once, tiring by the tenth time)</li><li class="avoid"><span class="mk">&times;</span>Overshoot, blur or sound on an interaction someone repeats all day</li></ul>
+<div class="variant-note"><b>Premium flourish versus a snappy tool, two variants.</b> Variant A: a spring with about 5% overshoot, a touch of motion blur on fast moves and an optional landing sound. Use when: hero sections, onboarding, celebrations, confirmations and other occasional moments meant to be noticed. Variant B: no overshoot and nothing past about 150ms (<a href="#lp-animation-timing">Animation Timing</a>, variant B). Use when: dense productivity UI, menus, dropdowns and anything someone triggers many times a day. Both kept on purpose.</div>
 </div>
 <div class="code-panel"><div class="code-panel-bar"><span class="code-panel-lang">CSS</span><button class="code-toggle" type="button"><span class="txt">Show code</span><span class="chev">▾</span></button></div><pre><code>:root {
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);      <span class="cm">/* default for anything entering */</span>
@@ -4253,7 +4328,17 @@ Character: warm and encouraging, progress never guilt
 }
 .toast-enter { animation: slide-up 250ms var(--ease-out); }
 .success-check { animation: pop 400ms var(--ease-spring); } <span class="cm">/* overshoots then settles */</span>
-.spinner { animation: spin 900ms linear infinite; } <span class="cm">/* linear is correct, no start/stop */</span></code></pre></div>
+.spinner { animation: spin 900ms linear infinite; } <span class="cm">/* linear is correct, no start/stop */</span>
+
+<span class="cm">/* premium motion: a spring, each element on its own beat, about 5% overshoot, blur only while fast */</span>
+<span class="cm">/* in a physics library: { type: "spring", stiffness: 170, damping: 21 } */</span>
+.hero-item { animation: rise 500ms var(--ease-spring) backwards; animation-delay: calc(var(--i, 0) * 70ms); }
+@keyframes rise {
+  0%   { translate: 0 40px; opacity: 0; filter: blur(2px); } <span class="cm">/* a touch of blur on the fast part */</span>
+  60%  { translate: 0 -2px; opacity: 1; filter: blur(0); }   <span class="cm">/* about 5% past the 40px move */</span>
+  100% { translate: 0 0; }
+}
+<span class="cm">/* optional: play a short landing sound on animationend, never on a routine control */</span></code></pre></div>
 </div>
 
 <div class="lib-pattern" id="lp-scroll-driven">
@@ -5040,7 +5125,7 @@ CARDS
   </section>
 
   <footer class="doc-footer">
-    <p>Design Standards v1.5.3 &middot; @brightcoast.ai</p>
+    <p>Design Standards v1.6.0 &middot; @brightcoast.ai</p>
     <p>Copyright 2026 Bright Coast AI. For Bright Coast AI clients and people Bright Coast AI has given this link to. You may build what you find here into your own work; you may not republish or resell the material itself. See LICENSE at github.com/bright-coast/design-standards.</p>
     <p>Install and update steps: github.com/bright-coast/design-standards</p>
   </footer>

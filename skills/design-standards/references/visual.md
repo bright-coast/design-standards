@@ -5,11 +5,11 @@
 
 The layer people notice consciously least and judge most: colour, depth, spacing, and the perceptual rules underneath them.
 
-File 1 of 2: 21 of the 37 Visual patterns. Use when: colour, type, spacing, depth, icons and layout.
+File 1 of 2: 21 of the 38 Visual patterns. Use when: colour, type, spacing, depth, icons and layout.
 
 In this part: Border Radius; Charts That Lie; Color Accessibility; Dark Mode; Depth Layers; Design System Kit; Design Tokens; Gestalt Laws; Golden Ratio; Gradient Design; Grid System; Icon Design Rules; Perfect Card; Proximity Rule; Shadow Elevation; Visual Hierarchy; Von Restorff Effect; Z-Index Mastery; Tabular Numbers; Color System, Not Random Hex; AI Dashboard Tells.
 
-In `references/visual-2.md`: AI Landing Page Tells; Scanning Patterns; Typography as a System; Min-Width Zero for Grid and Flex Children; Equal-Height Cards in a Row; Pricing Table; Card Treatment System; Phone Check at 375px; 60-30-10 Colour Balance; Visual Character: One Decision per Axis; Project Design Contract; Stacked Priority Order; Avatar; CSS Layout Foundations; Optical Corrections; Glass Panels.
+In `references/visual-2.md`: AI Landing Page Tells; Scanning Patterns; Typography as a System; Min-Width Zero for Grid and Flex Children; Equal-Height Cards in a Row; Pricing Table; Card Treatment System; Phone Check at 375px; 60-30-10 Colour Balance; Visual Character: One Decision per Axis; Project Design Contract; Stacked Priority Order; Avatar; CSS Layout Foundations; Optical Corrections; Glass Panels; Less Noise on a Busy Screen.
 
 ## Border Radius
 
@@ -481,14 +481,25 @@ Real depth comes from stacking multiple shadow layers, not one blur value scaled
 
 **One light source.** Every shadow in the interface assumes the same light direction, usually from straight above, so every shadow offsets the same way (down, never left on one card and right on another). **How tiers scale:** going up a tier, the offset and blur grow (y 1 and blur 2 at rest, y 20 and blur 32 on a modal) while the opacity of each layer stays roughly the same, about 4 to 8%; a higher element casts a longer, softer shadow, not a darker one. **Trim the halo:** give the wide ambient layer a negative spread (for example 0 20px 32px -8px) so the shadow sits under the element instead of glowing out past its sides. **On dark surfaces** black shadows barely read and Dark Mode raises surfaces with lightness instead; the one exception is a low-opacity glow tinted to the accent (about 15 to 25%), which can stand in for the black ambient layer on a floating element.
 
+**Five fixes for card shadows.** **1. Two layers, never one:** stop using a single shadow such as `0 4px 20px rgba(0,0,0,.25)`. Stack a tight contact shadow, `0 1px 2px rgba(24,24,27,.08)` (one pixel down, two of blur), with a wide lift shadow, `0 8px 24px rgba(24,24,27,.08)` (eight down, 24 of blur). **2. Tint, don’t blacken:** take the shadow colour from the background’s hue (zinc-900, rgb 24, 24, 27) at about 8%, never black at 25%. **3. Light from above:** x offset 0 and a positive y on every shadow in the UI, so nothing looks lit by two suns. **4. Elevation is a scale, not a guess:** shadow-1 for a card, shadow-2 for a dropdown, shadow-3 for a modal. Each component gets one level, and no component gets a custom shadow. **5. Dark mode:** shadows vanish on a dark page, so raise elevation with a lighter surface (for example #18181B) and a one-pixel border instead (Dark Mode, entry 04).
+
 Do:
 - Tint the glow to brand accent
 - Every shadow offset in the same direction
 - Offset and blur grow with elevation; opacity stays about the same
+- Two layers on every card: a contact shadow plus a lift shadow
+- Shadow colour from the background’s hue at about 8%
+- One level per component from a three-step scale (card, dropdown, modal)
+- Dark mode: a lighter surface and a one-pixel border instead of a shadow
 
 Avoid:
 - One flat drop shadow used everywhere
 - A black ambient shadow on a dark surface
+- One heavy black shadow such as `0 4px 20px rgba(0,0,0,.25)`
+- A custom shadow made up for a single component
+- A shadow with a sideways x offset
+
+Variant: **Shadow tint, two variants.** Variant A: a neutral tint from the background’s own hue (zinc-900 at about 8%). Use when: resting cards, dropdowns and modals, which is every ordinary shadow. Variant B: a glow tinted to the brand accent. Use when: one highlighted or dragged element that should stand out from the rest, layered on top of its neutral shadow. Both kept on purpose.
 
 Code (CSS):
 
@@ -503,6 +514,17 @@ Code (CSS):
 .card { box-shadow: var(--elevation-1); } /* resting */
 .modal { box-shadow: var(--elevation-3); } /* strongest tier reserved for what matters most */
 .card.dragging { box-shadow: var(--elevation-3), var(--elevation-glow); }
+
+/* five fixes: two layers, zinc tint at 8%, x 0 and y positive, one level per component */
+:root {
+  --shadow-1: 0 1px 2px rgb(24 24 27 / .08), 0 8px 24px rgb(24 24 27 / .08);  /* card: contact + lift */
+  --shadow-2: 0 2px 4px rgb(24 24 27 / .08), 0 12px 32px rgb(24 24 27 / .08); /* dropdown */
+  --shadow-3: 0 4px 8px rgb(24 24 27 / .08), 0 24px 48px -8px rgb(24 24 27 / .08); /* modal */
+}
+/* not this: box-shadow: 0 4px 20px rgba(0,0,0,.25); one layer, black at 25% */
+@media (prefers-color-scheme: dark) {
+  .card { box-shadow: none; background: #18181B; border: 1px solid rgb(255 255 255 / .08); } /* lighter surface + 1px border */
+}
 ```
 
 ## Visual Hierarchy

@@ -26,6 +26,8 @@ Variant: **Variants held here.** A: entrances land at 200 to 300ms with ease-out
 
 Variant: **Errors that must be noticed, an exception.** Default: no overshoot or bounce, and nothing past about 250ms in interface motion (this entry). Exception: an error or alert the person must not miss may use a short shake, three or four small horizontal moves of 4 to 6px over 300 to 400ms, played once when the error appears. Use when: a submit fails or a code is wrong and the eye is elsewhere on the screen. Never loop it, never go past about 400ms (a 500 to 800ms bounce reads as the interface breaking, not as a message), never use it on success or routine states, and under reduced motion drop it and rely on the colour, icon and message. Both are kept on purpose.
 
+Variant: **Stagger spacing, two variants.** Variant A: 30 to 50ms between items, which reads as one cascade. Use when: a list or grid of more than a handful of items, and any working screen; past 80ms on a long list a stagger feels like waiting. Variant B: about 70ms between items (`delay: i × 70ms`), so each element arrives on its own beat. Use when: a short set of hero elements, three to five cards or a headline group, where each arrival is meant to be seen (Easing Curves, entry 03). Both kept on purpose.
+
 Code (CSS):
 
 ```css
@@ -83,14 +85,21 @@ The shape of an easing curve is what the eye actually perceives, even holding di
 
 **Exits ease in.** Something leaving the screen uses ease-in (gentle start, fast finish), the mirror of an entrance: it accelerates away the way a real object does when it leaves, and it is out of sight before the eye settles on it. **Anticipation, kept small.** A tiny wind-up in the opposite direction before a move or a bounce makes motion feel physical, which suits illustration and marketing motion. In product UI keep it to a few pixels or a scale of about 0.97, and only on a deliberate, occasional action such as a launch or a send, never on every button press or menu.
 
+**Three details that make motion feel premium.** **1. Swap linear for a spring:** for example `spring(k 170, c 21)`, a stiffness of 170 and a damping of 21, which settles the way a real object does; in plain CSS, `--ease-spring` below stands in. **2. Stagger:** let each element arrive on its own beat, `delay: i × 70ms`, rather than moving everything at once (the spacing variants are in Animation Timing, entry 01). **3. The tiny stuff:** about 5% overshoot before settling, a touch of motion blur on fast moves, and, optionally, a sound effect that lands with the movement.
+
 Do:
 - Ease-out as the default for anything entering
 - Ease-in for anything leaving
 - Anticipation only as a few pixels of wind-up, on rare deliberate actions
+- A spring (stiffness 170, damping 21) in place of linear where the motion should feel physical
+- About 5% overshoot, a touch of blur on fast moves, an optional landing sound, on hero and confirmation moments
 
 Avoid:
 - Linear easing on UI that starts and stops
 - A spring or bounce on a dropdown or menu (fun once, tiring by the tenth time)
+- Overshoot, blur or sound on an interaction someone repeats all day
+
+Variant: **Premium flourish versus a snappy tool, two variants.** Variant A: a spring with about 5% overshoot, a touch of motion blur on fast moves and an optional landing sound. Use when: hero sections, onboarding, celebrations, confirmations and other occasional moments meant to be noticed. Variant B: no overshoot and nothing past about 150ms (Animation Timing, variant B). Use when: dense productivity UI, menus, dropdowns and anything someone triggers many times a day. Both kept on purpose.
 
 Code (CSS):
 
@@ -103,6 +112,16 @@ Code (CSS):
 .toast-enter { animation: slide-up 250ms var(--ease-out); }
 .success-check { animation: pop 400ms var(--ease-spring); } /* overshoots then settles */
 .spinner { animation: spin 900ms linear infinite; } /* linear is correct, no start/stop */
+
+/* premium motion: a spring, each element on its own beat, about 5% overshoot, blur only while fast */
+/* in a physics library: { type: "spring", stiffness: 170, damping: 21 } */
+.hero-item { animation: rise 500ms var(--ease-spring) backwards; animation-delay: calc(var(--i, 0) * 70ms); }
+@keyframes rise {
+  0%   { translate: 0 40px; opacity: 0; filter: blur(2px); } /* a touch of blur on the fast part */
+  60%  { translate: 0 -2px; opacity: 1; filter: blur(0); }   /* about 5% past the 40px move */
+  100% { translate: 0 0; }
+}
+/* optional: play a short landing sound on animationend, never on a routine control */
 ```
 
 ## Scroll-Driven Animations
